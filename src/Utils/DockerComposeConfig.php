@@ -52,6 +52,9 @@ class DockerComposeConfig
             'mariadb',
             'redis',
           ],
+          'environment' => [
+            'PLATFORM_DOCKER' => $this->name,
+          ],
         ];
     }
 
@@ -95,6 +98,7 @@ class DockerComposeConfig
           ],
           'environment' => [
             'VIRTUAL_HOST' => $this->name . '.platform',
+            'PLATFORM_DOCKER' => $this->name,
           ],
         ];
     }

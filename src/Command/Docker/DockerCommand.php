@@ -9,16 +9,26 @@
 namespace Platformsh\Docker\Command\Docker;
 
 
+use Platformsh\Cli\Helper\ShellHelper;
 use Platformsh\Docker\Command\Command;
 
 abstract class DockerCommand extends Command
 {
-    protected function executeDockerCompose($command, array $args = []) {
+    protected function executeDockerCompose($command, array $args = [])
+    {
         $shell = $this->getHelper('shell');
 
         array_unshift($args, $command);
         array_unshift($args, 'docker-compose');
 
         $shell->execute($args, null, true, false);
+    }
+
+    protected function executeDocker($command, array $args = [])
+    {
+        $shell = $this->getHelper('shell');
+        array_unshift($args, $command);
+        array_unshift($args, 'docker');
+        $shell->execute($args, null, true, true);
     }
 }

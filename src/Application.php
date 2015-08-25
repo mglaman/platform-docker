@@ -40,6 +40,8 @@ class Application extends ParentApplication
         $commands[] = new Command\Docker\StopCommand();
         $commands[] = new Command\Platform\DbSyncCommand();
         $commands[] = new Command\LinkCommand();
+        $commands[] = new Command\Docker\SshCommand();
+        $commands[] = new Command\Docker\LogsCommand();
         return $commands;
     }
 

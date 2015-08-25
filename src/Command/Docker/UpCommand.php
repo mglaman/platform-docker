@@ -20,6 +20,7 @@ class UpCommand extends DockerCommand
     {
         $this
           ->setName('docker:up')
+          ->setAliases(['start', 'up'])
           ->setDescription('Starts the docker containers');
     }
 

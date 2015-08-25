@@ -20,6 +20,7 @@ class StopCommand extends DockerCommand
     {
         $this
           ->setName('docker:stop')
+          ->setAliases(['stop'])
           ->setDescription('Stops the docker containers');
     }
 

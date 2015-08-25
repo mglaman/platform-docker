@@ -38,7 +38,7 @@ class DrupalSettings
     protected function dbFromDocker() {
         $this->string .= <<<EOT
 // Database configuration.
-if (empty(\$_SERVER['DOCKER'])) {
+if (empty(\$_SERVER['PLATFORM_DOCKER'])) {
     \$cmd = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"3306/tcp\") 0).HostPort}}' {$this->containerName}";
     \$port = trim(shell_exec(\$cmd));
     // Default config within Docker container.
