@@ -51,10 +51,7 @@ class InitCommand extends Command
         // If the docker-compose.yml file exists, then start containers.
         if ($this->fs->exists($this->projectPath . '/docker-compose.yml')) {
             $this->stdOut->writeln("<info>Docker compose initiated, starting containers");
-            // @todo run the start command. return its exit code.
-            $command = $this->getApplication()->find('up');
-            $command->run($input, $output);
-            return 1;
+            return $this->getApplication()->find('up')->run($input, $output);
         }
         // Else build the resources.
         $this->stdOut->writeln('<info>Building containers</info>');
