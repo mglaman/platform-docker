@@ -10,6 +10,7 @@ namespace Platformsh\Docker\Utils;
 
 
 use Platformsh\Cli\Local\LocalProject;
+use Symfony\Component\Yaml\Yaml;
 
 class PlatformUtil
 {
@@ -31,5 +32,13 @@ class PlatformUtil
     public static function repoDir()
     {
         return LocalProject::getProjectRoot() . '/' . LocalProject::REPOSITORY_DIR;
+    }
+
+    public static function projectServices()
+    {
+        $services = self::repoDir() . '/.platform/services.yaml';
+        if (file_exists($services)) {
+            return Yaml::parse(file_get_contents($services));
+        }
     }
 }
