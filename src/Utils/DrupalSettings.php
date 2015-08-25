@@ -16,12 +16,15 @@ class DrupalSettings
 {
     protected $string;
     protected $projectName;
+    protected $containerName;
     /**
      * Builds the settings.local.php file.
      */
     public function __construct()
     {
         $this->projectName = PlatformUtil::projectName();
+        $this->containerName = DockerUtil::getContainerName('mariadb');
+
         $this->string = "<?php\n\n";
         $this->dbFromLocal();
         $this->dbFromDocker();
@@ -36,7 +39,7 @@ class DrupalSettings
         $this->string .= <<<EOT
 // Database configuration.
 if (empty(\$_SERVER['DOCKER'])) {
-    \$cmd = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"3306/tcp\") 0).HostPort}}' {$this->projectName}_mariadb_1";
+    \$cmd = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"3306/tcp\") 0).HostPort}}' {$this->containerName}";
     \$port = trim(shell_exec(\$cmd));
     // Default config within Docker container.
     \$databases['default']['default'] = array(
@@ -57,7 +60,7 @@ EOT;
 // Database configuration.
 \$databases['default']['default'] = array(
   'driver' => 'mysql',
-  'host' => '{$this->projectName}_mariadb_1',
+  'host' => '{$this->containerName}',
   'username' => 'mysql',
   'password' => 'mysql',
   'database' => 'data',

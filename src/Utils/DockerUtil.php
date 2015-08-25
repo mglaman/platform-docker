@@ -13,8 +13,14 @@ class DockerUtil
 {
     public static function getContainerPort($type, $port, $protocol = 'tcp')
     {
-        $projectName = PlatformUtil::projectName();
-        $cmd = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"{$port}/{$protocol}\") 0).HostPort}}' {$projectName}_{$type}_1";
+        $containerName = self::getContainerName('nginx');
+        $cmd = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"{$port}/{$protocol}\") 0).HostPort}}' {$containerName}";
         return trim(shell_exec($cmd));
+    }
+
+    public static function getContainerName($type)
+    {
+        $projectName = str_replace('-', '', PlatformUtil::projectName());
+        return $projectName . '_' . $type . '_1';
     }
 }
