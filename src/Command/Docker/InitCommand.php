@@ -51,7 +51,7 @@ class InitCommand extends Command
         // If the docker-compose.yml file exists, then start containers.
         if ($this->fs->exists($this->projectPath . '/docker-compose.yml')) {
             $this->stdOut->writeln("<info>Docker compose initiated, starting containers");
-            return $this->getApplication()->find('up')->run($input, $output);
+            return $this->getApplication()->find('docker:up')->run($input, $output);
         }
         // Else build the resources.
         $this->stdOut->writeln('<info>Building containers</info>');
@@ -89,7 +89,7 @@ class InitCommand extends Command
         $drupalHelper->save();
 
         $this->stdOut->writeln("<info>Bring up containers</info>");
-        $this->getApplication()->find('up')->run($input, $output);
+        $this->getApplication()->find('docker:up')->run($input, $output);
         $this->stdOut->writeln("<info>Syncing Platform.sh environment database to local</info>");
         $this->getApplication()->find('platform:db-sync')->run($input, $output);
 
