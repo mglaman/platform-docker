@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cc5f3f4644767fbb9aaed59d121b23ff",
+    "hash": "383740253327ef77bcf973a28200b279",
     "packages": [
         {
             "name": "cocur/slugify",
@@ -116,23 +116,25 @@
         },
         {
             "name": "d11wtq/boris",
-            "version": "v1.0.10",
+            "version": "v1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/borisrepl/boris.git",
-                "reference": "31055b15e2d3fe47f31f6aa8e277f8f3fc7eb483"
+                "reference": "125dd4e5752639af7678a22ea597115646d89c6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/borisrepl/boris/zipball/31055b15e2d3fe47f31f6aa8e277f8f3fc7eb483",
-                "reference": "31055b15e2d3fe47f31f6aa8e277f8f3fc7eb483",
+                "url": "https://api.github.com/repos/borisrepl/boris/zipball/125dd4e5752639af7678a22ea597115646d89c6e",
+                "reference": "125dd4e5752639af7678a22ea597115646d89c6e",
                 "shasum": ""
             },
             "require": {
+                "php": ">=5.3.0"
+            },
+            "suggest": {
                 "ext-pcntl": "*",
                 "ext-posix": "*",
-                "ext-readline": "*",
-                "php": ">=5.3.0"
+                "ext-readline": "*"
             },
             "bin": [
                 "bin/boris"
@@ -144,11 +146,7 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "A tiny, but robust REPL (Read-Evaluate-Print-Loop) for PHP.",
-            "time": "2015-03-01 08:05:19"
+            "time": "2014-01-17 12:21:18"
         },
         {
             "name": "doctrine/cache",

@@ -8,7 +8,6 @@
 
 namespace Platformsh\Docker\Command\Docker;
 
-use Platformsh\Docker\Command\Command;
 use Platformsh\Docker\Utils\DockerComposeConfig;
 use Platformsh\Docker\Utils\DrupalSettings;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,7 +16,7 @@ use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 
-class InitCommand extends Command
+class InitCommand extends DockerCommand
 {
     /**
      * @var Filesystem;

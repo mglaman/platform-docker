@@ -24,6 +24,9 @@ This CLI will only run when within a Platform.sh project. When in a project, use
 Sites are provisioned at project-name.platform. Currently the tld is not configurable. It's best to set up dnsmasq set up
 wildcard DNS entries to point \*.platform to your localhost or Docker VM (Mac, Windows.)
 
+If you are on Mac OS X, export "PLATFORM_DOCKER_MACHINE_NAME" with your Docker machine name. The tool will automatically boot the machine 
+or export its environment information as needed.
+
 ### Commands
 
 ````
