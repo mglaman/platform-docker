@@ -67,6 +67,7 @@ class ComposeContainers
           ],
           'environment' => [
             'PLATFORM_DOCKER' => $this->name,
+            'PHP_IDE_CONFIG' => 'serverName=' . $this->name . '.platform',
           ],
         ];
     }
