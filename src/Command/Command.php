@@ -3,7 +3,7 @@
 namespace Platformsh\Docker\Command;
 
 use Platformsh\Cli\Local\LocalProject;
-use Platformsh\Docker\Utils\PlatformUtil;
+use Platformsh\Docker\Utils\Platform\Platform;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -46,7 +46,7 @@ abstract class Command extends BaseCommand
         }
 
         $this->projectPath = LocalProject::getProjectRoot();
-        $this->projectName = PlatformUtil::projectName();
+        $this->projectName = Platform::projectName();
 
         $this->stdOut = $output;
         $this->stdErr = $output instanceof ConsoleOutputInterface ? $output->getErrorOutput() : $output;

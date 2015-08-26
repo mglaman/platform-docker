@@ -1,40 +1,54 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mglaman
- * Date: 8/25/15
- * Time: 12:35 AM
- */
 
-namespace Platformsh\Docker\Utils;
+namespace Platformsh\Docker\Utils\Drupal;
 
 
-use Platformsh\Cli\Local\LocalProject;
 use Symfony\Component\Filesystem\Filesystem;
+use Platformsh\Docker\Utils\Platform\Platform;
+use Platformsh\Docker\Utils\Docker\Docker;
 
-class DrupalSettings
+/**
+ * Class Settings
+ * @package Platformsh\Docker\Utils\Drupal
+ */
+class Settings
 {
+    /**
+     * @var string
+     */
     protected $string;
+    /**
+     * @var
+     */
     protected $projectName;
+    /**
+     * @var string
+     */
     protected $containerName;
     /**
      * Builds the settings.local.php file.
      */
     public function __construct()
     {
-        $this->projectName = PlatformUtil::projectName();
-        $this->containerName = DockerUtil::getContainerName('mariadb');
+        $this->projectName = Platform::projectName();
+        $this->containerName = Docker::getContainerName('mariadb');
 
         $this->string = "<?php\n\n";
         $this->dbFromLocal();
         $this->dbFromDocker();
     }
 
+    /**
+     *
+     */
     public function save() {
         $fs = new Filesystem();
-        $fs->dumpFile(PlatformUtil::sharedDir() . '/settings.local.php', $this->string);
+        $fs->dumpFile(Platform::sharedDir() . '/settings.local.php', $this->string);
     }
 
+    /**
+     *
+     */
     protected function dbFromDocker() {
         $this->string .= <<<EOT
 // Database configuration.
@@ -55,6 +69,9 @@ if (empty(\$_SERVER['PLATFORM_DOCKER'])) {
 EOT;
     }
 
+    /**
+     *
+     */
     protected function dbFromLocal() {
         $this->string .= <<<EOT
 // Database configuration.

@@ -42,6 +42,7 @@ class Application extends ParentApplication
         $commands[] = new Command\LinkCommand();
         $commands[] = new Command\Docker\SshCommand();
         $commands[] = new Command\Docker\LogsCommand();
+        $commands[] = new Command\Docker\RebuildCommand();
         return $commands;
     }
 

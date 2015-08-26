@@ -29,6 +29,7 @@ class UpCommand extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->stdOut->writeln("<info>Bring up containers</info>");
         $this->executeDockerCompose('up', ['-d']);
     }
 }

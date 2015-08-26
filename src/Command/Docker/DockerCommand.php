@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mglaman
- * Date: 8/25/15
- * Time: 1:38 AM
- */
 
 namespace Platformsh\Docker\Command\Docker;
 
@@ -14,10 +8,23 @@ use Platformsh\Docker\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class DockerCommand
+ * @package Platformsh\Docker\Command\Docker
+ */
 abstract class DockerCommand extends Command
 {
+    /**
+     * @var
+     */
     protected $docker;
 
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @throws \Exception
+     */
     protected function initialize(InputInterface $input, OutputInterface $output) {
         parent::initialize($input, $output);
 
@@ -61,6 +68,10 @@ abstract class DockerCommand extends Command
     }
 
 
+    /**
+     * @param $command
+     * @param array $args
+     */
     protected function executeDockerCompose($command, array $args = [])
     {
         $shell = $this->getHelper('shell');
@@ -71,6 +82,12 @@ abstract class DockerCommand extends Command
         $shell->execute($args, null, true, false);
     }
 
+    /**
+     * @param $command
+     * @param array $args
+     *
+     * @throws \Exception
+     */
     protected function executeDocker($command, array $args = [])
     {
         /** @var ShellHelper $shell */
@@ -80,6 +97,9 @@ abstract class DockerCommand extends Command
         $shell->execute($args, null, true, true);
     }
 
+    /**
+     * @return bool
+     */
     protected function envExported() {
         return (bool) (getenv('DOCKER_MACHINE_NAME') || getenv('DOCKER_HOST') || getenv('DOCKER_CERT_PATH'));
     }

@@ -1,19 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mglaman
- * Date: 8/25/15
- * Time: 1:52 AM
- */
 
-namespace Platformsh\Docker\Utils;
+namespace Platformsh\Docker\Utils\Platform;
 
 
 use Platformsh\Cli\Local\LocalProject;
 use Symfony\Component\Yaml\Yaml;
 
-class PlatformUtil
+/**
+ * Class Platform
+ * @package Platformsh\Docker\Utils\Platform
+ */
+class Platform
 {
+    /**
+     * @return mixed
+     */
     public static function projectName()
     {
         $platformConfig = LocalProject::getProjectConfig();
@@ -24,21 +25,31 @@ class PlatformUtil
         }
     }
 
+    /**
+     * @return string
+     */
     public static function sharedDir()
     {
         return LocalProject::getProjectRoot() . '/' . LocalProject::SHARED_DIR;
     }
 
+    /**
+     * @return string
+     */
     public static function repoDir()
     {
         return LocalProject::getProjectRoot() . '/' . LocalProject::REPOSITORY_DIR;
     }
 
+    /**
+     * @return array
+     */
     public static function projectServices()
     {
         $services = self::repoDir() . '/.platform/services.yaml';
         if (file_exists($services)) {
             return Yaml::parse(file_get_contents($services));
         }
+        return null;
     }
 }

@@ -8,8 +8,6 @@
 
 namespace Platformsh\Docker\Command\Docker;
 
-use Platformsh\Cli\Helper\ShellHelper;
-use Platformsh\Docker\Utils\DockerUtil;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

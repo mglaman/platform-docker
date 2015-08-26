@@ -1,21 +1,28 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mglaman
- * Date: 8/25/15
- * Time: 12:24 AM
- */
 
-namespace Platformsh\Docker\Utils;
+namespace Platformsh\Docker\Utils\Docker;
 
 
 use Symfony\Component\Yaml\Yaml;
 use Platformsh\Cli\Local\LocalProject;
 
-class DockerComposeConfig
+/**
+ * Class ComposeConfig
+ * @package Platformsh\Docker\Utils\Docker
+ */
+class ComposeContainers
 {
+    /**
+     * @var
+     */
     protected $config;
+    /**
+     * @var false|string
+     */
     protected $path;
+    /**
+     * @var
+     */
     protected $name;
 
     /**
@@ -34,10 +41,16 @@ class DockerComposeConfig
     }
 
 
+    /**
+     * @return string
+     */
     public function yaml() {
         return Yaml::dump($this->config);
     }
 
+    /**
+     *
+     */
     public function addPhpFpm()
     {
         $this->config['phpfpm'] = [
@@ -58,6 +71,9 @@ class DockerComposeConfig
         ];
     }
 
+    /**
+     *
+     */
     public function addDatabase()
     {
         $this->config['mariadb'] = [
@@ -81,6 +97,9 @@ class DockerComposeConfig
         ];
     }
 
+    /**
+     *
+     */
     public function addWebserver()
     {
         $this->config['nginx'] = [
@@ -103,6 +122,9 @@ class DockerComposeConfig
         ];
     }
 
+    /**
+     *
+     */
     public function addRedis() {
         $this->config['redis'] = [
           'image' => 'redis',

@@ -8,8 +8,7 @@
 
 namespace Platformsh\Docker\Command\Docker;
 
-use Platformsh\Cli\Helper\ShellHelper;
-use Platformsh\Docker\Utils\DockerUtil;
+use Platformsh\Docker\Utils\Docker\Docker;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -41,16 +40,16 @@ class SshCommand extends DockerCommand
         $type = $input->getArgument('service');
         switch ($type) {
             case 'http':
-                $containerName = DockerUtil::getContainerName('nginx');
+                $containerName = Docker::getContainerName('nginx');
                 break;
             case 'php':
-                $containerName = DockerUtil::getContainerName('phpfpm');
+                $containerName = Docker::getContainerName('phpfpm');
                 break;
             case 'db':
-                $containerName = DockerUtil::getContainerName('mariadb');
+                $containerName = Docker::getContainerName('mariadb');
                 break;
             case 'redis':
-                $containerName = DockerUtil::getContainerName('redis');
+                $containerName = Docker::getContainerName('redis');
                 break;
             case 'solr':
                 $this->stdOut->writeln("<error>Not provided yet</error>");

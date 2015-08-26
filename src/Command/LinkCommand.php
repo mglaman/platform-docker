@@ -8,8 +8,8 @@
 
 namespace Platformsh\Docker\Command;
 
-use Platformsh\Docker\Utils\DockerUtil;
-use Platformsh\Docker\Utils\PlatformUtil;
+use Platformsh\Docker\Utils\Docker\Docker;
+use Platformsh\Docker\Utils\Platform\Platform;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -32,18 +32,16 @@ class LinkCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $url = 'http://' . PlatformUtil::projectName() . '.platform:' . DockerUtil::getContainerPort('nginx', '80');
-        $this->openUrl($url, $input, $output);
+        $url = 'http://' . Platform::projectName() . '.platform:' . Docker::getContainerPort('nginx', '80');
+        $this->openUrl($url);
     }
 
     /**
      * Open a URL in the browser, or print it.
      *
      * @param string          $url
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
-    protected function openUrl($url, InputInterface $input, OutputInterface $output)
+    protected function openUrl($url)
     {
         $shellHelper = $this->getHelper('shell');
 
@@ -57,7 +55,7 @@ class LinkCommand extends Command
         } else {
             $this->stdErr->writeln("<error>Browser not found: $browser</error>");
         }
-        $output->writeln($url);
+        $this->stdOut->writeln($url);
     }
 
     /**

@@ -10,7 +10,7 @@ namespace Platformsh\Docker\Command\Platform;
 
 
 use Platformsh\Docker\Command\Command;
-use Platformsh\Docker\Utils\PlatformUtil;
+use Platformsh\Docker\Utils\Platform\Platform;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -33,13 +33,15 @@ class DbSyncCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->stdOut->writeln("<info>Syncing Platform.sh environment database to local</info>");
+
         // @todo this isn't as robust as getCurrentEnvironment().
         $git = $this->getHelper('shell');
         $currentBranch = $git->execute(
-          ['git', 'symbolic-ref', '--short', 'HEAD'], PlatformUtil::repoDir());
+          ['git', 'symbolic-ref', '--short', 'HEAD'], Platform::repoDir());
 
-        $remoteAlias = '@' . PlatformUtil::projectName() . '.' . $currentBranch;
-        $localAlias = '@' . PlatformUtil::projectName() . '._local';
+        $remoteAlias = '@' . Platform::projectName() . '.' . $currentBranch;
+        $localAlias = '@' . Platform::projectName() . '._local';
 
         // @todo squeeze this into the ShellHelper arguments somehow.
         exec("drush $remoteAlias sql-dump --gzip | gzip -cd | drush $localAlias sqlc");
