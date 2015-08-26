@@ -31,7 +31,7 @@ class Docker
      */
     public static function getContainerName($type)
     {
-        $projectName = str_replace('-', '', Platform::projectName());
+        $projectName = str_replace(array('-', '.'), '', Platform::projectName());
         return $projectName . '_' . $type . '_1';
     }
 }
