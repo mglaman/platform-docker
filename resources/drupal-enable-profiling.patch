@@ -1,0 +1,20 @@
+diff --git a/index.php b/index.php
+index 8b83199..021ba09 100644
+--- a/index.php
++++ b/index.php
+@@ -11,6 +11,15 @@
+  * See COPYRIGHT.txt and LICENSE.txt.
+  */
+
++// Enable XHProf profile collection:
++xhprof_sample_enable();
++register_shutdown_function(function () {
++  $url_parts = implode("_", arg());
++  $filename = '/var/platform/xhprof/' . $url_parts . '.' . uniqid() . '.sample_xhprof';
++  file_put_contents($filename, serialize(xhprof_sample_disable()));
++  chmod($filename, 0777);
++});
++
+ /**
+  * Root directory of Drupal installation.
+  */

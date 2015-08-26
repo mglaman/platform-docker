@@ -43,6 +43,9 @@ class Application extends ParentApplication
         $commands[] = new Command\Docker\SshCommand();
         $commands[] = new Command\Docker\LogsCommand();
         $commands[] = new Command\Docker\RebuildCommand();
+        $commands[] = new Command\Flamegraph\SetupCommand();
+        $commands[] = new Command\Flamegraph\CreateCommand();
+        $commands[] = new Command\Flamegraph\UnpatchCommand();
         return $commands;
     }
 

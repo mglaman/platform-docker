@@ -41,6 +41,11 @@ class Platform
         return LocalProject::getProjectRoot() . '/' . LocalProject::REPOSITORY_DIR;
     }
 
+    public static function webDir()
+    {
+        return LocalProject::getProjectRoot() . '/' . LocalProject::WEB_ROOT;
+    }
+
     /**
      * @return array
      */
