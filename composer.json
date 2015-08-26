@@ -1,5 +1,5 @@
 {
-  "name": "mglaman/platformsh-docker",
+  "name": "mglaman/platform-docker",
   "description": "Platform.sh and Docker Compose scaffolding",
   "license": "GPL-2.0+",
   "require": {
