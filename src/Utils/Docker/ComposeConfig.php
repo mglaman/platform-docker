@@ -47,6 +47,7 @@ class ComposeConfig
     public function ensureDirectories()
     {
         $this->fs->mkdir([
+          $this->projectPath . '/xhprof',
           $this->projectPath . '/docker/data',
           $this->projectPath . '/docker/conf',
           $this->projectPath . '/docker/images/php'
