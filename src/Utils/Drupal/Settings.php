@@ -44,6 +44,11 @@ class Settings
     public function save() {
         $fs = new Filesystem();
         $fs->dumpFile(Platform::sharedDir() . '/settings.local.php', $this->string);
+
+        // Relink if missing.
+        if (!$fs->exists(Platform::webDir() . '/sites/default/settings.local.php')) {
+            $fs->symlink('../../../shared/settings.local.php', Platform::webDir() . '/sites/default/settings.local.php');
+        }
     }
 
     /**
