@@ -46,6 +46,7 @@ class Application extends ParentApplication
         $commands[] = new Command\Flamegraph\SetupCommand();
         $commands[] = new Command\Flamegraph\CreateCommand();
         $commands[] = new Command\Flamegraph\UnpatchCommand();
+        $commands[] = new Command\Docker\ProxyCommand();
         return $commands;
     }
 

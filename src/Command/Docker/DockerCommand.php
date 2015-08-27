@@ -87,14 +87,15 @@ abstract class DockerCommand extends Command
      * @param array $args
      *
      * @throws \Exception
+     * @return bool
      */
-    protected function executeDocker($command, array $args = [])
+    protected function executeDocker($command, array $args = [], $mustRun = true)
     {
         /** @var ShellHelper $shell */
         $shell = $this->getHelper('shell');
         array_unshift($args, $command);
         array_unshift($args, 'docker');
-        $shell->execute($args, null, true, true);
+        return $shell->execute($args, null, $mustRun, true);
     }
 
     /**
