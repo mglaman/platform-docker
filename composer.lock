@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "383740253327ef77bcf973a28200b279",
+    "hash": "17f5d1dce23bd8414657e40d8de1bab6",
     "packages": [
         {
             "name": "cocur/slugify",
@@ -116,25 +116,23 @@
         },
         {
             "name": "d11wtq/boris",
-            "version": "v1.0.8",
+            "version": "v1.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/borisrepl/boris.git",
-                "reference": "125dd4e5752639af7678a22ea597115646d89c6e"
+                "reference": "31055b15e2d3fe47f31f6aa8e277f8f3fc7eb483"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/borisrepl/boris/zipball/125dd4e5752639af7678a22ea597115646d89c6e",
-                "reference": "125dd4e5752639af7678a22ea597115646d89c6e",
+                "url": "https://api.github.com/repos/borisrepl/boris/zipball/31055b15e2d3fe47f31f6aa8e277f8f3fc7eb483",
+                "reference": "31055b15e2d3fe47f31f6aa8e277f8f3fc7eb483",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
-            },
-            "suggest": {
                 "ext-pcntl": "*",
                 "ext-posix": "*",
-                "ext-readline": "*"
+                "ext-readline": "*",
+                "php": ">=5.3.0"
             },
             "bin": [
                 "bin/boris"
@@ -146,7 +144,11 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2014-01-17 12:21:18"
+            "license": [
+                "MIT"
+            ],
+            "description": "A tiny, but robust REPL (Read-Evaluate-Print-Loop) for PHP.",
+            "time": "2015-03-01 08:05:19"
         },
         {
             "name": "doctrine/cache",
@@ -790,6 +792,48 @@
                 "schema"
             ],
             "time": "2015-07-14 16:29:50"
+        },
+        {
+            "name": "mglaman/toolstack-helper",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mglaman/toolstack-helper.git",
+                "reference": "fed6859e5fa767a8db2dd495ab8a9a2d8348cc7f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mglaman/toolstack-helper/zipball/fed6859e5fa767a8db2dd495ab8a9a2d8348cc7f",
+                "reference": "fed6859e5fa767a8db2dd495ab8a9a2d8348cc7f",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/filesystem": "2.7.*",
+                "symfony/finder": "2.7.*",
+                "symfony/process": "2.7.*"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "1.4",
+                "phpunit/phpunit": "^4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "mglaman\\Toolstack\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Glaman",
+                    "email": "nmd.matt@gmail.com"
+                }
+            ],
+            "description": "Helps identify what kind of project is in a folder (Drupal, WordPress, Symfonfy, etc.)",
+            "time": "2015-08-28 10:41:06"
         },
         {
             "name": "pear/console_table",
@@ -1502,7 +1546,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "platformsh/cli": 0,
-        "drush/drush": 0
+        "drush/drush": 0,
+        "mglaman/toolstack-helper": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

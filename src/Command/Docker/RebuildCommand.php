@@ -8,6 +8,8 @@
 
 namespace Platformsh\Docker\Command\Docker;
 
+use mglaman\Toolstack\Toolstack;
+use mglaman\Toolstack\Stacks;
 use Platformsh\Docker\Utils\Docker\ComposeConfig;
 use Platformsh\Docker\Utils\Docker\ComposeContainers;
 use Platformsh\Docker\Utils\Drupal;
@@ -52,9 +54,12 @@ class RebuildCommand extends DockerCommand
         $composeContainers->addRedis();
         $composeConfig->writeDockerCompose($composeContainers);
 
-        // @todo: see if this is a drupal project
-        $drupalSettings = new Drupal\Settings();
-        $drupalSettings->save();
+        switch (Toolstack::getStackByDir($this->projectPath)) {
+            case Stacks\Drupal::TYPE:
+                $drupalSettings = new Drupal\Settings();
+                $drupalSettings->save();
+                break;
+        }
 
         $this->executeDockerCompose('build');
         $this->executeDockerCompose('up', ['-d']);
