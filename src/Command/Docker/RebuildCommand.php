@@ -6,13 +6,13 @@
  * Time: 12:13 AM
  */
 
-namespace Platformsh\Docker\Command\Docker;
+namespace mglaman\PlatformDocker\Command\Docker;
 
 use mglaman\Toolstack\Toolstack;
 use mglaman\Toolstack\Stacks;
-use Platformsh\Docker\Utils\Docker\ComposeConfig;
-use Platformsh\Docker\Utils\Docker\ComposeContainers;
-use Platformsh\Docker\Utils\Drupal;
+use mglaman\PlatformDocker\Utils\Docker\ComposeConfig;
+use mglaman\PlatformDocker\Utils\Docker\ComposeContainers;
+use mglaman\PlatformDocker\Utils\Stacks\Drupal;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -56,8 +56,8 @@ class RebuildCommand extends DockerCommand
 
         switch (Toolstack::getStackByDir($this->projectPath)) {
             case Stacks\Drupal::TYPE:
-                $drupalSettings = new Drupal\Settings();
-                $drupalSettings->save();
+                $drupal = new Drupal();
+                $drupal->configure();
                 break;
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Platformsh\Docker\Utils\Docker;
+namespace mglaman\PlatformDocker\Utils\Docker;
 
 
 use Symfony\Component\Yaml\Yaml;
@@ -8,7 +8,7 @@ use Platformsh\Cli\Local\LocalProject;
 
 /**
  * Class ComposeConfig
- * @package Platformsh\Docker\Utils\Docker
+ * @package mglaman\PlatformDocker\Utils\Docker
  */
 class ComposeContainers
 {

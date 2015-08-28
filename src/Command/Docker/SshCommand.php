@@ -6,9 +6,9 @@
  * Time: 12:13 AM
  */
 
-namespace Platformsh\Docker\Command\Docker;
+namespace mglaman\PlatformDocker\Command\Docker;
 
-use Platformsh\Docker\Utils\Docker\Docker;
+use mglaman\PlatformDocker\Utils\Docker\Docker;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Platformsh\Docker;
+namespace mglaman\PlatformDocker;
 
 use Platformsh\Cli\Helper\ShellHelper;
 use Symfony\Component\Console\Application as ParentApplication;
@@ -35,7 +35,7 @@ class Application extends ParentApplication
             return $commands;
         }
 
-        $commands[] = new Command\Docker\InitCommand();
+        $commands[] = new Command\InitCommand();
         $commands[] = new Command\Docker\UpCommand();
         $commands[] = new Command\Docker\StopCommand();
         $commands[] = new Command\Platform\DbSyncCommand();

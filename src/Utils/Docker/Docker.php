@@ -1,12 +1,12 @@
 <?php
 
-namespace Platformsh\Docker\Utils\Docker;
+namespace mglaman\PlatformDocker\Utils\Docker;
 
-use Platformsh\Docker\Utils\Platform\Platform;
+use mglaman\PlatformDocker\Utils\Platform\Platform;
 
 /**
  * Class Docker
- * @package Platformsh\Docker\Utils\Docker
+ * @package mglaman\PlatformDocker\Utils\Docker
  */
 class Docker
 {

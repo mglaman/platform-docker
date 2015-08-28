@@ -6,12 +6,12 @@
  * Time: 2:51 AM
  */
 
-namespace Platformsh\Docker\Command\Flamegraph;
+namespace mglaman\PlatformDocker\Command\Flamegraph;
 
 use Platformsh\Cli\Helper\ShellHelper;
 use Platformsh\Cli\Local\LocalProject;
-use Platformsh\Docker\Command\Command;
-use Platformsh\Docker\Utils\Platform\Platform;
+use mglaman\PlatformDocker\Command\Command;
+use mglaman\PlatformDocker\Utils\Platform\Platform;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;

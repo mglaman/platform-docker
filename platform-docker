@@ -10,7 +10,7 @@ if (file_exists(CLI_ROOT . '/vendor/autoload.php')) {
     echo "You need to run 'composer install'.\n";
     exit(1);
 }
-use Platformsh\Docker\Application;
+use mglaman\PlatformDocker\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 $input = new ArgvInput();
 $application = new Application();

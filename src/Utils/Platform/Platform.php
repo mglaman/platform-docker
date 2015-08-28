@@ -1,6 +1,6 @@
 <?php
 
-namespace Platformsh\Docker\Utils\Platform;
+namespace mglaman\PlatformDocker\Utils\Platform;
 
 
 use Platformsh\Cli\Local\LocalProject;
@@ -8,7 +8,7 @@ use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class Platform
- * @package Platformsh\Docker\Utils\Platform
+ * @package mglaman\PlatformDocker\Utils\Platform
  */
 class Platform
 {
@@ -23,6 +23,11 @@ class Platform
         } else {
             return $platformConfig['id'];
         }
+    }
+
+    public static function rootDir()
+    {
+        return LocalProject::getProjectRoot();
     }
 
     /**

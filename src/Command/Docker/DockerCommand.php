@@ -1,16 +1,16 @@
 <?php
 
-namespace Platformsh\Docker\Command\Docker;
+namespace mglaman\PlatformDocker\Command\Docker;
 
 
 use Platformsh\Cli\Helper\ShellHelper;
-use Platformsh\Docker\Command\Command;
+use mglaman\PlatformDocker\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class DockerCommand
- * @package Platformsh\Docker\Command\Docker
+ * @package mglaman\PlatformDocker\Command\Docker
  */
 abstract class DockerCommand extends Command
 {
@@ -85,6 +85,7 @@ abstract class DockerCommand extends Command
     /**
      * @param $command
      * @param array $args
+     * @param bool $mustRun
      *
      * @throws \Exception
      * @return bool

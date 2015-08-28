@@ -6,11 +6,12 @@
  * Time: 1:59 AM
  */
 
-namespace Platformsh\Docker\Command\Platform;
+namespace mglaman\PlatformDocker\Command\Platform;
 
 
-use Platformsh\Docker\Command\Command;
-use Platformsh\Docker\Utils\Platform\Platform;
+use mglaman\PlatformDocker\Command\Command;
+use mglaman\PlatformDocker\Utils\Platform\Platform;
+use Platformsh\Cli\Helper\ShellHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -35,20 +36,22 @@ class DbSyncCommand extends Command
     {
         $this->stdOut->writeln("<info>Syncing Platform.sh environment database to local</info>");
 
-        // @todo this isn't as robust as getCurrentEnvironment().
-        $git = $this->getHelper('shell');
-        $currentBranch = $git->execute(
-          ['git', 'symbolic-ref', '--short', 'HEAD'], Platform::repoDir());
+        /** @var ShellHelper $shell */
+        $shell = $this->getHelper('shell');
+        $shell->execute([
+            'platform',
+            'sql-dump',
+        ]);
 
-        $remoteAlias = '@' . Platform::projectName() . '.' . $currentBranch;
-        $localAlias = '@' . Platform::projectName() . '._local';
+        $cd = getcwd();
+        chdir(Platform::webDir());
+        exec('drush sqlc < ../dump.sql');
+        chdir($cd);
 
-        // @todo squeeze this into the ShellHelper arguments somehow.
-        exec("drush $remoteAlias sql-dump --gzip | gzip -cd | drush $localAlias sqlc");
-//        $this->stdOut->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
-//        $shell = new ShellHelper($this->stdOut);
+        // Why can't I get execute() w/ < to work.
 //        $shell->execute([
-//            "drush $remoteAlias sql-dump --gzip | gzip -cd | drush $localAlias sqlc"
-//        ], null, true, false);
+//            'drush',
+//            'sqlc < ../dump.sql',
+//        ], Platform::webDir());
     }
 }

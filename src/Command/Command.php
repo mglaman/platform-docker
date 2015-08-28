@@ -1,13 +1,13 @@
 <?php
 
-namespace Platformsh\Docker\Command;
+namespace mglaman\PlatformDocker\Command;
 
-use Platformsh\Cli\Local\LocalProject;
-use Platformsh\Docker\Utils\Platform\Platform;
+use mglaman\PlatformDocker\Utils\Platform\Platform;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Symfony\Component\Yaml\Parser;
 
 abstract class Command extends BaseCommand
 {
@@ -20,18 +20,9 @@ abstract class Command extends BaseCommand
     /** @var bool */
     protected static $interactive = false;
     /** @var array */
-    protected $platformConfig;
+    protected $projectConfig = array();
     protected $projectName;
     protected $projectPath;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct($name = null)
-    {
-        parent::__construct($name);
-        $this->getProjectConfig();
-    }
 
 
     /**
@@ -39,28 +30,35 @@ abstract class Command extends BaseCommand
      */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        // Validate we can run.
-        if ($this->platformConfig === null) {
-            $output->writeln('<error>Must run command within a Platform.sh project</error>');
-            exit(1);
-        }
-
-        $this->projectPath = LocalProject::getProjectRoot();
-        $this->projectName = Platform::projectName();
-
         $this->stdOut = $output;
         $this->stdErr = $output instanceof ConsoleOutputInterface ? $output->getErrorOutput() : $output;
         $this->stdIn = $input;
         self::$interactive = $input->isInteractive();
+
+        // Validate we can run.
+        $this->validate();
+
+        $this->projectPath = Platform::rootDir();
+        $this->projectName = Platform::projectName();
     }
 
-    /**
-     * Returns current project's Platform.sh config.
-     *
-     * @throws \Exception
-     */
-    protected function getProjectConfig()
+    protected function validate()
     {
-        $this->platformConfig = LocalProject::getProjectConfig();
+        if (empty($this->projectConfig)) {
+            if (!$this->projectConfig = $this->loadConfig()) {
+                $this->stdOut->writeln('<error>Must run command within a project</error>');
+                exit(1);
+            }
+        }
+        return false;
+    }
+
+    protected function loadConfig()
+    {
+        if (file_exists('.platform-project')) {
+            $yaml = new Parser();
+            return $yaml->parse(file_get_contents('.platform-project'));
+        }
+        return array();
     }
 }

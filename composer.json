@@ -1,6 +1,6 @@
 {
   "name": "mglaman/platform-docker",
-  "description": "Platform.sh and Docker Compose scaffolding",
+  "description": "An opinionated platform stack for Drupal with Docker Compose",
   "license": "GPL-2.0+",
   "require": {
     "symfony/config": "2.7.*",
@@ -8,17 +8,22 @@
     "symfony/yaml": "2.7.*",
     "symfony/process": "2.7.*",
     "platformsh/cli": "@stable",
-    "drush/drush": "@stable",
     "mglaman/toolstack-helper": "dev-master"
+  },
+  "suggest": {
+    "drush/drush": "For Drupal projects",
+    "wp-cli/wp-cli": "For WordPress projects",
+    "platformsh/cli": "For Platform.sh projects"
   },
   "autoload": {
     "psr-4": {
-      "Platformsh\\Docker\\": "src"
+      "mglaman\\PlatformDocker\\": "src"
     }
   },
   "authors": [
     {
-      "name": "Matt Glaman"
+      "name": "Matt Glaman",
+      "email": "nmd.matt@gmail.com"
     }
   ],
   "bin": [

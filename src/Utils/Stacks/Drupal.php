@@ -1,17 +1,17 @@
 <?php
 
-namespace Platformsh\Docker\Utils\Drupal;
+namespace mglaman\PlatformDocker\Utils\Stacks;
 
 
 use Symfony\Component\Filesystem\Filesystem;
-use Platformsh\Docker\Utils\Platform\Platform;
-use Platformsh\Docker\Utils\Docker\Docker;
+use mglaman\PlatformDocker\Utils\Platform\Platform;
+use mglaman\PlatformDocker\Utils\Docker\Docker;
 
 /**
  * Class Settings
- * @package Platformsh\Docker\Utils\Drupal
+ * @package mglaman\PlatformDocker\Stacks\Drupal
  */
-class Settings
+class Drupal
 {
     /**
      * @var string
@@ -41,8 +41,10 @@ class Settings
     /**
      *
      */
-    public function save() {
+    public function configure() {
         $fs = new Filesystem();
+
+        $fs->copy(CLI_ROOT . '/resources/stacks/drupal/drupal7.settings.php', Platform::webDir() . '/sites/default/settings.php', true);
         $fs->dumpFile(Platform::sharedDir() . '/settings.local.php', $this->string);
 
         // Relink if missing.

@@ -6,11 +6,11 @@
  * Time: 11:50 PM
  */
 
-namespace Platformsh\Docker\Utils\Docker;
+namespace mglaman\PlatformDocker\Utils\Docker;
 
 
 use Platformsh\Cli\Local\LocalProject;
-use Platformsh\Docker\Utils\Platform\Platform;
+use mglaman\PlatformDocker\Utils\Platform\Platform;
 use Symfony\Component\Filesystem\Filesystem;
 
 class ComposeConfig

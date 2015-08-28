@@ -14,7 +14,7 @@ First, if you do not have Docker then head over to their [documentation](https:/
 
 If you have platform-cli already running, then simply install via Composer.
 ````
-composer global require platformsh/docker:@stable
+composer global require mglaman/platform-docker:@stable
 ````
 
 ## Usage
