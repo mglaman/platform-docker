@@ -45,7 +45,7 @@ EOT;
 
         // Relink if missing.
         if (!$fs->exists(Platform::webDir() . '/wp-config.local.php')) {
-            $fs->symlink('../shared/settings.local.php', Platform::webDir() . '/settings.local.php');
+            $fs->symlink('../shared/wp-config.local.php', Platform::webDir() . '/wp-config  .local.php');
         }
     }
 
