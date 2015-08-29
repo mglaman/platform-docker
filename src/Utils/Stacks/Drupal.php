@@ -11,7 +11,7 @@ use mglaman\PlatformDocker\Utils\Docker\Docker;
  * Class Settings
  * @package mglaman\PlatformDocker\Stacks\Drupal
  */
-class Drupal
+class Drupal implements StackTypeInterface
 {
     /**
      * @var string
@@ -56,7 +56,7 @@ class Drupal
     /**
      *
      */
-    protected function dbFromDocker() {
+    public function dbFromDocker() {
         $this->string .= <<<EOT
 // Database configuration.
 if (empty(\$_SERVER['PLATFORM_DOCKER'])) {
@@ -79,7 +79,7 @@ EOT;
     /**
      *
      */
-    protected function dbFromLocal() {
+    public function dbFromLocal() {
         $this->string .= <<<EOT
 // Database configuration.
 \$databases['default']['default'] = array(

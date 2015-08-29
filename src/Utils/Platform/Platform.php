@@ -12,21 +12,33 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Platform
 {
+    public static function getConfig($key = null)
+    {
+        $platformConfig = LocalProject::getProjectConfig();
+        if ($key) {
+            return (isset($platformConfig[$key]) ? $platformConfig[$key] : null);
+        }
+        return $platformConfig;
+    }
     /**
      * @return mixed
      */
     public static function projectName()
     {
-        $platformConfig = LocalProject::getProjectConfig();
-        if (isset($platformConfig['alias-group'])) {
-            return $platformConfig['alias-group'];
-        } else {
-            return $platformConfig['id'];
+        $platformConfig = self::getConfig();
+        foreach (['name', 'alias-group', 'id'] as $key) {
+            if (isset($platformConfig[$key])) {
+                return $platformConfig[$key];
+            }
         }
     }
 
     public static function rootDir()
     {
+        $dir = self::getConfig('path');
+        if ($dir) {
+            return $dir;
+        }
         return LocalProject::getProjectRoot();
     }
 

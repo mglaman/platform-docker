@@ -45,8 +45,9 @@ class InitCommand extends Command
                 // Reset project path since we're making project here.
                 $this->projectPath = getcwd();
 
-                $question = new Question("<comment>Project name (machine name)</comment>: ");
-                $this->projectConfig['alias-group'] = $helper->ask($input, $output, $question);
+                $this->projectConfig['alias-group'] = basename(getcwd());
+                $this->projectConfig['name'] = basename(getcwd());
+                $this->projectConfig['path'] = $this->projectPath;
 
                 $dumper = new Dumper();
                 file_put_contents($this->projectPath . '/.platform-project', $dumper->dump($this->projectConfig, 2));
@@ -73,8 +74,6 @@ class InitCommand extends Command
         }
 
         $this->getApplication()->find('docker:rebuild')->run($input, $output);
-        sleep(5);
-        $this->getApplication()->find('platform:db-sync')->run($input, $output);
     }
 
 
