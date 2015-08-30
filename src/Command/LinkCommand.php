@@ -43,11 +43,9 @@ class LinkCommand extends Command
      */
     protected function openUrl($url)
     {
-        $shellHelper = $this->getHelper('shell');
-
         $browser = $this->getDefaultBrowser();
         if ($browser) {
-            $opened = $shellHelper->execute(array($browser, $url));
+            $opened = $this->getHelper('process')->run($this->stdOut, array($browser, $url));
             if ($opened) {
                 $this->stdErr->writeln("<info>Opened</info>: $url");
                 return;
@@ -66,9 +64,12 @@ class LinkCommand extends Command
     protected function getDefaultBrowser()
     {
         $potential = array('xdg-open', 'open', 'start');
-        $shellHelper = $this->getHelper('shell');
+        /** @var \Symfony\Component\Console\Helper\ProcessHelper $process */
+        $process = $this->getHelper('process');
         foreach ($potential as $browser) {
-            if ($shellHelper->commandExists($browser)) {
+            // Check if command exists by executing help flag.
+
+            if ($process->run($this->stdOut, "command -v $browser")->isSuccessful()) {
                 return $browser;
             }
         }

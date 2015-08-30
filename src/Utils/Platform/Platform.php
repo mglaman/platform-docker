@@ -3,43 +3,54 @@
 namespace mglaman\PlatformDocker\Utils\Platform;
 
 
-use Platformsh\Cli\Local\LocalProject;
-use Symfony\Component\Yaml\Yaml;
-
 /**
  * Class Platform
  * @package mglaman\PlatformDocker\Utils\Platform
  */
 class Platform
 {
-    public static function getConfig($key = null)
-    {
-        $platformConfig = LocalProject::getProjectConfig();
-        if ($key) {
-            return (isset($platformConfig[$key]) ? $platformConfig[$key] : null);
-        }
-        return $platformConfig;
-    }
+    const REPOSITORY_DIR = 'repository';
+    const SHARED_DIR = 'shared';
+    const WEB_ROOT = 'www';
+
     /**
      * @return mixed
      */
     public static function projectName()
     {
-        $platformConfig = self::getConfig();
+        $platformConfig = Config::get();
         foreach (['name', 'alias-group', 'id'] as $key) {
             if (isset($platformConfig[$key])) {
                 return $platformConfig[$key];
             }
         }
+        return null;
     }
 
     public static function rootDir()
     {
-        $dir = self::getConfig('path');
-        if ($dir) {
-            return $dir;
+        static $rootDir, $lastDir;
+        $cwd = getcwd();
+
+        if ($rootDir !== null && $lastDir === $cwd) {
+            return $rootDir;
         }
-        return LocalProject::getProjectRoot();
+
+        $rootDir = $lastDir = $current = $cwd;
+        do {
+            if (file_exists($current . '/' . Config::PLATFORM_CONFIG)) {
+                $rootDir = $current;
+                break;
+            }
+
+            $up = dirname($current);
+            if ($up == $current || $up == '.') {
+                break;
+            }
+            $current = $up;
+        } while(!$rootDir);
+
+        return $rootDir;
     }
 
     /**
@@ -47,7 +58,7 @@ class Platform
      */
     public static function sharedDir()
     {
-        return LocalProject::getProjectRoot() . '/' . LocalProject::SHARED_DIR;
+        return self::rootDir() . '/' . self::SHARED_DIR;
     }
 
     /**
@@ -55,23 +66,11 @@ class Platform
      */
     public static function repoDir()
     {
-        return LocalProject::getProjectRoot() . '/' . LocalProject::REPOSITORY_DIR;
+        return self::rootDir() . '/' . self::REPOSITORY_DIR;
     }
 
     public static function webDir()
     {
-        return LocalProject::getProjectRoot() . '/' . LocalProject::WEB_ROOT;
-    }
-
-    /**
-     * @return array
-     */
-    public static function projectServices()
-    {
-        $services = self::repoDir() . '/.platform/services.yaml';
-        if (file_exists($services)) {
-            return Yaml::parse(file_get_contents($services));
-        }
-        return null;
+        return self::rootDir() . '/' . self::WEB_ROOT;
     }
 }

@@ -57,7 +57,7 @@ class ProxyCommand extends DockerCommand
     protected function startProxy()
     {
         $this->stdOut->writeln("<comment>Starting the nginx proxy container");
-        if (!$this->executeDocker('start', [$this->containerName], false)) {
+        if (!$this->executeDocker('start', [$this->containerName])) {
             // Container wasn't created yet.
             return $this->createProxy();
         }

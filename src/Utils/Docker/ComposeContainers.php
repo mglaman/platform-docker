@@ -3,8 +3,8 @@
 namespace mglaman\PlatformDocker\Utils\Docker;
 
 
+use mglaman\PlatformDocker\Utils\Platform\Platform;
 use Symfony\Component\Yaml\Yaml;
-use Platformsh\Cli\Local\LocalProject;
 
 /**
  * Class ComposeConfig
@@ -32,7 +32,7 @@ class ComposeContainers
      */
     function __construct($name)
     {
-        $this->path = LocalProject::getProjectRoot();
+        $this->path = Platform::rootDir();
         $this->name = $name;
         // Add required containers.
         $this->addPhpFpm();

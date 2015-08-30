@@ -2,14 +2,11 @@
 
 namespace mglaman\PlatformDocker\Command;
 
+use mglaman\PlatformDocker\Utils\Platform\Config;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Yaml\Dumper;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class InitCommand
@@ -17,10 +14,8 @@ use Symfony\Component\Yaml\Yaml;
  */
 class InitCommand extends Command
 {
-    /**
-     * @var Filesystem;
-     */
-    protected $fs;
+
+    protected $cwd;
 
     /**
      * {@inheritdoc}
@@ -35,23 +30,21 @@ class InitCommand extends Command
      * @inheritdoc
      */
     protected function initialize(InputInterface $input, OutputInterface $output) {
-        $this->fs = new Filesystem();
-        if (empty($this->projectConfig)) {
+        if (empty(Config::get())) {
+            $this->cwd = getcwd();
+
             /** @var QuestionHelper $helper */
             $helper = $this->getHelper('question');
+            $output->writeln("<comment>Current directory: {$this->cwd}");
             $question = new ConfirmationQuestion("<info>There isn't a project here, create one? [Y,n] </info>");
 
             if ($helper->ask($input, $output, $question)) {
-                // Reset project path since we're making project here.
-                $this->projectPath = getcwd();
-
-                $this->projectConfig['alias-group'] = basename(getcwd());
-                $this->projectConfig['name'] = basename(getcwd());
-                $this->projectConfig['path'] = $this->projectPath;
-
-                $dumper = new Dumper();
-                file_put_contents($this->projectPath . '/.platform-project', $dumper->dump($this->projectConfig, 2));
-                clearstatcache(true);
+                Config::set('alias-group', basename($this->cwd));
+                Config::set('name', basename($this->cwd));
+                Config::set('path', $this->cwd);
+                if (!Config::write()) {
+                    throw new \Exception('There was an error writing the platform configuration.');
+                }
             }
             else {
                 exit(1);
@@ -68,12 +61,12 @@ class InitCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // If the docker-compose.yml file exists, then start containers.
-        if ($this->fs->exists($this->projectPath . '/docker-compose.yml')) {
+        if (file_exists($this->cwd . '/docker-compose.yml')) {
             $this->stdOut->writeln("<info>Docker compose initiated, starting containers. Run docker:rebuild to rebuild.");
             return $this->getApplication()->find('docker:up')->run($input, $output);
         }
 
-        $this->getApplication()->find('docker:rebuild')->run($input, $output);
+        return $this->getApplication()->find('docker:rebuild')->run($input, $output);
     }
 
 

@@ -67,7 +67,7 @@ class SshCommand extends DockerCommand
           'bash'
         ]);
         $process = $builder->getProcess();
-        // Need to set tty true, ShellHelper doesn't allow this setting.
+        // Need to set tty true, ProccessHelper doesn't allow this setting.
         $process->setTty(true);
         try {
             $process->mustRun(null);

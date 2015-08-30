@@ -8,6 +8,7 @@
 
 namespace mglaman\PlatformDocker\Command\Docker;
 
+use mglaman\PlatformDocker\Utils\Platform\Config;
 use mglaman\PlatformDocker\Utils\Platform\Platform;
 use mglaman\PlatformDocker\Utils\Stacks\WordPress;
 use mglaman\Toolstack\Toolstack;
@@ -51,7 +52,7 @@ class RebuildCommand extends DockerCommand
         $composeConfig->copyImages();
         $composeConfig->copyConfigs();
 
-        $composeContainers = new ComposeContainers($this->projectName);
+        $composeContainers = new ComposeContainers(Config::get('name'));
         // @todo check if services.yml has redis
         $composeContainers->addRedis();
         $composeConfig->writeDockerCompose($composeContainers);

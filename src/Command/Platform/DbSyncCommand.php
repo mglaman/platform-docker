@@ -11,7 +11,6 @@ namespace mglaman\PlatformDocker\Command\Platform;
 
 use mglaman\PlatformDocker\Command\Command;
 use mglaman\PlatformDocker\Utils\Platform\Platform;
-use Platformsh\Cli\Helper\ShellHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -36,22 +35,16 @@ class DbSyncCommand extends Command
     {
         $this->stdOut->writeln("<info>Syncing Platform.sh environment database to local</info>");
 
-        /** @var ShellHelper $shell */
-        $shell = $this->getHelper('shell');
-        $shell->execute([
+        /** @var \Symfony\Component\Console\Helper\ProcessHelper $process */
+        $process = $this->getHelper('process');
+        $process->mustRun($this->stdOut, [
             'platform',
             'sql-dump',
         ]);
 
         $cd = getcwd();
         chdir(Platform::webDir());
-        exec('drush sqlc < ../dump.sql');
+        $process->run($this->stdOut, 'drush sqlc < ../dump.sql');
         chdir($cd);
-
-        // Why can't I get execute() w/ < to work.
-//        $shell->execute([
-//            'drush',
-//            'sqlc < ../dump.sql',
-//        ], Platform::webDir());
     }
 }

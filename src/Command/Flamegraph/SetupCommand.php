@@ -8,8 +8,6 @@
 
 namespace mglaman\PlatformDocker\Command\Flamegraph;
 
-use Platformsh\Cli\Helper\ShellHelper;
-use Platformsh\Cli\Local\LocalProject;
 use mglaman\PlatformDocker\Command\Command;
 use mglaman\PlatformDocker\Utils\Platform\Platform;
 use Symfony\Component\Console\Input\InputInterface;
@@ -35,24 +33,23 @@ class SetupCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var ShellHelper $shell */
-        $shell = $this->getHelper('shell');
+        /** @var \Symfony\Component\Console\Helper\ProcessHelper $process */
+        $process = $this->getHelper('process');
         $output->setVerbosity(OutputInterface::VERBOSITY_VERY_VERBOSE);
-        $shell->setOutput($output);
-        if (!is_dir(LocalProject::getProjectRoot() . '/docker/fg')) {
-            $shell->execute([
+        if (!is_dir(Platform::rootDir() . '/docker/fg')) {
+            $process->mustRun($output, [
                 'git',
                 'clone',
                 'https://github.com/brendangregg/FlameGraph.git',
-              LocalProject::getProjectRoot() . '/docker/fg'
+              Platform::rootDir() . '/docker/fg'
             ]);
         }
-        if (!is_dir(LocalProject::getProjectRoot() . '/docker/xhpfg')) {
-            $shell->execute([
+        if (!is_dir(Platform::rootDir() . '/docker/xhpfg')) {
+            $process->mustRun($output, [
               'git',
               'clone',
               'https://github.com/msonnabaum/xhprof-flamegraphs.git',
-              LocalProject::getProjectRoot() . '/docker/xhpfg'
+              Platform::rootDir() . '/docker/xhpfg'
             ]);
         }
 
@@ -61,6 +58,6 @@ class SetupCommand extends Command
           'patch -p1 < ' . CLI_ROOT . '/resources/drupal-enable-profiling.patch',
           Platform::webDir()
           );
-        $process->mustRun(null);
+        $process->mustRun($output, 'patch -p1 < ' . CLI_ROOT . '/resources/drupal-enable-profiling.patch', Platform::webDir());
     }
 }

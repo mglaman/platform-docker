@@ -9,7 +9,6 @@
 namespace mglaman\PlatformDocker\Utils\Docker;
 
 
-use Platformsh\Cli\Local\LocalProject;
 use mglaman\PlatformDocker\Utils\Platform\Platform;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -33,7 +32,7 @@ class ComposeConfig
     public function __construct()
     {
         $this->resourcesDir = CLI_ROOT . '/resources';
-        $this->projectPath = LocalProject::getProjectRoot();
+        $this->projectPath = Platform::rootDir();
         $this->fs = new Filesystem();
     }
 

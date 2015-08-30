@@ -61,10 +61,11 @@ EOT;
 
     public function dbFromLocal()
     {
+        $hostname = Docker::getContainerName('mariadb');
         $name = Platform::projectName();
         $this->string .= <<<EOT
 if (empty(\$_SERVER['PLATFORM_DOCKER'])) {
-    \$cmd = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"3306/tcp\") 0).HostPort}}' {$this->containerName}";
+    \$cmd = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"3306/tcp\") 0).HostPort}}' {$hostname}";
     \$port = trim(shell_exec(\$cmd));
     define('DB_HOST', "{$name}.platform:\$port");
 }

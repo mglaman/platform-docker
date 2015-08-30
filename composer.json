@@ -7,7 +7,6 @@
     "symfony/console": "2.7.*",
     "symfony/yaml": "2.7.*",
     "symfony/process": "2.7.*",
-    "platformsh/cli": "@stable",
     "mglaman/toolstack-helper": "dev-master"
   },
   "suggest": {

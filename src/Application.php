@@ -2,16 +2,12 @@
 
 namespace mglaman\PlatformDocker;
 
-use Platformsh\Cli\Helper\ShellHelper;
 use Symfony\Component\Console\Application as ParentApplication;
 use Symfony\Component\Console\Helper\DebugFormatterHelper;
-use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\ProcessHelper;
-use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Helper\QuestionHelper;
-use Symfony\Component\Console\Helper\TableHelper;
 
 class Application extends ParentApplication
 {
@@ -57,13 +53,9 @@ class Application extends ParentApplication
     {
         return new HelperSet(array(
           new FormatterHelper(),
-          new DialogHelper(false),
-          new ProgressHelper(false),
-          new TableHelper(false),
           new DebugFormatterHelper(),
           new ProcessHelper(),
           new QuestionHelper(),
-          new ShellHelper()
         ));
     }
 
