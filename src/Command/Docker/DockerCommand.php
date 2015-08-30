@@ -139,8 +139,6 @@ abstract class DockerCommand extends Command
 
         $process = $processBuilder->getProcess();
 
-        $this->stdOut->writeln('<error>' . $process->getCommandLine() . '</error>');
-
         if ($this->stdOut->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
             $that = $this;
             $process->run(function ($type, $buffer) use ($process, $that) {
