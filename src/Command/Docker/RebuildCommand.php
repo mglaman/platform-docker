@@ -37,8 +37,6 @@ class RebuildCommand extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->stdOut->writeln('<info>Building containers</info>');
-
         $composeConfig = new ComposeConfig();
 
         // Create docker folder in project.
@@ -55,6 +53,8 @@ class RebuildCommand extends DockerCommand
         $composeContainers = new ComposeContainers(Config::get('name'));
         // @todo check if services.yml has redis
         $composeContainers->addRedis();
+        // @todo check to make this optional
+        $composeContainers->addSolr();
         $composeConfig->writeDockerCompose($composeContainers);
 
         // @todo move this into a static class to run configure based on type.
@@ -73,7 +73,10 @@ class RebuildCommand extends DockerCommand
             }
         }
 
+        $this->stdOut->writeln('<info>Building the containers</info>');
         $this->executeDockerCompose('build');
+
+        $this->stdOut->writeln('<info>Bringing up the containers</info>');
         $this->executeDockerCompose('up', ['-d']);
     }
 }

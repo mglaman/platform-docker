@@ -7,6 +7,7 @@ use mglaman\PlatformDocker\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessBuilder;
 
 /**
@@ -46,28 +47,28 @@ abstract class DockerCommand extends Command
                     $process->mustRun($output, 'docker-machine start ' . getenv('PLATFORM_DOCKER_MACHINE_NAME'));
                     // Give it a chance to boot.
                     sleep(1);
-
-                    // Export the Docker VM info on behalf of the user
-                    $envOutput = $process->run($output, 'docker-machine env ' . getenv('PLATFORM_DOCKER_MACHINE_NAME'));
-                    $envOutput = explode(PHP_EOL, $envOutput->getOutput());
-                    foreach ($envOutput as $line) {
-                        if (strpos($line, 'export') !== false) {
-                            list($cmd, $export) = explode(' ', $line);
-                            $this->dockerParams[] = str_replace('"', '', $export);
-
-                            if ($output->getVerbosity() > OutputInterface::VERBOSITY_VERBOSE) {
-                                $this->stdOut->writeln("<info>$export</info>");
-                            }
-                        }
-                    }
-
-                    // Give a Docker command a try.
-                    if (!$this->executeDocker('ps')) {
-                        $this->stdOut->writeln("<error>Unable to export Docker environment information</error>");
-                    }
                 } else {
                     $this->stdOut->writeln("<error>You need to start your Docker machine and export the environment information");
                     exit(1);
+                }
+
+                // Export the Docker VM info on behalf of the user
+                $envOutput = $process->run($output, 'docker-machine env ' . getenv('PLATFORM_DOCKER_MACHINE_NAME'));
+                $envOutput = explode(PHP_EOL, $envOutput->getOutput());
+                foreach ($envOutput as $line) {
+                    if (strpos($line, 'export') !== false) {
+                        list($cmd, $export) = explode(' ', $line);
+                        $this->dockerParams[] = str_replace('"', '', $export);
+
+                        if ($output->getVerbosity() > OutputInterface::VERBOSITY_VERBOSE) {
+                            $this->stdOut->writeln("<info>$export</info>");
+                        }
+                    }
+                }
+
+                // Give a Docker command a try.
+                if (!$this->executeDocker('ps')) {
+                    $this->stdOut->writeln("<error>Unable to export Docker environment information</error>");
                 }
             }
         }
@@ -97,7 +98,6 @@ abstract class DockerCommand extends Command
     }
 
     /**
-     * ProcessHelper doesn't allow setting of environment variables.
      * @param $type
      * @param $command
      * @param $args
@@ -107,10 +107,34 @@ abstract class DockerCommand extends Command
     protected function runDockerCommand($type, $command, $args)
     {
         $this->prependCommand($type, $command, $args);
-        $process = ProcessBuilder::create($args)->getProcess();
-        $process->setEnv($this->dockerParams);
 
-        $process->run(null);
+        $processBuilder = ProcessBuilder::create($args);
+        $processBuilder->setTimeout(3600);
+
+        if (!$this->envExported()) {
+            foreach ($this->dockerParams as $param) {
+                list($key, $value) = explode('=', $param, 2);
+                $processBuilder->setEnv($key, $value);
+            }
+        }
+
+        $process = $processBuilder->getProcess();
+
+        if ($this->stdOut->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
+            $that = $this;
+            $process->run(function ($type, $buffer) use ($process, $that) {
+                if ($that->stdOut->getVerbosity() > OutputInterface::OUTPUT_NORMAL) {
+                    if (Process::ERR == $type) {
+                        $that->stdOut->writeln("<error>$buffer</error>");
+                    } else {
+                        $that->stdOut->write("<comment>$buffer</comment>");
+                    }
+                }
+            });
+        } else {
+            $process->run(null);
+        }
+
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }

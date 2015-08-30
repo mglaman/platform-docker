@@ -11,6 +11,7 @@ namespace mglaman\PlatformDocker\Utils\Docker;
 
 use mglaman\PlatformDocker\Utils\Platform\Platform;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 class ComposeConfig
 {
@@ -50,7 +51,8 @@ class ComposeConfig
           $this->projectPath . '/xhprof',
           $this->projectPath . '/docker/data',
           $this->projectPath . '/docker/conf',
-          $this->projectPath . '/docker/images/php'
+          $this->projectPath . '/docker/conf/solr',
+          $this->projectPath . '/docker/images'
         ]);
     }
 
@@ -74,6 +76,17 @@ class ComposeConfig
         $nginxConf = file_get_contents($nginxConfFile);
         $nginxConf = str_replace('{{ platform }}', Platform::projectName() . '.platform', $nginxConf);
         file_put_contents($nginxConfFile, $nginxConf);
+
+        // stub in for Solr configs
+        $finder = new Finder();
+        $finder->in($this->resourcesDir . '/conf/solr')
+               ->files()
+               ->depth('< 1')
+               ->name('*');
+        /** @var \SplFileInfo $file */
+        foreach ($finder as $file) {
+            $this->fs->copy($file->getPathname(), $this->projectPath . '/docker/conf/solr/' . $file->getFilename());
+        }
     }
 
     /**
@@ -81,6 +94,6 @@ class ComposeConfig
      */
     protected function configsToCopy()
     {
-        return ['fpm.conf', 'mysql.cnf', 'nginx.conf', 'php.ini'];
+        return ['fpm.conf', 'mysql.cnf', 'nginx.conf', 'php.ini',];
     }
 }

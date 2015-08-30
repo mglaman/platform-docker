@@ -52,14 +52,14 @@ class SshCommand extends DockerCommand
                 $containerName = Docker::getContainerName('redis');
                 break;
             case 'solr':
-                $this->stdOut->writeln("<error>Not provided yet</error>");
+                $containerName = Docker::getContainerName('solr');
                 break;
             default:
                 $this->stdOut->writeln("<error>Invalid service type</error>");
                 break;
         }
 
-        $builder = new ProcessBuilder([
+        $builder = ProcessBuilder::create([
           'docker',
           'exec',
           '-it',

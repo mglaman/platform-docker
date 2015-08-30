@@ -1,4 +1,5 @@
 FROM php:5.6.8-fpm
+MAINTAINER Matt Glaman <nmd.matt@gmail.com>
 # Install modules
 RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
