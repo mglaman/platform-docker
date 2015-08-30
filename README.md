@@ -27,6 +27,11 @@ wildcard DNS entries to point \*.platform to your localhost or Docker VM (Mac, W
 If you are on Mac OS X, export ````PLATFORM_DOCKER_MACHINE_NAME```` with your Docker machine name. The tool will automatically boot the machine 
 or export its environment information as needed.
 
+### Features
+
+#### Solr
+By default an Apache Solr container is launched. The default server URI is ````http://solr:8983/solr````
+
 ### Commands
 
 ````

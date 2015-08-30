@@ -44,7 +44,9 @@ class Drupal implements StackTypeInterface
     public function configure() {
         $fs = new Filesystem();
 
-        $fs->copy(CLI_ROOT . '/resources/stacks/drupal/drupal7.settings.php', Platform::webDir() . '/sites/default/settings.php', true);
+        if (!file_exists(Platform::webDir() . '/sites/default/settings.php')) {
+            $fs->copy(CLI_ROOT . '/resources/stacks/drupal/drupal7.settings.php', Platform::webDir() . '/sites/default/settings.php', true);
+        }
         $fs->dumpFile(Platform::sharedDir() . '/settings.local.php', $this->string);
 
         // Relink if missing.

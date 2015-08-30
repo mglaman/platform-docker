@@ -111,7 +111,7 @@ abstract class DockerCommand extends Command
         $processBuilder = ProcessBuilder::create($args);
         $processBuilder->setTimeout(3600);
 
-        if (!$this->envExported()) {
+        if (PHP_OS != 'Linux' && !$this->envExported()) {
             foreach ($this->dockerParams as $param) {
                 list($key, $value) = explode('=', $param, 2);
                 $processBuilder->setEnv($key, $value);
