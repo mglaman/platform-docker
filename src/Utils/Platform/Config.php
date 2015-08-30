@@ -18,21 +18,20 @@ class Config
     protected static $instance;
     protected $config = array();
 
-    protected static function instance()
+    protected static function instance($refresh = false)
     {
-        if (self::$instance === NULL) {
+        if (self::$instance === null || $refresh === true) {
             self::$instance = new self();
         }
 
         return self::$instance;
     }
 
-    public function __construct($refresh = false)
+    public function __construct()
     {
-        if ((!$this->config || $refresh) && file_exists(Platform::rootDir() . '/' . self::PLATFORM_CONFIG)) {
+        if ((empty($this->config)) && file_exists(Platform::rootDir() . '/' . self::PLATFORM_CONFIG)) {
             $this->config = Yaml::parse(Platform::rootDir() . '/' . self::PLATFORM_CONFIG);
         }
-
         return $this->config;
     }
 
@@ -63,6 +62,11 @@ class Config
     {
         $this->config[$key] = $value;
         return $this;
+    }
+
+    public static function reset()
+    {
+        return self::instance(true);
     }
 
     public function writeConfig()

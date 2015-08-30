@@ -28,11 +28,12 @@ class ComposeContainers
     /**
      * Builds Docker Compose YML file.
      *
+     * @param $path
      * @param $name
      */
-    function __construct($name)
+    function __construct($path, $name)
     {
-        $this->path = Platform::rootDir();
+        $this->path = $path;
         $this->name = $name;
         // Add required containers.
         $this->addPhpFpm();

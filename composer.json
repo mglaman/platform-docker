@@ -10,6 +10,10 @@
     "symfony/process": "2.7.*",
     "mglaman/toolstack-helper": "dev-master"
   },
+  "require-dev": {
+    "phpunit/phpunit": "4.3.*",
+    "mikey179/vfsStream": "~1.4"
+  },
   "suggest": {
     "drush/drush": "For Drupal projects",
     "wp-cli/wp-cli": "For WordPress projects",
@@ -18,6 +22,11 @@
   "autoload": {
     "psr-4": {
       "mglaman\\PlatformDocker\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "mglaman\\PlatformDocker\\Tests\\": "tests"
     }
   },
   "authors": [

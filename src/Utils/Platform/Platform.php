@@ -36,7 +36,8 @@ class Platform
             return $rootDir;
         }
 
-        $rootDir = $lastDir = $current = $cwd;
+        $rootDir = null;
+        $lastDir = $current = $cwd;
         do {
             if (file_exists($current . '/' . Config::PLATFORM_CONFIG)) {
                 $rootDir = $current;

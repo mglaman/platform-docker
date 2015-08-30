@@ -50,7 +50,7 @@ class RebuildCommand extends DockerCommand
         $composeConfig->copyImages();
         $composeConfig->copyConfigs();
 
-        $composeContainers = new ComposeContainers(Config::get('name'));
+        $composeContainers = new ComposeContainers(Platform::rootDir(), Config::get('name'));
         // @todo check if services.yml has redis
         $composeContainers->addRedis();
         // @todo check to make this optional
