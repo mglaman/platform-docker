@@ -3,6 +3,7 @@
 namespace mglaman\PlatformDocker\Utils\Docker;
 
 use mglaman\PlatformDocker\Utils\Platform\Platform;
+use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * Class Docker
@@ -33,5 +34,34 @@ class Docker
     {
         $projectName = str_replace(array('-', '.'), '', Platform::projectName());
         return $projectName . '_' . $type . '_1';
+    }
+
+    /**
+     * @return bool
+     */
+    public static function dockerExists()
+    {
+        return !(ProcessBuilder::create(['docker'])->getProcess()->run());
+    }
+
+    public static function dockerAvailable()
+    {
+        return !(ProcessBuilder::create(['docker', 'ps'])->getProcess()->run());
+    }
+
+    public static function dockerComposeExists()
+    {
+        return !(ProcessBuilder::create(['docker-compose', '-v'])->getProcess()->run());
+    }
+
+    public static function dockerMachineStart($name)
+    {
+        // Check if machine is running.
+        if (ProcessBuilder::create(['docker-machine', 'inspect', $name])->getProcess()->run() !== 0) {
+            // If not, try to start it.
+            return !(ProcessBuilder::create(['docker-machine', 'start', $name])->getProcess()->run());
+        }
+
+        return true;
     }
 }
