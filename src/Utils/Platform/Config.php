@@ -30,7 +30,8 @@ class Config
     public function __construct()
     {
         if ((empty($this->config)) && file_exists(Platform::rootDir() . '/' . self::PLATFORM_CONFIG)) {
-            $this->config = Yaml::parse(Platform::rootDir() . '/' . self::PLATFORM_CONFIG);
+            $path = Platform::rootDir() . '/' . self::PLATFORM_CONFIG;
+            $this->config = Yaml::parse(file_get_contents($path));
         }
         return $this->config;
     }
@@ -71,6 +72,6 @@ class Config
 
     public function writeConfig()
     {
-        return file_put_contents(Platform::rootDir() . '/.platform-project', Yaml::dump($this->config, 2));
+        return file_put_contents(Platform::rootDir() . '/' . self::PLATFORM_CONFIG, Yaml::dump($this->config, 2));
     }
 }

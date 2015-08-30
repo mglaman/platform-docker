@@ -1,4 +1,4 @@
-# platform-docker
+# platform-docker [![Build Status](https://travis-ci.org/mglaman/platform-docker.svg?branch=master)](https://travis-ci.org/mglaman/platform-docker)
 **Platform Docker** is a CLI tool for scaffolding docker-compose configuration for Platform.sh projects. Running ````platform-docker````
 in a Platform.sh project folder will create a multi-container application environment for local development.
 
