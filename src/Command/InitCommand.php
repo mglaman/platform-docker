@@ -3,6 +3,7 @@
 namespace mglaman\PlatformDocker\Command;
 
 use mglaman\PlatformDocker\Utils\Platform\Config;
+use mglaman\PlatformDocker\Utils\Platform\Platform;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -42,7 +43,8 @@ class InitCommand extends Command
                 Config::set('alias-group', basename($this->cwd));
                 Config::set('name', basename($this->cwd));
                 Config::set('path', $this->cwd);
-                if (!Config::write()) {
+
+                if (!Config::write($this->cwd)) {
                     throw new \Exception('There was an error writing the platform configuration.');
                 }
             }

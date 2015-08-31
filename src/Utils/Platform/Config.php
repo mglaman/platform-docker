@@ -46,9 +46,12 @@ class Config
         return self::instance()->setConfig($key, $value);
     }
 
-    public static function write()
+    public static function write($destinationDir = null)
     {
-        return self::instance()->writeConfig();
+        if (!$destinationDir) {
+            $destinationDir = Platform::rootDir();
+        }
+        return self::instance()->writeConfig($destinationDir);
     }
 
     public function getConfig($key = null)
@@ -70,8 +73,11 @@ class Config
         return self::instance(true);
     }
 
-    public function writeConfig()
+    public function writeConfig($destinationDir = null)
     {
-        return file_put_contents(Platform::rootDir() . '/' . self::PLATFORM_CONFIG, Yaml::dump($this->config, 2));
+        if (!$destinationDir) {
+            $destinationDir = Platform::rootDir();
+        }
+        return file_put_contents($destinationDir . '/' . self::PLATFORM_CONFIG, Yaml::dump($this->config, 2));
     }
 }
