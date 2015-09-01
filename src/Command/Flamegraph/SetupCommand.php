@@ -54,10 +54,10 @@ class SetupCommand extends Command
         }
 
         $this->stdOut->writeln("<comment>Patching Drupal for xhprof</comment>");
-        $process = new Process(
+        $patchProcess = new Process(
           'patch -p1 < ' . CLI_ROOT . '/resources/drupal-enable-profiling.patch',
           Platform::webDir()
           );
-        $process->mustRun($output, 'patch -p1 < ' . CLI_ROOT . '/resources/drupal-enable-profiling.patch', Platform::webDir());
+        $patchProcess->mustRun();
     }
 }
