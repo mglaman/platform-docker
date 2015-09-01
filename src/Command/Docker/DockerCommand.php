@@ -38,14 +38,14 @@ abstract class DockerCommand extends Command
         }
 
         // For Mac OS X we need to ensure a Docker VM is running.
-        if (PHP_OS != 'Linux') {
-            $this->validateNonLinux();
+        if (!Docker::native()) {
+            $this->validateNonNative();
         } else {
-            $this->validateLinux();
+            $this->validateNative();
         }
     }
 
-    protected function validateLinux()
+    protected function validateNative()
     {
         // Give a Docker command a try.
         if (!Docker::dockerAvailable()) {
@@ -54,10 +54,8 @@ abstract class DockerCommand extends Command
         }
     }
 
-    protected function validateNonLinux()
+    protected function validateNonNative()
     {
-        /** @var \Symfony\Component\Console\Helper\ProcessHelper $process */
-        $process = $this->getHelper('process');
         // Check to see if Docker has been exported.
         if (!$this->envExported()) {
             $this->stdOut->writeln("<comment>Docker environment information not exported. Attempting from PLATFORM_DOCKER_MACHINE_NAME");
@@ -73,18 +71,9 @@ abstract class DockerCommand extends Command
             }
 
             // Export the Docker VM info on behalf of the user
-            $envOutput = $process->run($this->stdOut, 'docker-machine env ' . getenv('PLATFORM_DOCKER_MACHINE_NAME'));
-            $envOutput = explode(PHP_EOL, $envOutput->getOutput());
-            foreach ($envOutput as $line) {
-                if (strpos($line, 'export') !== false) {
-                    list($cmd, $export) = explode(' ', $line, 2);
-                    list($key, $value) = explode('=', $export, 2);
-                    $this->dockerParams[$key] = $value;
-
-                    if ($this->stdOut->getVerbosity() > OutputInterface::VERBOSITY_VERBOSE) {
-                        $this->stdOut->writeln("<info>$export</info>");
-                    }
-                }
+            $this->dockerParams = Docker::dockerMachineEnvironment(getenv('PLATFORM_DOCKER_MACHINE_NAME'));
+            foreach ($this->dockerParams as $key => $value) {
+                putenv("$key=$value");
             }
         }
         // Give a Docker command a try.
@@ -102,7 +91,16 @@ abstract class DockerCommand extends Command
      */
     protected function executeDockerCompose($command, array $args = [])
     {
-        return $this->runDockerCommand('docker-compose', $command, $args);
+        $that = $this;
+        return Docker::dockerComposeCommand($command, $args, function ($type, $buffer) use ($that) {
+            if ($that->stdOut->getVerbosity() > OutputInterface::OUTPUT_NORMAL) {
+                if (Process::ERR == $type) {
+                    $that->stdOut->writeln("<error>$buffer</error>");
+                } else {
+                    $that->stdOut->write("<comment>$buffer</comment>");
+                }
+            }
+        });
     }
 
     /**
@@ -114,63 +112,22 @@ abstract class DockerCommand extends Command
      */
     protected function executeDocker($command, array $args = [])
     {
-        return $this->runDockerCommand('docker', $command, $args);
-    }
-
-    /**
-     * @param $type
-     * @param $command
-     * @param $args
-     *
-     * @return \Symfony\Component\Process\Process
-     */
-    protected function runDockerCommand($type, $command, $args)
-    {
-        $this->prependCommand($type, $command, $args);
-
-        $processBuilder = ProcessBuilder::create($args);
-        $processBuilder->setTimeout(3600);
-
-        if (PHP_OS != 'Linux' && !$this->envExported()) {
-            foreach ($this->dockerParams as $key => $value) {
-                $processBuilder->setEnv($key, $value);
-            }
-        }
-
-        $process = $processBuilder->getProcess();
-
-        if ($this->stdOut->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
-            $that = $this;
-            $process->run(function ($type, $buffer) use ($process, $that) {
-                if ($that->stdOut->getVerbosity() > OutputInterface::OUTPUT_NORMAL) {
-                    if (Process::ERR == $type) {
-                        $that->stdOut->writeln("<error>$buffer</error>");
-                    } else {
-                        $that->stdOut->write("<comment>$buffer</comment>");
-                    }
+        $that = $this;
+        return Docker::dockerCommand($command, $args, function ($type, $buffer) use ($that) {
+            if ($that->stdOut->getVerbosity() > OutputInterface::OUTPUT_NORMAL) {
+                if (Process::ERR == $type) {
+                    $that->stdOut->writeln("<error>$buffer</error>");
+                } else {
+                    $that->stdOut->write("<comment>$buffer</comment>");
                 }
-            });
-        } else {
-            $process->run(null);
-        }
-
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
-
-        return $process;
+            }
+        });
     }
 
     /**
      * @return bool
      */
     protected function envExported() {
-        return (bool) !empty($this->dockerParams) || (getenv('DOCKER_MACHINE_NAME') || getenv('DOCKER_HOST') || getenv('DOCKER_CERT_PATH'));
-    }
-
-    protected function prependCommand($type, $command, &$args)
-    {
-        array_unshift($args, $command);
-        array_unshift($args, $type);
+        return (bool) !empty($this->dockerParams) || Docker::dockerMachineExported();
     }
 }

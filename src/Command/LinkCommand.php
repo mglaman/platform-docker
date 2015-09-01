@@ -8,12 +8,13 @@
 
 namespace mglaman\PlatformDocker\Command;
 
+use mglaman\PlatformDocker\Command\Docker\DockerCommand;
 use mglaman\PlatformDocker\Utils\Docker\Docker;
 use mglaman\PlatformDocker\Utils\Platform\Platform;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class LinkCommand extends Command
+class LinkCommand extends DockerCommand
 {
     /**
      * {@inheritdoc}
