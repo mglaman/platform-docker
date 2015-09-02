@@ -43,6 +43,7 @@ class Application extends ParentApplication
         $commands[] = new Command\Flamegraph\CreateCommand();
         $commands[] = new Command\Flamegraph\UnpatchCommand();
         $commands[] = new Command\Project\DbSyncCommand();
+        $commands[] = new Command\Project\BehatCommand();
         return $commands;
     }
 
