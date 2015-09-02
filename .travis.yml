@@ -10,18 +10,18 @@ matrix:
         - php: 7.0
     fast_finish: true
 sudo: true
-#services:
-#  - docker
+services:
+  - docker
 cache:
   directories:
     - $HOME/.composer/cache
-#before_install:
-#  - curl -L https://github.com/docker/compose/releases/download/1.4.0/docker-compose-`uname -s`-`uname -m` > docker-compose
-#  - chmod +x docker-compose
-#  - sudo mv docker-compose /usr/local/bin
+before_install:
+  - curl -L https://github.com/docker/compose/releases/download/1.4.0/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
 install:
-  - curl -sLo - http://j.mp/install-travis-docker | sh -xe
   - docker -v
+  - docker-compose -v
   - composer install --no-interaction
   - travis_wait composer update --prefer-lowest --no-interaction
 script:
