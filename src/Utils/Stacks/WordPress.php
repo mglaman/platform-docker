@@ -9,6 +9,7 @@
 namespace mglaman\PlatformDocker\Utils\Stacks;
 
 
+use mglaman\Docker\Compose;
 use mglaman\PlatformDocker\Utils\Docker\Docker;
 use mglaman\PlatformDocker\Utils\Platform\Platform;
 use Symfony\Component\Filesystem\Filesystem;
@@ -51,7 +52,7 @@ EOT;
 
     public function dbFromDocker()
     {
-        $hostname = Docker::getContainerName('mariadb');
+        $hostname = Compose::getContainerName(Platform::projectName(), 'mariadb');
         $this->string .= <<<EOT
 if (!empty(\$_SERVER['PLATFORM_DOCKER'])) {
     define('DB_HOST', '{$hostname}');
@@ -61,7 +62,7 @@ EOT;
 
     public function dbFromLocal()
     {
-        $hostname = Docker::getContainerName('mariadb');
+        $hostname = Compose::getContainerName(Platform::projectName(), 'mariadb');
         $name = Platform::projectName();
         $this->string .= <<<EOT
 if (empty(\$_SERVER['PLATFORM_DOCKER'])) {

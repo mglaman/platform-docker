@@ -8,6 +8,7 @@
 
 namespace mglaman\PlatformDocker\Command\Docker;
 
+use mglaman\Docker\Compose;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -29,6 +30,6 @@ class StopCommand extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->executeDockerCompose('stop');
+        Compose::stop();
     }
 }

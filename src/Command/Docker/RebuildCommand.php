@@ -8,6 +8,7 @@
 
 namespace mglaman\PlatformDocker\Command\Docker;
 
+use mglaman\Docker\Compose;
 use mglaman\PlatformDocker\Utils\Platform\Config;
 use mglaman\PlatformDocker\Utils\Platform\Platform;
 use mglaman\PlatformDocker\Utils\Stacks\WordPress;
@@ -74,9 +75,9 @@ class RebuildCommand extends DockerCommand
         }
 
         $this->stdOut->writeln('<info>Building the containers</info>');
-        $this->executeDockerCompose('build');
+        Compose::build();
 
         $this->stdOut->writeln('<info>Bringing up the containers</info>');
-        $this->executeDockerCompose('up', ['-d']);
+        Compose::up(['-d']);
     }
 }

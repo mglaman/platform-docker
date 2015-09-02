@@ -8,11 +8,13 @@
 
 namespace mglaman\PlatformDocker\Command;
 
+use mglaman\Docker\Compose;
 use mglaman\PlatformDocker\Command\Docker\DockerCommand;
-use mglaman\PlatformDocker\Utils\Docker\Docker;
 use mglaman\PlatformDocker\Utils\Platform\Platform;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use mglaman\Docker\Docker;
+use mglaman\Docker\Machine;
 
 class LinkCommand extends DockerCommand
 {
@@ -33,7 +35,8 @@ class LinkCommand extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $url = 'http://' . Platform::projectName() . '.platform:' . Docker::getContainerPort('nginx', '80');
+        $port = Docker::getContainerPort(Compose::getContainerName(Platform::projectName(), 'nginx'), 80);
+        $url = 'http://' . Platform::projectName() . '.platform:' . trim($port);
         $this->openUrl($url);
     }
 

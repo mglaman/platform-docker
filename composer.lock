@@ -4,8 +4,47 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6d037d5a6238e506748bfb0d0dccf5d6",
+    "hash": "023d9c15ae7b4fb1975cc299bc8c9841",
     "packages": [
+        {
+            "name": "mglaman/docker-helper",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mglaman/docker-helper.git",
+                "reference": "7b31861c8af9a698e9ad022493b86af97273b547"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mglaman/docker-helper/zipball/7b31861c8af9a698e9ad022493b86af97273b547",
+                "reference": "7b31861c8af9a698e9ad022493b86af97273b547",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/process": "2.7.*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "mglaman\\Docker\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Glaman",
+                    "email": "nmd.matt@gmail.com"
+                }
+            ],
+            "description": "Helper class for interacting with Docker, Docker Compose, and Docker Machine.",
+            "time": "2015-09-02 07:44:09"
+        },
         {
             "name": "mglaman/toolstack-helper",
             "version": "dev-master",
@@ -1145,7 +1184,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "mglaman/toolstack-helper": 20
+        "mglaman/toolstack-helper": 20,
+        "mglaman/docker-helper": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

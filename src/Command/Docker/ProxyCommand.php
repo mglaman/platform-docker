@@ -8,6 +8,7 @@
 
 namespace mglaman\PlatformDocker\Command\Docker;
 
+use mglaman\Docker\Docker;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -51,13 +52,13 @@ class ProxyCommand extends DockerCommand
     protected function stopProxy()
     {
         $this->stdOut->writeln("<comment>Stopping the nginx proxy container");
-        return $this->executeDocker('stop', [$this->containerName]);
+        return Docker::stop([$this->containerName]);
     }
 
     protected function startProxy()
     {
         $this->stdOut->writeln("<comment>Starting the nginx proxy container");
-        if (!$this->executeDocker('start', [$this->containerName])) {
+        if (!Docker::start([$this->containerName])->isSuccessful()) {
             // Container wasn't created yet.
             return $this->createProxy();
         }
@@ -67,15 +68,15 @@ class ProxyCommand extends DockerCommand
     protected function createProxy()
     {
         $this->stdOut->writeln("<comment>Creating the nginx proxy container");
-        return $this->executeDocker('run', [
-            '-d',
-            '-p',
-            '80:80',
-            '-v',
-            '/var/run/docker.sock:/tmp/docker.sock:ro',
-            '--name',
-            $this->containerName,
-            'jwilder/nginx-proxy',
+        return Docker::run([
+          '-d',
+          '-p',
+          '80:80',
+          '-v',
+          '/var/run/docker.sock:/tmp/docker.sock:ro',
+          '--name',
+          $this->containerName,
+          'jwilder/nginx-proxy',
         ]);
     }
 }

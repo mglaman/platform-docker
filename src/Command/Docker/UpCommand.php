@@ -8,6 +8,7 @@
 
 namespace mglaman\PlatformDocker\Command\Docker;
 
+use mglaman\Docker\Compose;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -30,6 +31,6 @@ class UpCommand extends DockerCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->stdOut->writeln("<info>Bring up containers</info>");
-        $this->executeDockerCompose('up', ['-d']);
+        Compose::up(['-d']);
     }
 }

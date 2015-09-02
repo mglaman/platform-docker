@@ -8,7 +8,9 @@
 
 namespace mglaman\PlatformDocker\Command\Docker;
 
+use mglaman\Docker\Compose;
 use mglaman\PlatformDocker\Utils\Docker\Docker;
+use mglaman\PlatformDocker\Utils\Platform\Platform;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -40,19 +42,19 @@ class SshCommand extends DockerCommand
         $type = $input->getArgument('service');
         switch ($type) {
             case 'http':
-                $containerName = Docker::getContainerName('nginx');
+                $containerName = Compose::getContainerName(Platform::projectName(), 'nginx');
                 break;
             case 'php':
-                $containerName = Docker::getContainerName('phpfpm');
+                $containerName = Compose::getContainerName(Platform::projectName(), 'phpfpm');
                 break;
             case 'db':
-                $containerName = Docker::getContainerName('mariadb');
+                $containerName = Compose::getContainerName(Platform::projectName(), 'mariadb');
                 break;
             case 'redis':
-                $containerName = Docker::getContainerName('redis');
+                $containerName = Compose::getContainerName(Platform::projectName(), 'redis');
                 break;
             case 'solr':
-                $containerName = Docker::getContainerName('solr');
+                $containerName = Compose::getContainerName(Platform::projectName(), 'solr');
                 break;
             default:
                 $this->stdOut->writeln("<error>Invalid service type</error>");

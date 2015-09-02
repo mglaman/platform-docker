@@ -3,8 +3,10 @@
 namespace mglaman\PlatformDocker\Command\Docker;
 
 
+use mglaman\Docker\Compose;
 use mglaman\PlatformDocker\Command\Command;
-use mglaman\PlatformDocker\Utils\Docker\Docker;
+use mglaman\Docker\Docker;
+use mglaman\Docker\Machine;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -28,11 +30,11 @@ abstract class DockerCommand extends Command
     protected function initialize(InputInterface $input, OutputInterface $output) {
         parent::initialize($input, $output);
 
-        if (!Docker::dockerExists()) {
+        if (!Docker::exists()) {
             $this->stdOut->writeln("<error>Cannot find docker command</error>");
             exit(1);
         }
-        if (!Docker::dockerComposeExists()) {
+        if (!Compose::exists()) {
             $this->stdOut->writeln("<error>Cannot find docker-compose command</error>");
             exit(1);
         }
@@ -48,7 +50,7 @@ abstract class DockerCommand extends Command
     protected function validateNative()
     {
         // Give a Docker command a try.
-        if (!Docker::dockerAvailable()) {
+        if (!Docker::available()) {
             $this->stdOut->writeln("<error>Unable to reach Docker service - try running `service docker start`</error>");
             exit(1);
         }
@@ -61,7 +63,7 @@ abstract class DockerCommand extends Command
             $this->stdOut->writeln("<comment>Docker environment information not exported. Attempting from PLATFORM_DOCKER_MACHINE_NAME");
             if (getenv('PLATFORM_DOCKER_MACHINE_NAME')) {
                 // Attempt to boot the Docker VM
-                if (!Docker::dockerMachineStart(getenv('PLATFORM_DOCKER_MACHINE_NAME'))) {
+                if (!Machine::start(getenv('PLATFORM_DOCKER_MACHINE_NAME'))) {
                     $this->stdOut->writeln("<error>Failed to start Docker machine</error>");
                     exit(1);
                 }
@@ -71,63 +73,22 @@ abstract class DockerCommand extends Command
             }
 
             // Export the Docker VM info on behalf of the user
-            $this->dockerParams = Docker::dockerMachineEnvironment(getenv('PLATFORM_DOCKER_MACHINE_NAME'));
+            $this->dockerParams = Machine::getEnv(getenv('PLATFORM_DOCKER_MACHINE_NAME'));
             foreach ($this->dockerParams as $key => $value) {
                 putenv("$key=$value");
             }
         }
         // Give a Docker command a try.
-        if (!Docker::dockerAvailable()) {
+        if (!Docker::available()) {
             $this->stdOut->writeln("<error>Unable to reach Docker service - try manually exporting environment variables.</error>");
             exit(1);
         }
-    }
-
-
-    /**
-     * @param $command
-     * @param array $args
-     * @return Process
-     */
-    protected function executeDockerCompose($command, array $args = [])
-    {
-        $that = $this;
-        return Docker::dockerComposeCommand($command, $args, function ($type, $buffer) use ($that) {
-            if ($that->stdOut->getVerbosity() > OutputInterface::OUTPUT_NORMAL) {
-                if (Process::ERR == $type) {
-                    $that->stdOut->writeln("<error>$buffer</error>");
-                } else {
-                    $that->stdOut->write("<comment>$buffer</comment>");
-                }
-            }
-        });
-    }
-
-    /**
-     * @param $command
-     * @param array $args
-     *
-     * @throws \Exception
-     * @return Process
-     */
-    protected function executeDocker($command, array $args = [])
-    {
-        $that = $this;
-        return Docker::dockerCommand($command, $args, function ($type, $buffer) use ($that) {
-            if ($that->stdOut->getVerbosity() > OutputInterface::OUTPUT_NORMAL) {
-                if (Process::ERR == $type) {
-                    $that->stdOut->writeln("<error>$buffer</error>");
-                } else {
-                    $that->stdOut->write("<comment>$buffer</comment>");
-                }
-            }
-        });
     }
 
     /**
      * @return bool
      */
     protected function envExported() {
-        return (bool) !empty($this->dockerParams) || Docker::dockerMachineExported();
+        return (bool) !empty($this->dockerParams) || Machine::isExported();
     }
 }

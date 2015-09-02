@@ -8,6 +8,7 @@
 
 namespace mglaman\PlatformDocker\Command\Docker;
 
+use mglaman\Docker\Compose;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -37,19 +38,19 @@ class LogsCommand extends DockerCommand
         $type = $input->getArgument('service');
         switch ($type) {
             case 'http':
-                $this->executeDockerCompose('logs', ['nginx']);
+                Compose::logs(['nginx']);
                 break;
             case 'php':
-                $this->executeDockerCompose('logs', ['phpfpm']);
+                Compose::logs(['phpfpm']);
                 break;
             case 'db':
-                $this->executeDockerCompose('logs', ['mariadb']);
+                Compose::logs(['mariadb']);
                 break;
             case 'redis':
-                $this->executeDockerCompose('logs', ['redis']);
+                Compose::logs(['redis']);
                 break;
             case 'solr':
-                $this->stdOut->writeln("<error>Not provided yet</error>");
+                Compose::logs(['solr']);
                 break;
             default:
                 $this->stdOut->writeln("<error>Invalid service type</error>");

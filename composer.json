@@ -2,13 +2,15 @@
   "name": "mglaman/platform-docker",
   "description": "An opinionated platform stack for Drupal with Docker Compose",
   "license": "GPL-2.0+",
+  "minimum-stability": "stable",
   "require": {
     "symfony/config": "2.7.*",
     "symfony/console": "2.7.*",
     "symfony/filesystem": "2.7.*",
     "symfony/yaml": "2.7.*",
     "symfony/process": "2.7.*",
-    "mglaman/toolstack-helper": "dev-master"
+    "mglaman/toolstack-helper": "dev-master",
+    "mglaman/docker-helper": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "4.3.*",

@@ -3,9 +3,9 @@
 namespace mglaman\PlatformDocker\Utils\Stacks;
 
 
+use mglaman\Docker\Compose;
 use Symfony\Component\Filesystem\Filesystem;
 use mglaman\PlatformDocker\Utils\Platform\Platform;
-use mglaman\PlatformDocker\Utils\Docker\Docker;
 
 /**
  * Class Settings
@@ -31,7 +31,7 @@ class Drupal implements StackTypeInterface
     public function __construct()
     {
         $this->projectName = Platform::projectName();
-        $this->containerName = Docker::getContainerName('mariadb');
+        $this->containerName = Compose::getContainerName(Platform::projectName(), 'mariadb');
 
         $this->string = "<?php\n\n";
         $this->dbFromLocal();
