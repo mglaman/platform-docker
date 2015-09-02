@@ -31,7 +31,7 @@ class ProxyCommand extends DockerCommand
             'Allows you to start or stop the nginx container proxy',
             'start'
           )
-          ->setDescription('Starts the docker containers');
+          ->setDescription('Starts the nginx proxy container');
     }
 
     /**
