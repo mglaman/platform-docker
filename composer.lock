@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mglaman/docker-helper.git",
-                "reference": "7b31861c8af9a698e9ad022493b86af97273b547"
+                "reference": "b201fec4da2c16926e71025a7f5066af85ad8ce5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/docker-helper/zipball/7b31861c8af9a698e9ad022493b86af97273b547",
-                "reference": "7b31861c8af9a698e9ad022493b86af97273b547",
+                "url": "https://api.github.com/repos/mglaman/docker-helper/zipball/b201fec4da2c16926e71025a7f5066af85ad8ce5",
+                "reference": "b201fec4da2c16926e71025a7f5066af85ad8ce5",
                 "shasum": ""
             },
             "require": {
@@ -43,7 +43,7 @@
                 }
             ],
             "description": "Helper class for interacting with Docker, Docker Compose, and Docker Machine.",
-            "time": "2015-09-02 07:44:09"
+            "time": "2015-09-02 08:03:04"
         },
         {
             "name": "mglaman/toolstack-helper",
