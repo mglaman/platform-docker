@@ -16,7 +16,7 @@ class Application extends ParentApplication
      */
     public function __construct()
     {
-        parent::__construct('Platform.sh Docker', '0.0.1');
+        parent::__construct('Platform Docker', '0.0.1');
         $this->setDefaultTimezone();
         $this->addCommands($this->getCommands());
     }
