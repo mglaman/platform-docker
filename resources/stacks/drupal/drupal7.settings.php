@@ -6,14 +6,6 @@
 $update_free_access = FALSE;
 
 /**
- * Salt for one-time login links and cancel links, form tokens, etc.
- *
- * If this variable is empty, a hash of the serialized database credentials
- * will be used as a fallback salt.
- */
-$drupal_hash_salt = '';
-
-/**
  * PHP settings.
  */
 ini_set('session.gc_probability', 1);

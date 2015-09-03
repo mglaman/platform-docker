@@ -34,6 +34,7 @@ class Drupal implements StackTypeInterface
         $this->containerName = Compose::getContainerName(Platform::projectName(), 'mariadb');
 
         $this->string = "<?php\n\n";
+        $this->setSalt();
         $this->dbFromLocal();
         $this->dbFromDocker();
     }
@@ -53,6 +54,22 @@ class Drupal implements StackTypeInterface
         if (!$fs->exists(Platform::webDir() . '/sites/default/settings.local.php')) {
             $fs->symlink('../../../shared/settings.local.php', Platform::webDir() . '/sites/default/settings.local.php');
         }
+    }
+
+    public function setSalt()
+    {
+        $salt = hash('sha256', serialize($_SERVER));
+        $this->string .= <<<EOT
+
+/**
+ * Salt for one-time login links and cancel links, form tokens, etc.
+ *
+ * If this variable is empty, a hash of the serialized database credentials
+ * will be used as a fallback salt.
+ */
+\$drupal_hash_salt = '$salt';
+
+EOT;
     }
 
     /**
