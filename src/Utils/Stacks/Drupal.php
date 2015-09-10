@@ -4,6 +4,8 @@ namespace mglaman\PlatformDocker\Utils\Stacks;
 
 
 use mglaman\Docker\Compose;
+use mglaman\Toolstack\Toolstack;
+use mglaman\Toolstack\Stacks\Drupal as DrupalStackHelper;
 use Symfony\Component\Filesystem\Filesystem;
 use mglaman\PlatformDocker\Utils\Platform\Platform;
 
@@ -25,6 +27,8 @@ class Drupal implements StackTypeInterface
      * @var string
      */
     protected $containerName;
+
+    protected $version;
     /**
      * Builds the settings.local.php file.
      */
@@ -33,10 +37,26 @@ class Drupal implements StackTypeInterface
         $this->projectName = Platform::projectName();
         $this->containerName = Compose::getContainerName(Platform::projectName(), 'mariadb');
 
+        /** @var DrupalStackHelper $drupalStack */
+        $drupalStack = Toolstack::getStackByType('drupal');
+        $this->version = $drupalStack->version(Platform::webDir());
+
         $this->string = "<?php\n\n";
+
         $this->setSalt();
         $this->dbFromLocal();
         $this->dbFromDocker();
+
+
+        if ($this->version == DrupalStackHelper::DRUPAL8) {
+            $this->string .= <<<EOT
+// Configuration directories.
+\$config_directories = array(
+  CONFIG_ACTIVE_DIRECTORY => '../../../shared/config/active',
+  CONFIG_STAGING_DIRECTORY => '../../../shared/config/staging',
+);
+EOT;
+        }
     }
 
     /**
@@ -45,9 +65,21 @@ class Drupal implements StackTypeInterface
     public function configure() {
         $fs = new Filesystem();
 
-        if (!file_exists(Platform::webDir() . '/sites/default/settings.php')) {
+        if ($this->version  == DrupalStackHelper::DRUPAL7) {
             $fs->copy(CLI_ROOT . '/resources/stacks/drupal/drupal7.settings.php', Platform::webDir() . '/sites/default/settings.php', true);
         }
+        elseif ($this->version  == DrupalStackHelper::DRUPAL8) {
+            $fs->copy(CLI_ROOT . '/resources/stacks/drupal/drupal8.settings.php', Platform::webDir() . '/sites/default/settings.php', true);
+        }
+
+        if ($this->version == DrupalStackHelper::DRUPAL8) {
+            $fs->mkdir([
+                Platform::sharedDir() . '/config',
+                Platform::sharedDir() . '/config/active',
+                Platform::sharedDir() . '/config/staging',
+            ]);
+        }
+
         $fs->dumpFile(Platform::sharedDir() . '/settings.local.php', $this->string);
 
         // Relink if missing.
@@ -59,7 +91,8 @@ class Drupal implements StackTypeInterface
     public function setSalt()
     {
         $salt = hash('sha256', serialize($_SERVER));
-        $this->string .= <<<EOT
+        if ($this->version == DrupalStackHelper::DRUPAL7) {
+            $this->string .= <<<EOT
 
 /**
  * Salt for one-time login links and cancel links, form tokens, etc.
@@ -70,6 +103,12 @@ class Drupal implements StackTypeInterface
 \$drupal_hash_salt = '$salt';
 
 EOT;
+        }
+        elseif ($this->version == \mglaman\Toolstack\Stacks\Drupal::DRUPAL8) {
+            $this->string .= <<<EOT
+\$settings['hash_salt'] = '$salt';
+EOT;
+        }
     }
 
     /**

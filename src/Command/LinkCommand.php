@@ -14,7 +14,6 @@ use mglaman\PlatformDocker\Utils\Platform\Platform;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use mglaman\Docker\Docker;
-use mglaman\Docker\Machine;
 
 class LinkCommand extends DockerCommand
 {

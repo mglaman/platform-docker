@@ -51,12 +51,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mglaman/toolstack-helper.git",
-                "reference": "59775db401da2ff0b5eb4987b5bbf11b00ef3d06"
+                "reference": "9ff8aa48db7e734fef30ff9b6a00495ef12b897a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/toolstack-helper/zipball/59775db401da2ff0b5eb4987b5bbf11b00ef3d06",
-                "reference": "59775db401da2ff0b5eb4987b5bbf11b00ef3d06",
+                "url": "https://api.github.com/repos/mglaman/toolstack-helper/zipball/9ff8aa48db7e734fef30ff9b6a00495ef12b897a",
+                "reference": "9ff8aa48db7e734fef30ff9b6a00495ef12b897a",
                 "shasum": ""
             },
             "require": {
@@ -85,7 +85,7 @@
                 }
             ],
             "description": "Helps identify what kind of project is in a folder (Drupal, WordPress, Symfonfy, etc.)",
-            "time": "2015-08-29 01:59:34"
+            "time": "2015-09-10 04:23:33"
         },
         {
             "name": "symfony/config",
