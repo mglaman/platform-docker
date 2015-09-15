@@ -59,7 +59,7 @@ class RebuildCommand extends DockerCommand
         $composeConfig->writeDockerCompose($composeContainers);
 
         // @todo move this into a static class to run configure based on type.
-        $stack = Toolstack::getStackByDir(Platform::webDir());
+        $stack = Toolstack::inspect(Platform::webDir());
         if ($stack) {
             $this->stdOut->writeln("<comment>Configuring stack:</comment> " . $stack->type());
             switch ($stack->type()) {
