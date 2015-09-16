@@ -34,8 +34,13 @@ class LinkCommand extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $port = Docker::getContainerPort(Compose::getContainerName(Platform::projectName(), 'nginx'), 80);
-        $url = 'http://' . Platform::projectName() . '.platform:' . trim($port);
+        $process = Docker::inspect(['--format="{{ .State.Running }}"', 'nginx-proxy'], true);
+
+        $url = 'http://' . Platform::projectName() . '.platform';
+        if (trim($process->getOutput()) != 'true') {
+            $port = Docker::getContainerPort(Compose::getContainerName(Platform::projectName(), 'nginx'), 80);
+            $url .= ':' . $port;
+        }
         $this->openUrl($url);
     }
 
