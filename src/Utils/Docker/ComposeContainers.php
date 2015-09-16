@@ -57,9 +57,9 @@ class ComposeContainers
           'command' => 'php-fpm --allow-to-run-as-root',
           'build'   => 'docker/images/php',
           'volumes' => [
-            'docker/conf/fpm.conf:/usr/local/etc/php-fpm.conf',
-            '.:/var/platform',
-            'docker/conf/php.ini:/usr/local/etc/php/conf.d/local.ini',
+            './docker/conf/fpm.conf:/usr/local/etc/php-fpm.conf',
+            './:/var/platform',
+            './docker/conf/php.ini:/usr/local/etc/php/conf.d/local.ini',
           ],
           'links' => [
             'mariadb',
@@ -86,8 +86,8 @@ class ComposeContainers
             '3306',
           ],
           'volumes' => [
-            'docker/data:/var/lib/mysql',
-            'docker/conf/mysql.cnf:/etc/mysql/my.cnf',
+            './docker/data:/var/lib/mysql',
+            './docker/conf/mysql.cnf:/etc/mysql/my.cnf',
           ],
           'environment' => [
             'MYSQL_DATABASE' => 'data',
@@ -107,8 +107,8 @@ class ComposeContainers
         $this->config['nginx'] = [
           'image' => 'nginx:1.9.0',
           'volumes' => [
-            'docker/conf/nginx.conf:/etc/nginx/conf.d/default.conf',
-            '.:/var/platform',
+            './docker/conf/nginx.conf:/etc/nginx/conf.d/default.conf',
+            './:/var/platform',
           ],
           'ports' => [
             '80',
@@ -142,7 +142,7 @@ class ComposeContainers
               '8893',
           ],
           'volumes' => [
-            'docker/conf/solr:/opt/solr/example/solr/collection1/conf',
+            './docker/conf/solr:/opt/solr/example/solr/collection1/conf',
           ],
         ];
     }
