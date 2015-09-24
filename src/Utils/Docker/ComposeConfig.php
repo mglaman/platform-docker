@@ -52,7 +52,8 @@ class ComposeConfig
           $this->projectPath . '/docker/data',
           $this->projectPath . '/docker/conf',
           $this->projectPath . '/docker/conf/solr',
-          $this->projectPath . '/docker/images'
+          $this->projectPath . '/docker/images',
+          $this->projectPath . '/docker/ssl'
         ]);
     }
 
@@ -87,6 +88,10 @@ class ComposeConfig
         foreach ($finder as $file) {
             $this->fs->copy($file->getPathname(), $this->projectPath . '/docker/conf/solr/' . $file->getFilename());
         }
+
+        // copy ssl
+        $this->fs->copy($this->resourcesDir . '/ssl/nginx.crt', $this->projectPath . '/docker/ssl/nginx.crt');
+        $this->fs->copy($this->resourcesDir . '/ssl/nginx.key', $this->projectPath . '/docker/ssl/nginx.key');
     }
 
     /**
