@@ -12,6 +12,7 @@ class Platform
     const REPOSITORY_DIR = 'repository';
     const SHARED_DIR = 'shared';
     const WEB_ROOT = 'www';
+    const TEST_ROOT = 'tests';
 
     /**
      * @return mixed
@@ -73,5 +74,10 @@ class Platform
     public static function webDir()
     {
         return self::rootDir() . '/' . self::WEB_ROOT;
+    }
+
+    public static function testsDir()
+    {
+        return self::rootDir() . '/' . self::TEST_ROOT;
     }
 }
