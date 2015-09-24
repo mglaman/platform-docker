@@ -63,8 +63,6 @@ class ComposeContainers
           ],
           'links' => [
             'mariadb',
-            'redis',
-            'solr',
           ],
           'environment' => [
             'PLATFORM_DOCKER' => $this->name,
@@ -116,7 +114,6 @@ class ComposeContainers
           ],
           'links' => [
             'phpfpm',
-            'solr',
           ],
           'environment' => [
             'VIRTUAL_HOST' => $this->name . '.platform',
@@ -132,6 +129,7 @@ class ComposeContainers
         $this->config['redis'] = [
           'image' => 'redis',
         ];
+        $this->config['phpfpm']['links'][] = 'redis';
     }
 
     public function addSolr()
@@ -145,5 +143,7 @@ class ComposeContainers
             './docker/conf/solr:/opt/solr/example/solr/collection1/conf',
           ],
         ];
+        $this->config['phpfpm']['links'][] = 'solr';
+        $this->config['nginx']['links'][] = 'solr';
     }
 }
