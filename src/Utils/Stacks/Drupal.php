@@ -86,6 +86,8 @@ EOT;
         if (!$fs->exists(Platform::webDir() . '/sites/default/settings.local.php')) {
             $fs->symlink('../../../shared/settings.local.php', Platform::webDir() . '/sites/default/settings.local.php');
         }
+
+        $this->drushrc();
     }
 
     public function setSalt()
@@ -150,5 +152,19 @@ EOT;
 );
 
 EOT;
+    }
+
+    /**
+     * Write a drushrc
+     */
+    public function drushrc() {
+
+        $drushrc = <<<EOT
+<?php
+\$options['uri'] = "http://{$this->projectName}.platform";
+EOT;
+        $fs = new Filesystem();
+        $fs->dumpFile(Platform::sharedDir() . '/drushrc.php', $drushrc);
+        $fs->symlink('../../../shared/drushrc.php', Platform::webDir() . '/sites/default/drushrc.php');
     }
 }
