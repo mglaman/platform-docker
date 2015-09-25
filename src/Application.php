@@ -3,6 +3,7 @@
 namespace mglaman\PlatformDocker;
 
 use Symfony\Component\Console\Application as ParentApplication;
+use Symfony\Component\Console\Command\HelpCommand;
 use Symfony\Component\Console\Helper\DebugFormatterHelper;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -19,6 +20,14 @@ class Application extends ParentApplication
         parent::__construct('Platform Docker', '0.0.1');
         $this->setDefaultTimezone();
         $this->addCommands($this->getCommands());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getDefaultCommands()
+    {
+        return array(new HelpCommand(), new Command\ListCommand());
     }
 
     /**
