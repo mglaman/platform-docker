@@ -63,6 +63,9 @@ class RebuildCommand extends DockerCommand
                     case 'solr':
                         $composeContainers->addSolr();
                         break;
+                    case 'memcached':
+                        $composeContainers->addMemcached();
+                        break;
                 }
             }
         }

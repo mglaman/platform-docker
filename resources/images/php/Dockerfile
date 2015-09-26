@@ -10,6 +10,19 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd
 
+# Make memcache available
+RUN curl -L -o /root/memcache.tgz https://pecl.php.net/get/memcache-3.0.6.tgz && \
+	cd /root && \
+	tar -zxvf memcache.tgz && \
+	cd /root/memcache-3.0.6 && \
+	/usr/local/bin/phpize && \
+	./configure --with-php-config=/usr/local/bin/php-config && \
+	make  && \
+	make install && \
+	cd /root && \
+	rm -fr /root/memcache-3.0.6 && \
+	rm -fr /root/memcache.tgz
+
 # Setup xdebug
 RUN curl -L -o /root/xdebug.tgz https://pecl.php.net/get/xdebug-2.3.2.tgz && \
 	cd /root && \

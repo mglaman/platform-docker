@@ -148,4 +148,11 @@ class ComposeContainers
         $this->config['phpfpm']['links'][] = 'solr';
         $this->config['nginx']['links'][] = 'solr';
     }
+
+    public function addMemcached() {
+        $this->config['memcached'] = [
+          'image' => 'memcached',
+        ];
+        $this->config['phpfpm']['links'][] = 'memcached';
+    }
 }
