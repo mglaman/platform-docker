@@ -9,8 +9,8 @@
     "symfony/filesystem": "2.7.*",
     "symfony/yaml": "2.7.*",
     "symfony/process": "2.7.*",
-    "mglaman/toolstack-helper": "dev-master",
-    "mglaman/docker-helper": "dev-master"
+    "mglaman/toolstack-helper": "0.0.*",
+    "mglaman/docker-helper": "0.0.*"
   },
   "require-dev": {
     "phpunit/phpunit": "4.3.*",
