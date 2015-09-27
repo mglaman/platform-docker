@@ -1,6 +1,6 @@
 # platform-docker [![Build Status](https://travis-ci.org/mglaman/platform-docker.svg?branch=master)](https://travis-ci.org/mglaman/platform-docker)
-**Platform Docker** is a CLI tool for scaffolding docker-compose configuration for Platform.sh projects. Running ````platform-docker````
-in a Platform.sh project folder will create a multi-container application environment for local development.
+**Platform Docker** is a CLI tool for scaffolding docker-compose configuration for PHP projects, currently opinionated at Drupal (7 and 8!) Running ````platform-docker````
+in a directory will create a multi-container application environment for local development.
 
 ## Requirements
 
@@ -12,29 +12,41 @@ in a Platform.sh project folder will create a multi-container application enviro
 
 First, if you do not have Docker then head over to their [documentation](https://docs.docker.com/) and see how to install for your machine.
 
-If you have platform-cli already running, then simply install via Composer.
 ````
 composer global require mglaman/platform-docker:@stable
 ````
 
 ## Usage
 
-Use within a Platform.sh, or any project. Until the app itself can scaffold a folder, it's expecting a folder structure of
-* /
-* /shared
-* /www
-* /repository
+Use within any directory. Until the app itself can scaffold a folder, it's expecting a folder structure of
+* /shared (if not present it will be made)
+* /www (required, this is your build)
+* /repository (not required, but opinionated this is the source of what was built.)
+* /tests (default directory it will look for Behat tests, however checks shared and www)
 
-Sites are provisioned at project-name.platform. Currently the tld is not configurable. It's best to set up dnsmasq set up
-wildcard DNS entries to point \*.platform to your localhost or Docker VM (Mac, Windows.)
+Sites are provisioned at *project-name*.platform. Currently the tld is not configurable (#24). It's best to set up dnsmasq set up wildcard DNS entries to point \*.platform to your localhost or Docker VM (Mac, Windows.) Here's some tutorials
+* http://passingcuriosity.com/2013/dnsmasq-dev-osx/
+* http://www.dickson.me.uk/2012/03/26/setting-up-dnsmasq-with-ubuntu-10-04-for-home-networking/
 
-If you are on Mac OS X, export ````PLATFORM_DOCKER_MACHINE_NAME```` with your Docker machine name. The tool will automatically boot the machine 
-or export its environment information as needed.
+If you are on Mac OS X, export ````PLATFORM_DOCKER_MACHINE_NAME```` with your Docker machine name. The tool will automatically boot the machine or export its environment information as needed. For example, put ````12 export PLATFORM_DOCKER_MACHINE_NAME="vmname"```` in your .bash_profile.
 
 ### Features
 
+#### Redis
+There is a redis container available. Currently it can be added by adding the following to .platform-project in the root directory of the project
+
+````
+services:
+  - redis
+`````
+
 #### Solr
-By default an Apache Solr container is launched. The default server URI is ````http://solr:8983/solr````
+An Apache Solr container is available with the default server URI is ````http://solr:8983/solr```` Currently it can be added by adding the following to .platform-project in the root directory of the project
+
+````
+services:
+  - solr
+`````
 
 #### Flamegraphs
 There is a helper command which patches Drupal to log xhprof items, and then turn them into a flamegraph.

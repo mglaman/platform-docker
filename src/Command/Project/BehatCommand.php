@@ -13,6 +13,7 @@ use mglaman\Docker\Docker;
 use mglaman\PlatformDocker\Command\Command;
 use mglaman\PlatformDocker\Utils\Platform\Platform;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Finder\Finder;
@@ -31,7 +32,9 @@ class BehatCommand extends Command
         $this
           ->setName('project:behat')
           ->setAliases(['behat'])
-          ->setDescription('Runs behat');
+          ->addOption('depth', 'd', InputOption::VALUE_OPTIONAL, 'Directory depth level to search', 5)
+          ->addOption('folder', 'f', InputOption::VALUE_OPTIONAL, 'Additional folder to scan')
+          ->setDescription('Runs behat test suite for project. Checks ./tests, ./www, ./shared and ./repository by default.');
     }
 
     /**
@@ -111,19 +114,29 @@ class BehatCommand extends Command
 
     protected function discoverBehatYml()
     {
+        $depth = $this->stdIn->getOption('depth');
         $scanDirs = [
             Platform::sharedDir(),
             Platform::webDir(),
-            Platform::rootDir() . '/tests',
         ];
 
         if (is_dir(Platform::repoDir())) {
             $scanDirs[] = Platform::repoDir();
         }
 
+        if (is_dir(Platform::testsDir())) {
+            $scanDirs[] = Platform::testsDir();
+        }
+
+        $extraDir = $this->stdIn->getOption('folder');
+        if ($extraDir && is_dir($extraDir)) {
+            $scanDirs[] = $extraDir;
+        }
+
         $finder = new Finder();
         $finder->files()
           ->in($scanDirs)
+          ->depth("< $depth")
           ->name('behat.yml');
         return $finder;
     }

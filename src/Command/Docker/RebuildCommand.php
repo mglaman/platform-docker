@@ -52,10 +52,24 @@ class RebuildCommand extends DockerCommand
         $composeConfig->copyConfigs();
 
         $composeContainers = new ComposeContainers(Platform::rootDir(), Config::get('name'));
-        // @todo check if services.yml has redis
-        $composeContainers->addRedis();
-        // @todo check to make this optional
-        $composeContainers->addSolr();
+
+        // @todo: With #20 and making tool provider aware, read those configs. Or push those configs to main.
+        if (isset(Config::get()['services'])) {
+            foreach(Config::get('services') as $service) {
+                switch($service) {
+                    case 'redis':
+                        $composeContainers->addRedis();
+                        break;
+                    case 'solr':
+                        $composeContainers->addSolr();
+                        break;
+                    case 'memcached':
+                        $composeContainers->addMemcached();
+                        break;
+                }
+            }
+        }
+
         $composeConfig->writeDockerCompose($composeContainers);
 
         // @todo move this into a static class to run configure based on type.

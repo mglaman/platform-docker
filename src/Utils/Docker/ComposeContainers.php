@@ -63,8 +63,6 @@ class ComposeContainers
           ],
           'links' => [
             'mariadb',
-            'redis',
-            'solr',
           ],
           'environment' => [
             'PLATFORM_DOCKER' => $this->name,
@@ -109,6 +107,8 @@ class ComposeContainers
           'volumes' => [
             './docker/conf/nginx.conf:/etc/nginx/conf.d/default.conf',
             './:/var/platform',
+            './docker/ssl/nginx.crt:/etc/nginx/ssl/nginx.crt',
+            './docker/ssl/nginx.key:/etc/nginx/ssl/nginx.key',
           ],
           'ports' => [
             '80',
@@ -116,7 +116,6 @@ class ComposeContainers
           ],
           'links' => [
             'phpfpm',
-            'solr',
           ],
           'environment' => [
             'VIRTUAL_HOST' => $this->name . '.platform',
@@ -132,6 +131,7 @@ class ComposeContainers
         $this->config['redis'] = [
           'image' => 'redis',
         ];
+        $this->config['phpfpm']['links'][] = 'redis';
     }
 
     public function addSolr()
@@ -145,5 +145,14 @@ class ComposeContainers
             './docker/conf/solr:/opt/solr/example/solr/collection1/conf',
           ],
         ];
+        $this->config['phpfpm']['links'][] = 'solr';
+        $this->config['nginx']['links'][] = 'solr';
+    }
+
+    public function addMemcached() {
+        $this->config['memcached'] = [
+          'image' => 'memcached',
+        ];
+        $this->config['phpfpm']['links'][] = 'memcached';
     }
 }
