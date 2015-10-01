@@ -65,6 +65,9 @@ EOT;
     public function configure() {
         $fs = new Filesystem();
 
+        $fs->chmod(Platform::webDir() . '/sites/default', 0775);
+        $fs->chmod(Platform::webDir() . '/sites/default/settings.php', 0664);
+
         if ($this->version  == DrupalStackHelper::DRUPAL7) {
             $fs->copy(CLI_ROOT . '/resources/stacks/drupal/drupal7.settings.php', Platform::webDir() . '/sites/default/settings.php', true);
         }
