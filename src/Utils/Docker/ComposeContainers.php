@@ -3,6 +3,7 @@
 namespace mglaman\PlatformDocker\Utils\Docker;
 
 
+use mglaman\PlatformDocker\Utils\Platform\Platform;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -66,7 +67,7 @@ class ComposeContainers
           ],
           'environment' => [
             'PLATFORM_DOCKER' => $this->name,
-            'PHP_IDE_CONFIG' => 'serverName=' . $this->name . '.platform',
+            'PHP_IDE_CONFIG' => 'serverName=' . $this->name . '.' . Platform::projectTld(),
           ],
         ];
     }
@@ -118,7 +119,7 @@ class ComposeContainers
             'phpfpm',
           ],
           'environment' => [
-            'VIRTUAL_HOST' => $this->name . '.platform',
+            'VIRTUAL_HOST' => $this->name . '.' . Platform::projectTld(),
             'PLATFORM_DOCKER' => $this->name,
           ],
         ];

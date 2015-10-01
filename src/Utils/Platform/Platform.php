@@ -28,6 +28,12 @@ class Platform
         return null;
     }
 
+    public static function projectTld() {
+        $platformConfig = Config::get();
+
+        return isset($platformConfig['tld']) ? $platformConfig['tld'] : 'platform';
+    }
+
     public static function rootDir()
     {
         static $rootDir, $lastDir;

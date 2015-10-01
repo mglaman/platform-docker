@@ -75,7 +75,7 @@ class ComposeConfig
         // Quick fix to make nginx PHP_IDE_CONFIG dynamic for now.
         $nginxConfFile= $this->projectPath . '/docker/conf/nginx.conf';
         $nginxConf = file_get_contents($nginxConfFile);
-        $nginxConf = str_replace('{{ platform }}', Platform::projectName() . '.platform', $nginxConf);
+        $nginxConf = str_replace('{{ platform }}', Platform::projectName() . '.' . Platform::projectTld(), $nginxConf);
         file_put_contents($nginxConfFile, $nginxConf);
 
         // stub in for Solr configs

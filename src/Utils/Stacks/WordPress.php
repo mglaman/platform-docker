@@ -64,11 +64,12 @@ EOT;
     {
         $hostname = Compose::getContainerName(Platform::projectName(), 'mariadb');
         $name = Platform::projectName();
+        $tld = Platform::projectTld();
         $this->string .= <<<EOT
 if (empty(\$_SERVER['PLATFORM_DOCKER'])) {
     \$cmd = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"3306/tcp\") 0).HostPort}}' {$hostname}";
     \$port = trim(shell_exec(\$cmd));
-    define('DB_HOST', "{$name}.platform:\$port");
+    define('DB_HOST', "{$name}.{$tld}:\$port");
 }
 EOT;
     }

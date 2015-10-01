@@ -36,7 +36,7 @@ class LinkCommand extends DockerCommand
     {
         $process = Docker::inspect(['--format="{{ .State.Running }}"', 'nginx-proxy'], true);
 
-        $url = 'http://' . Platform::projectName() . '.platform';
+        $url = 'http://' . Platform::projectName() . '.' . Platform::projectTld();
         if (trim($process->getOutput()) != 'true') {
             $port = Docker::getContainerPort(Compose::getContainerName(Platform::projectName(), 'nginx'), 80);
             $url .= ':' . $port;

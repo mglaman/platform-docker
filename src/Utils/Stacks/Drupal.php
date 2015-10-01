@@ -23,6 +23,8 @@ class Drupal implements StackTypeInterface
      * @var
      */
     protected $projectName;
+
+    protected $projectTld;
     /**
      * @var string
      */
@@ -35,6 +37,7 @@ class Drupal implements StackTypeInterface
     public function __construct()
     {
         $this->projectName = Platform::projectName();
+        $this->projectTld = Platform::projectTld();
         $this->containerName = Compose::getContainerName(Platform::projectName(), 'mariadb');
 
         /** @var DrupalStackHelper $drupalStack */
@@ -128,7 +131,7 @@ if (empty(\$_SERVER['PLATFORM_DOCKER'])) {
     // Default config within Docker container.
     \$databases['default']['default'] = array(
       'driver' => 'mysql',
-      'host' => '{$this->projectName}.platform',
+      'host' => '{$this->projectName}.{$this->projectTld}',
       'port' => \$port,
       'username' => 'mysql',
       'password' => 'mysql',
@@ -164,7 +167,7 @@ EOT;
 
         $drushrc = <<<EOT
 <?php
-\$options['uri'] = "http://{$this->projectName}.platform";
+\$options['uri'] = "http://{$this->projectName}.{$this->projectTld}";
 EOT;
         $fs = new Filesystem();
         $fs->dumpFile(Platform::sharedDir() . '/drushrc.php', $drushrc);
