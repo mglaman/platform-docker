@@ -42,6 +42,7 @@ class Application extends ParentApplication
 
         $commands[] = new Command\InitCommand();
         $commands[] = new Command\LinkCommand();
+        $commands[] = new Command\DrushCommand();
         $commands[] = new Command\Docker\UpCommand();
         $commands[] = new Command\Docker\StopCommand();
         $commands[] = new Command\Docker\SshCommand();
