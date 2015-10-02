@@ -58,26 +58,24 @@ Searches for behat.yml files, laucnches a Selenium (Firefox) container and execu
 
 ````
 Available commands:
-  behat               Runs behat
-  help                Displays help for a command
-  init                Setup Platform and Docker Compose files
-  link                Displays link to local environment, with port.
-  list                Lists commands
-  proxy               Starts the nginx proxy container
-  start               Starts the docker containers
-  stop                Stops the docker containers
+  drush                   Runs a Drush command for project.
+  help                    Displays help for a command
+  init                    Setup Platform and Docker Compose files
+  link                    Displays link to local environment, with port.
+  list                    Lists commands
  docker
-  docker:logs         Tails the logs of a specific service container
-  docker:proxy        Starts the nginx proxy container
-  docker:rebuild      Rebuild configurations and containers
-  docker:ssh          Allows for quick SSH into a service container.
-  docker:stop         Stops the docker containers
-  docker:up           Starts the docker containers
+  docker:logs             Tails the logs of a specific service container
+  docker:proxy (proxy)    Starts the nginx proxy container
+  docker:rebuild          Rebuild configurations and containers
+  docker:ssh              Allows for quick SSH into a service container.
+  docker:stop (stop)      Stops the docker containers
+  docker:up (start)       Starts the docker containers
  flamegraph
-  flamegraph:create   Creates a flamegraph from xhprof folder contents.
-  flamegraph:setup    Sets the project up for generating flamegrapghs.
-  flamegraph:unpatch  Unpatches index.php to stop xhprof logging.
+  flamegraph:create       Creates a flamegraph from xhprof folder contents.
+  flamegraph:setup        Sets the project up for generating flamegrapghs.
+  flamegraph:unpatch      Unpatches index.php to stop xhprof logging.
  project
-  project:behat       Runs behat
-  project:db-sync     Syncs database from environment to local
+  project:behat (behat)   Runs behat test suite for project. Checks ./tests, ./www, ./shared and ./repository by default.
+  project:db-sync         Syncs database from environment to local
+
 ````
