@@ -31,11 +31,15 @@ class Drupal implements StackTypeInterface
     protected $containerName;
 
     protected $version;
+
+    protected $fs;
+
     /**
      * Builds the settings.local.php file.
      */
     public function __construct()
     {
+        $this->fs = new Filesystem();
         $this->projectName = Platform::projectName();
         $this->projectTld = Platform::projectTld();
         $this->containerName = Compose::getContainerName(Platform::projectName(), 'mariadb');
@@ -43,134 +47,95 @@ class Drupal implements StackTypeInterface
         /** @var DrupalStackHelper $drupalStack */
         $drupalStack = Toolstack::getStackByType('drupal');
         $this->version = $drupalStack->version(Platform::webDir());
-
-        $this->string = "<?php\n\n";
-
-        $this->setSalt();
-        $this->dbFromLocal();
-        $this->dbFromDocker();
-
-
-        if ($this->version == DrupalStackHelper::DRUPAL8) {
-            $this->string .= <<<EOT
-// Configuration directories.
-\$config_directories = array(
-  CONFIG_ACTIVE_DIRECTORY => '../../../shared/config/active',
-  CONFIG_STAGING_DIRECTORY => '../../../shared/config/staging',
-);
-EOT;
-        }
     }
 
     /**
      *
      */
     public function configure() {
-        $fs = new Filesystem();
-
-        $fs->chmod(Platform::webDir() . '/sites/default', 0775);
-        $fs->chmod(Platform::webDir() . '/sites/default/settings.php', 0664);
-
-        if ($this->version  == DrupalStackHelper::DRUPAL7) {
-            $fs->copy(CLI_ROOT . '/resources/stacks/drupal/drupal7.settings.php', Platform::webDir() . '/sites/default/settings.php', true);
-        }
-        elseif ($this->version  == DrupalStackHelper::DRUPAL8) {
-            $fs->copy(CLI_ROOT . '/resources/stacks/drupal/drupal8.settings.php', Platform::webDir() . '/sites/default/settings.php', true);
-        }
-
-        if ($this->version == DrupalStackHelper::DRUPAL8) {
-            $fs->mkdir([
-                Platform::sharedDir() . '/config',
-                Platform::sharedDir() . '/config/active',
-                Platform::sharedDir() . '/config/staging',
-            ]);
-        }
-
-        $fs->dumpFile(Platform::sharedDir() . '/settings.local.php', $this->string);
-
-        // Relink if missing.
-        if (!$fs->exists(Platform::webDir() . '/sites/default/settings.local.php')) {
-            $fs->symlink('../../../shared/settings.local.php', Platform::webDir() . '/sites/default/settings.local.php');
-        }
-
+        $this->ensureSettings();
+        $this->ensureLocalSettings();
         $this->drushrc();
     }
 
-    public function setSalt()
-    {
-        $salt = hash('sha256', serialize($_SERVER));
-        if ($this->version == DrupalStackHelper::DRUPAL7) {
-            $this->string .= <<<EOT
-
-/**
- * Salt for one-time login links and cancel links, form tokens, etc.
- *
- * If this variable is empty, a hash of the serialized database credentials
- * will be used as a fallback salt.
- */
-\$drupal_hash_salt = '$salt';
-
-EOT;
-        }
-        elseif ($this->version == \mglaman\Toolstack\Stacks\Drupal::DRUPAL8) {
-            $this->string .= <<<EOT
-\$settings['hash_salt'] = '$salt';
-EOT;
-        }
-    }
-
     /**
-     *
+     * Ensures that the Drupal settings.php is available.
+     * @throws \Exception
      */
-    public function dbFromDocker() {
-        $this->string .= <<<EOT
-// Database configuration.
-if (empty(\$_SERVER['PLATFORM_DOCKER'])) {
-    \$cmd = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"3306/tcp\") 0).HostPort}}' {$this->containerName}";
-    \$port = trim(shell_exec(\$cmd));
-    // Default config within Docker container.
-    \$databases['default']['default'] = array(
-      'driver' => 'mysql',
-      'host' => '{$this->projectName}.{$this->projectTld}',
-      'port' => \$port,
-      'username' => 'mysql',
-      'password' => 'mysql',
-      'database' => 'data',
-      'prefix' => '',
-    );
-}
-EOT;
+    protected function ensureSettings() {
+        // If building from an existing project, Drupal may have fiddled with
+        // the permissions preventing us from writing.
+        $this->fs->chmod(Platform::webDir() . '/sites/default', 0775);
+        if ($this->fs->exists(Platform::webDir() . '/sites/default/settings.php')) {
+            $this->fs->chmod(Platform::webDir() . '/sites/default/settings.php', 0664);
+        }
+
+        switch ($this->version) {
+            case DrupalStackHelper::DRUPAL7:
+                $this->fs->copy(CLI_ROOT . '/resources/stacks/drupal7/settings.php', Platform::webDir() . '/sites/default/settings.php', true);
+                break;
+            case DrupalStackHelper::DRUPAL8:
+                $this->fs->copy(CLI_ROOT . '/resources/stacks/drupal8/settings.php', Platform::webDir() . '/sites/default/settings.php', true);
+                $this->fs->mkdir([
+                  Platform::sharedDir() . '/config',
+                  Platform::sharedDir() . '/config/active',
+                  Platform::sharedDir() . '/config/staging',
+                ]);
+                break;
+            default:
+                throw new \Exception('Unsupported version of Drupal. Write a pull reuqest!');
+        }
     }
 
-    /**
-     *
-     */
-    public function dbFromLocal() {
-        $this->string .= <<<EOT
-// Database configuration.
-\$databases['default']['default'] = array(
-  'driver' => 'mysql',
-  'host' => '{$this->containerName}',
-  'username' => 'mysql',
-  'password' => 'mysql',
-  'database' => 'data',
-  'prefix' => '',
-);
+    protected function ensureLocalSettings() {
+        // @todo: Check if settings.local.php exists, load in any $conf changes.
+        switch ($this->version) {
+            case DrupalStackHelper::DRUPAL7:
+                $this->fs->copy(CLI_ROOT . '/resources/stacks/drupal7/settings.local.php', Platform::sharedDir() . '/settings.local.php', true);
+                break;
+            case DrupalStackHelper::DRUPAL8:
+                $this->fs->copy(CLI_ROOT . '/resources/stacks/drupal8/settings.local.php', Platform::sharedDir() . '/settings.local.php', true);
+                break;
+            default:
+                throw new \Exception('Unsupported version of Drupal. Write a pull reuqest!');
+        }
 
-EOT;
+        // Replace template variables.
+        $localSettings = file_get_contents(Platform::sharedDir() . '/settings.local.php');
+        $localSettings = str_replace('{{ salt }}', hash('sha256', serialize($_SERVER)), $localSettings);
+        $localSettings = str_replace('{{ container_name }}', $this->containerName, $localSettings);
+        $localSettings = str_replace('{{ project_domain }}', $this->projectName . '.' . $this->projectTld, $localSettings);
+        file_put_contents(Platform::sharedDir() . '/settings.local.php', $localSettings);
+
+        // Relink if missing.
+        if (!$this->fs->exists(Platform::webDir() . '/sites/default/settings.local.php')) {
+            $this->fs->symlink('../../../shared/settings.local.php', Platform::webDir() . '/sites/default/settings.local.php');
+        }
     }
+
 
     /**
      * Write a drushrc
      */
     public function drushrc() {
+        // @todo: Check if drushrc.php exists, load in any $conf changes.
+        switch ($this->version) {
+            case DrupalStackHelper::DRUPAL7:
+                $this->fs->copy(CLI_ROOT . '/resources/stacks/drupal7/drushrc.php', Platform::sharedDir() . '/drushrc.php', true);
+                break;
+            case DrupalStackHelper::DRUPAL8:
+                $this->fs->copy(CLI_ROOT . '/resources/stacks/drupal8/drushrc.php', Platform::sharedDir() . '/drushrc.php', true);
+                break;
+            default:
+                throw new \Exception('Unsupported version of Drupal. Write a pull reuqest!');
+        }
 
-        $drushrc = <<<EOT
-<?php
-\$options['uri'] = "http://{$this->projectName}.{$this->projectTld}";
-EOT;
-        $fs = new Filesystem();
-        $fs->dumpFile(Platform::sharedDir() . '/drushrc.php', $drushrc);
-        $fs->symlink('../../../shared/drushrc.php', Platform::webDir() . '/sites/default/drushrc.php');
+        // Replace template variables.
+        $localSettings = file_get_contents(Platform::sharedDir() . '/drushrc.php');
+        // @todo this expects proxy to be running.
+        $localSettings = str_replace('{{ project_domain }}', $this->projectName . '.' . $this->projectTld, $localSettings);
+        file_put_contents(Platform::sharedDir() . '/drushrc.php', $localSettings);
+
+        $this->fs->symlink('../../../shared/drushrc.php', Platform::webDir() . '/sites/default/drushrc.php');
     }
 }

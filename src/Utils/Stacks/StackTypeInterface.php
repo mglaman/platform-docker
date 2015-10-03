@@ -12,6 +12,4 @@ namespace mglaman\PlatformDocker\Utils\Stacks;
 interface StackTypeInterface
 {
     public function configure();
-    public function dbFromDocker();
-    public function dbFromLocal();
 }
