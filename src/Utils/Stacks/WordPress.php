@@ -32,7 +32,7 @@ class WordPress extends StacksBase
 
         // Relink if missing.
         if (!$this->fs->exists(Platform::webDir() . '/wp-config.local.php')) {
-            $this->fs->symlink('../shared/wp-config.local.php', Platform::webDir() . '/wp-config  .local.php');
+            $this->fs->symlink('../shared/wp-config.local.php', Platform::webDir() . '/wp-config.local.php');
         }
     }
 
