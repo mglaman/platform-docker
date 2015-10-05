@@ -14,66 +14,27 @@ use mglaman\PlatformDocker\Utils\Docker\Docker;
 use mglaman\PlatformDocker\Utils\Platform\Platform;
 use Symfony\Component\Filesystem\Filesystem;
 
-class WordPress implements StackTypeInterface
+class WordPress extends StacksBase
 {
-    /**
-     * @var string
-     */
-    protected $string;
-
-    public function __construct()
-    {
-        $this->string = <<<EOT
-<?php
-
-define('DB_NAME', 'data');
-define('DB_USER', 'mysql');
-define('DB_PASSWORD', 'mysql');
-EOT;
-        $this->dbFromLocal();
-        $this->dbFromDocker();
-        $this->salts();
-        $this->debug();
-    }
 
     public function configure()
     {
-        $fs = new Filesystem();
-        $fs->copy(CLI_ROOT . '/resources/stacks/wordpress/wp-config.php', Platform::webDir() . '/wp-config.php', true);
-        $fs->remove(Platform::webDir() . '/wp-confg-sample.php');
+        $this->fs->copy(CLI_ROOT . '/resources/stacks/wordpress/wp-config.php', Platform::webDir() . '/wp-config.php', true);
+        $this->fs->remove(Platform::webDir() . '/wp-confg-sample.php');
 
-        $fs->dumpFile(Platform::sharedDir() . '/wp-config.local.php', $this->string);
+        $this->fs->copy(CLI_ROOT . '/resources/stacks/wordpress/wp-config.local.php', Platform::sharedDir() . '/wp-config.local.php');
+
+        $localSettings = file_get_contents(Platform::sharedDir() . '/wp-config.local.php');
+        $localSettings = str_replace('{{ salts }}', $this->salts(), $localSettings);
+        $localSettings = str_replace('{{ container_name }}', $this->containerName, $localSettings);
+        $localSettings = str_replace('{{ project_domain }}', $this->projectName . '.' . $this->projectTld, $localSettings);
+        file_put_contents(Platform::sharedDir() . '/wp-config.local.php', $localSettings);
 
         // Relink if missing.
-        if (!$fs->exists(Platform::webDir() . '/wp-config.local.php')) {
-            $fs->symlink('../shared/wp-config.local.php', Platform::webDir() . '/wp-config  .local.php');
+        if (!$this->fs->exists(Platform::webDir() . '/wp-config.local.php')) {
+            $this->fs->symlink('../shared/wp-config.local.php', Platform::webDir() . '/wp-config  .local.php');
         }
     }
-
-    public function dbFromDocker()
-    {
-        $hostname = Compose::getContainerName(Platform::projectName(), 'mariadb');
-        $this->string .= <<<EOT
-if (!empty(\$_SERVER['PLATFORM_DOCKER'])) {
-    define('DB_HOST', '{$hostname}');
-}
-EOT;
-    }
-
-    public function dbFromLocal()
-    {
-        $hostname = Compose::getContainerName(Platform::projectName(), 'mariadb');
-        $name = Platform::projectName();
-        $tld = Platform::projectTld();
-        $this->string .= <<<EOT
-if (empty(\$_SERVER['PLATFORM_DOCKER'])) {
-    \$cmd = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"3306/tcp\") 0).HostPort}}' {$hostname}";
-    \$port = trim(shell_exec(\$cmd));
-    define('DB_HOST', "{$name}.{$tld}:\$port");
-}
-EOT;
-    }
-
 
     /**
      * Returns salt defines.
@@ -81,18 +42,6 @@ EOT;
      */
     public function salts() {
         return file_get_contents('https://api.wordpress.org/secret-key/1.1/salt/');
-    }
-
-    public function debug()
-    {
-        $this->string .= <<<EOT
-define('WP_DEBUG', false);
-define('WP_DEBUG_LOG', true);
-define('WP_DEBUG_DISPLAY', false);
-define('SCRIPT_DEBUG', true);
-define('SAVEQUERIES', true);
-EOT;
-
     }
 
 }

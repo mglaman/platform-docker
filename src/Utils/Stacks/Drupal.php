@@ -13,36 +13,14 @@ use mglaman\PlatformDocker\Utils\Platform\Platform;
  * Class Settings
  * @package mglaman\PlatformDocker\Stacks\Drupal
  */
-class Drupal implements StackTypeInterface
+class Drupal extends StacksBase
 {
-    /**
-     * @var string
-     */
-    protected $string;
-    /**
-     * @var
-     */
-    protected $projectName;
-
-    protected $projectTld;
-    /**
-     * @var string
-     */
-    protected $containerName;
-
-    protected $version;
-
-    protected $fs;
-
     /**
      * Builds the settings.local.php file.
      */
     public function __construct()
     {
-        $this->fs = new Filesystem();
-        $this->projectName = Platform::projectName();
-        $this->projectTld = Platform::projectTld();
-        $this->containerName = Compose::getContainerName(Platform::projectName(), 'mariadb');
+        parent::__construct();
 
         /** @var DrupalStackHelper $drupalStack */
         $drupalStack = Toolstack::getStackByType('drupal');

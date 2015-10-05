@@ -11,6 +11,7 @@ namespace mglaman\PlatformDocker\Command\Docker;
 use mglaman\Docker\Compose;
 use mglaman\PlatformDocker\Utils\Platform\Config;
 use mglaman\PlatformDocker\Utils\Platform\Platform;
+use mglaman\PlatformDocker\Utils\Stacks\StacksFactory;
 use mglaman\PlatformDocker\Utils\Stacks\WordPress;
 use mglaman\Toolstack\Toolstack;
 use mglaman\Toolstack\Stacks;
@@ -72,20 +73,10 @@ class RebuildCommand extends DockerCommand
 
         $composeConfig->writeDockerCompose($composeContainers);
 
-        // @todo move this into a static class to run configure based on type.
         $stack = Toolstack::inspect(Platform::webDir());
         if ($stack) {
             $this->stdOut->writeln("<comment>Configuring stack:</comment> " . $stack->type());
-            switch ($stack->type()) {
-                case Stacks\Drupal::TYPE:
-                    $drupal = new Drupal();
-                    $drupal->configure();
-                    break;
-                case Stacks\WordPress::TYPE:
-                    $wordpress = new WordPress();
-                    $wordpress->configure();
-                    break;
-            }
+            StacksFactory::configure($stack->type());
         }
 
         $this->stdOut->writeln('<info>Building the containers</info>');
