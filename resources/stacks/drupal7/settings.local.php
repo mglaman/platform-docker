@@ -20,7 +20,7 @@ $databases['default']['default'] = array(
 // Database configuration.
 if (empty($_SERVER['PLATFORM_DOCKER'])) {
     $cmd = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"3306/tcp\") 0).HostPort}}' {{ container_name }}";
-    $port = trim(shell_exec(\$cmd));
+    $port = trim(shell_exec($cmd));
     // Default config within Docker container.
     $databases['default']['default'] = array(
       'driver' => 'mysql',
