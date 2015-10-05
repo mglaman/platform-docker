@@ -41,6 +41,7 @@ abstract class ProviderCommand extends BaseCommand {
     {
         $this
           ->setName('provider:' . $this->providerCommandName())
+          ->setAliases([$this->providerCommandName()])
           ->addArgument('project', InputArgument::REQUIRED, 'Project identifier')
           ->setDescription("Sets up a {$this->providerName()} project");
 
