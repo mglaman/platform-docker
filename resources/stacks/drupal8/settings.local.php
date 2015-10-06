@@ -12,9 +12,9 @@ $settings['hash_salt'] = '{{ salt }}';
 $databases['default']['default'] = array(
   'driver' => 'mysql',
   'host' => '{{ container_name }}',
-  'username' => 'mysql',
-  'password' => 'mysql',
-  'database' => 'data',
+  'username' => $_SERVER['PLATFORM_DB_NAME'],
+  'password' => $_SERVER['PLATFORM_DB_USER'],
+  'database' => $_SERVER['PLATFORM_DB_PASSWORD'],
   'prefix' => '',
 );
 
@@ -27,9 +27,9 @@ if (empty($_SERVER['PLATFORM_DOCKER'])) {
       'driver' => 'mysql',
       'host' => '{{ project_domain }}',
       'port' => $port,
-      'username' => 'mysql',
-      'password' => 'mysql',
-      'database' => 'data',
+      'username' => $_SERVER['PLATFORM_DB_NAME'],
+      'password' => $_SERVER['PLATFORM_DB_USER'],
+      'database' => $_SERVER['PLATFORM_DB_PASSWORD'],
       'prefix' => '',
     );
 }

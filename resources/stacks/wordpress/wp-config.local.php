@@ -1,8 +1,8 @@
 <?php
 
-define('DB_NAME', 'data');
-define('DB_USER', 'mysql');
-define('DB_PASSWORD', 'mysql');
+define('DB_NAME', $_SERVER['PLATFORM_DB_NAME']);
+define('DB_USER', $_SERVER['PLATFORM_DB_USER']);
+define('DB_PASSWORD', $_SERVER['PLATFORM_DB_PASSWORD']);
 
 if (!empty($_SERVER['PLATFORM_DOCKER'])) {
     define('DB_HOST', '{{ container_name }}');
