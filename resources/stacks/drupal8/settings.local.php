@@ -16,6 +16,8 @@ $databases['default']['default'] = array(
   'password' => 'mysql',
   'database' => 'data',
   'prefix' => '',
+  'port' => 3306,
+  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
 );
 
 // Database configuration.
@@ -31,6 +33,8 @@ if (empty($_SERVER['PLATFORM_DOCKER'])) {
       'password' => 'mysql',
       'database' => 'data',
       'prefix' => '',
+      'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+
     );
 }
 
@@ -38,4 +42,5 @@ if (empty($_SERVER['PLATFORM_DOCKER'])) {
 $config_directories = array(
   CONFIG_ACTIVE_DIRECTORY => '../../../shared/config/active',
   CONFIG_STAGING_DIRECTORY => '../../../shared/config/staging',
+  CONFIG_SYNC_DIRECTORY => '../../../shared/config/staging',
 );
