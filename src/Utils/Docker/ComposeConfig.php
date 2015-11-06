@@ -9,6 +9,7 @@
 namespace mglaman\PlatformDocker\Utils\Docker;
 
 
+use mglaman\Docker\Docker;
 use mglaman\PlatformDocker\Utils\Platform\Platform;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -70,6 +71,14 @@ class ComposeConfig
         foreach ($this->configsToCopy() as $fileName) {
             $this->fs->copy($this->resourcesDir . '/conf/' . $fileName,
               $this->projectPath . '/docker/conf/' . $fileName);
+        }
+
+        // Change the default xdebug remote host on Mac, which uses a VM
+        if (!Docker::native()) {
+            $phpConfFile = $this->projectPath . '/docker/conf/php.ini';
+            $phpConf = file_get_contents($phpConfFile);
+            $phpConf = str_replace('172.17.42.1', '192.168.99.1', $phpConf);
+            file_put_contents($phpConfFile, $phpConf);
         }
 
         // Quick fix to make nginx PHP_IDE_CONFIG dynamic for now.
