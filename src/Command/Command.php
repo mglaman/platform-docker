@@ -19,7 +19,7 @@ abstract class Command extends BaseCommand
     protected $stdIn;
     /** @var bool */
     protected static $interactive = false;
-
+    protected $projectRequired = true;
 
     /**
      * @inheritdoc
@@ -31,8 +31,13 @@ abstract class Command extends BaseCommand
         $this->stdIn = $input;
         self::$interactive = $input->isInteractive();
 
-        if (empty(Config::get())) {
-            $this->getApplication()->find('init')->run($input, $output);
+        // Check if this command requires a project to be defined in order to run.
+        $this->checkProjectRequired();
+    }
+
+    protected function checkProjectRequired() {
+        if ($this->projectRequired && empty(Config::get())) {
+            $this->getApplication()->find('init')->run($this->stdIn, $this->stdOut);
             exit(1);
         }
     }

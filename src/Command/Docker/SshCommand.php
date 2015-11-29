@@ -30,7 +30,7 @@ class SshCommand extends DockerCommand
           ->addArgument(
             'service',
             InputArgument::REQUIRED,
-            'Service to SSH into the container of: http, php, db, redis, solr');
+            'Service to SSH into the container of: http, php, db, redis, solr, memcache');
     }
 
     /**
@@ -40,34 +40,31 @@ class SshCommand extends DockerCommand
     {
         $containerName = null;
         $type = $input->getArgument('service');
-        switch ($type) {
-            case 'http':
-                $containerName = Compose::getContainerName(Platform::projectName(), 'nginx');
-                break;
-            case 'php':
-                $containerName = Compose::getContainerName(Platform::projectName(), 'phpfpm');
-                break;
-            case 'db':
-                $containerName = Compose::getContainerName(Platform::projectName(), 'mariadb');
-                break;
-            case 'redis':
-                $containerName = Compose::getContainerName(Platform::projectName(), 'redis');
-                break;
-            case 'solr':
-                $containerName = Compose::getContainerName(Platform::projectName(), 'solr');
-                break;
-            default:
-                $this->stdOut->writeln("<error>Invalid service type</error>");
-                break;
+
+        $containerNameMap = [
+            'http' => 'nginx',
+            'php' => 'phpfpm',
+            'db' => 'mariadb',
+            'redis' => 'redis',
+            'solr' => 'solr',
+            'memcache' => 'memcached',
+        ];
+
+        if (!isset($containerNameMap[$type])) {
+            $this->stdOut->writeln("<error>Invalid service type</error>");
+            return 1;
+        } else {
+            $containerName = $containerNameMap[$type];
         }
 
         $builder = ProcessBuilder::create([
           'docker',
           'exec',
           '-it',
-          $containerName,
+          Compose::getContainerName(Platform::projectName(), $containerName),
           'bash'
         ]);
+
         $process = $builder->getProcess();
         // Need to set tty true, ProccessHelper doesn't allow this setting.
         $process->setTty(true);

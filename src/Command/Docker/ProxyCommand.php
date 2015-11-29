@@ -15,6 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ProxyCommand extends DockerCommand
 {
+    protected $projectRequired = false;
     protected $containerName = 'nginx-proxy';
 
     /**
