@@ -49,6 +49,7 @@ class Application extends ParentApplication
         $commands[] = new Command\Docker\LogsCommand();
         $commands[] = new Command\Docker\ProxyCommand();
         $commands[] = new Command\Docker\RebuildCommand();
+        $commands[] = new Command\Docker\RestartCommand();
         $commands[] = new Command\Flamegraph\SetupCommand();
         $commands[] = new Command\Flamegraph\CreateCommand();
         $commands[] = new Command\Flamegraph\UnpatchCommand();
