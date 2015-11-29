@@ -8,6 +8,11 @@
  */
 $settings['hash_salt'] = '{{ salt }}';
 
+/**
+ * Use local services definition file.
+ */
+$settings['container_yamls'][] = __DIR__ . '/services.yml';
+
 // Database configuration.
 $databases['default']['default'] = array(
   'driver' => 'mysql',

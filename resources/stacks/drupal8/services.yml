@@ -1,0 +1,4 @@
+parameters:
+  twig.config:
+    # Change to `true` to enable Twig debugging.
+    debug: false
