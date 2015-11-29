@@ -1,6 +1,6 @@
 <?php
 
-namespace mglaman\PlatformDocker\Utils\Stacks;
+namespace mglaman\PlatformDocker\Stacks;
 use mglaman\Toolstack\Stacks;
 use mglaman\Toolstack\Toolstack;
 

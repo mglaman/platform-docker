@@ -9,13 +9,13 @@
 namespace mglaman\PlatformDocker\Command\Docker;
 
 use mglaman\Docker\Compose;
-use mglaman\PlatformDocker\Utils\Platform\Config;
-use mglaman\PlatformDocker\Utils\Platform\Platform;
-use mglaman\PlatformDocker\Utils\Stacks\StacksFactory;
+use mglaman\PlatformDocker\Config;
+use mglaman\PlatformDocker\Platform;
+use mglaman\PlatformDocker\Stacks\StacksFactory;
 use mglaman\Toolstack\Toolstack;
 use mglaman\Toolstack\Stacks;
-use mglaman\PlatformDocker\Utils\Docker\ComposeConfig;
-use mglaman\PlatformDocker\Utils\Docker\ComposeContainers;
+use mglaman\PlatformDocker\Docker\ComposeConfig;
+use mglaman\PlatformDocker\Docker\ComposeContainers;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\IOException;

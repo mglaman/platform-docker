@@ -9,7 +9,7 @@
 namespace mglaman\PlatformDocker\Tests\Utils;
 
 
-use mglaman\PlatformDocker\Utils\Platform\Config;
+use mglaman\PlatformDocker\Config;
 
 class ConfigTest extends BaseUtilsTest
 {

@@ -8,8 +8,8 @@
 
 namespace mglaman\PlatformDocker\Tests\Utils;
 
-use mglaman\PlatformDocker\Utils\Platform\Config;
-use mglaman\PlatformDocker\Utils\Platform\Platform;
+use mglaman\PlatformDocker\Config;
+use mglaman\PlatformDocker\Platform;
 
 class PlatformTest extends BaseUtilsTest
 {

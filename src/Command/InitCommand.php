@@ -2,7 +2,7 @@
 
 namespace mglaman\PlatformDocker\Command;
 
-use mglaman\PlatformDocker\Utils\Platform\Config;
+use mglaman\PlatformDocker\Config;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

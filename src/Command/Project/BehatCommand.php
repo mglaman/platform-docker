@@ -11,7 +11,7 @@ namespace mglaman\PlatformDocker\Command\Project;
 
 use mglaman\Docker\Docker;
 use mglaman\PlatformDocker\Command\Command;
-use mglaman\PlatformDocker\Utils\Platform\Platform;
+use mglaman\PlatformDocker\Platform;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;

@@ -1,9 +1,9 @@
 <?php
 
-namespace mglaman\PlatformDocker\Utils\Stacks;
+namespace mglaman\PlatformDocker\Stacks;
 
 use mglaman\Docker\Compose;
-use mglaman\PlatformDocker\Utils\Platform\Platform;
+use mglaman\PlatformDocker\Platform;
 use Symfony\Component\Filesystem\Filesystem;
 
 abstract class StacksBase  implements StackTypeInterface {

@@ -9,8 +9,8 @@
 namespace mglaman\PlatformDocker\Command\Docker;
 
 use mglaman\Docker\Compose;
-use mglaman\PlatformDocker\Utils\Docker\Docker;
-use mglaman\PlatformDocker\Utils\Platform\Platform;
+use mglaman\PlatformDocker\Docker;
+use mglaman\PlatformDocker\Platform;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -75,5 +75,7 @@ class SshCommand extends DockerCommand
             $message .= "\n\nFull command: " . $process->getCommandLine();
             throw new \Exception($message);
         }
+
+        return $process->isSuccessful();
     }
 }

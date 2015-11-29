@@ -10,8 +10,8 @@ namespace mglaman\PlatformDocker\Command\Project;
 
 
 use mglaman\PlatformDocker\Command\Command;
-use mglaman\PlatformDocker\Utils\Platform\Config;
-use mglaman\PlatformDocker\Utils\Platform\Platform;
+use mglaman\PlatformDocker\Config;
+use mglaman\PlatformDocker\Platform;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

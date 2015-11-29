@@ -6,13 +6,11 @@
  * Time: 2:56 PM
  */
 
-namespace mglaman\PlatformDocker\Utils\Stacks;
+namespace mglaman\PlatformDocker\Stacks;
 
 
-use mglaman\Docker\Compose;
-use mglaman\PlatformDocker\Utils\Docker\Docker;
-use mglaman\PlatformDocker\Utils\Platform\Platform;
-use Symfony\Component\Filesystem\Filesystem;
+use mglaman\PlatformDocker\Docker;
+use mglaman\PlatformDocker\Platform;
 
 class WordPress extends StacksBase
 {

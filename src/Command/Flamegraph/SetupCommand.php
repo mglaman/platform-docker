@@ -9,8 +9,8 @@
 namespace mglaman\PlatformDocker\Command\Flamegraph;
 
 use mglaman\PlatformDocker\Command\Command;
-use mglaman\PlatformDocker\Utils\Platform\Platform;
-use mglaman\PlatformDocker\Utils\Stacks\StacksFactory;
+use mglaman\PlatformDocker\Platform;
+use mglaman\PlatformDocker\Stacks\StacksFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;

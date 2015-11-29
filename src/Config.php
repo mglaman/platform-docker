@@ -6,8 +6,7 @@
  * Time: 10:01 PM
  */
 
-namespace mglaman\PlatformDocker\Utils\Platform;
-
+namespace mglaman\PlatformDocker;
 
 use Symfony\Component\Yaml\Yaml;
 

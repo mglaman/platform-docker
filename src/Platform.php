@@ -1,6 +1,6 @@
 <?php
 
-namespace mglaman\PlatformDocker\Utils\Platform;
+namespace mglaman\PlatformDocker;
 
 
 /**

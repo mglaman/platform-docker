@@ -9,8 +9,8 @@
 namespace mglaman\PlatformDocker\Tests\Utils;
 
 
-use mglaman\PlatformDocker\Utils\Docker\ComposeContainers;
-use mglaman\PlatformDocker\Utils\Platform\Platform;
+use mglaman\PlatformDocker\ComposeContainers;
+use mglaman\PlatformDocker\Platform;
 use Symfony\Component\Yaml\Yaml;
 
 class ComposeContainersTest extends BaseUtilsTest

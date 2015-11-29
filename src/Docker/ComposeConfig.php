@@ -6,11 +6,11 @@
  * Time: 11:50 PM
  */
 
-namespace mglaman\PlatformDocker\Utils\Docker;
+namespace mglaman\PlatformDocker\Docker;
 
 
 use mglaman\Docker\Docker;
-use mglaman\PlatformDocker\Utils\Platform\Platform;
+use mglaman\PlatformDocker\Platform;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 

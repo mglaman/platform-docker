@@ -6,7 +6,7 @@
  * Time: 2:55 PM
  */
 
-namespace mglaman\PlatformDocker\Utils\Stacks;
+namespace mglaman\PlatformDocker\Stacks;
 
 
 interface StackTypeInterface

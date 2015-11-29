@@ -1,9 +1,9 @@
 <?php
 
-namespace mglaman\PlatformDocker\Utils\Docker;
+namespace mglaman\PlatformDocker\Docker;
 
 
-use mglaman\PlatformDocker\Utils\Platform\Platform;
+use mglaman\PlatformDocker\Platform;
 use Symfony\Component\Yaml\Yaml;
 
 /**

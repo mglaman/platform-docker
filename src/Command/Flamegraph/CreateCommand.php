@@ -8,7 +8,7 @@
 
 namespace mglaman\PlatformDocker\Command\Flamegraph;
 
-use mglaman\PlatformDocker\Utils\Platform\Platform;
+use mglaman\PlatformDocker\Platform;
 use mglaman\PlatformDocker\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
