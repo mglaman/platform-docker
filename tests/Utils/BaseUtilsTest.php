@@ -9,7 +9,6 @@
 namespace mglaman\PlatformDocker\Tests\Utils;
 
 use mglaman\PlatformDocker\Config;
-use mglaman\PlatformDocker\Platform;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 

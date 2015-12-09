@@ -9,7 +9,7 @@
 namespace mglaman\PlatformDocker\Tests\Utils;
 
 
-use mglaman\PlatformDocker\ComposeContainers;
+use mglaman\PlatformDocker\Docker\ComposeContainers;
 use mglaman\PlatformDocker\Platform;
 use Symfony\Component\Yaml\Yaml;
 
