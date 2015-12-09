@@ -1,6 +1,9 @@
 # platform-docker [![Build Status](https://travis-ci.org/mglaman/platform-docker.svg?branch=master)](https://travis-ci.org/mglaman/platform-docker)
-**Platform Docker** is a CLI tool for scaffolding docker-compose configuration for PHP projects, currently opinionated at Drupal (7 and 8!) Running ````platform-docker````
+
+**Platform Docker** is a CLI tool for scaffolding docker-compose configuration for PHP projects, currently opinionated at PHP projects. Running ````platform-docker````
 in a directory will create a multi-container application environment for local development.
+
+Currently support is focused at Drupal 7 and Drupal 8. However there is rudimentary WordPress support. Generic PHP applications should be easy to implement.
 
 ## Requirements
 
@@ -13,18 +16,20 @@ in a directory will create a multi-container application environment for local d
 First, if you do not have Docker then head over to their [documentation](https://docs.docker.com/) and see how to install for your machine.
 
 ````
-composer global require mglaman/platform-docker:@stable
+composer global require mglaman/platform-docker
 ````
 
 ## Usage
 
 Use within any directory. Until the app itself can scaffold a folder, it's expecting a folder structure of
+
 * /shared (if not present it will be made)
 * /www (required, this is your build)
 * /repository (not required, but opinionated this is the source of what was built.)
 * /tests (default directory it will look for Behat tests, however checks shared and www)
 
 Sites are provisioned at *project-name*.platform. Currently the tld is not configurable (#24). It's best to set up dnsmasq set up wildcard DNS entries to point \*.platform to your localhost or Docker VM (Mac, Windows.) Here's some tutorials
+
 * http://passingcuriosity.com/2013/dnsmasq-dev-osx/
 * http://www.dickson.me.uk/2012/03/26/setting-up-dnsmasq-with-ubuntu-10-04-for-home-networking/
 
@@ -58,24 +63,26 @@ Searches for behat.yml files, laucnches a Selenium (Firefox) container and execu
 
 ````
 Available commands:
-  drush                   Runs a Drush command for project.
-  help                    Displays help for a command
-  init                    Setup Platform and Docker Compose files
-  link                    Displays link to local environment, with port.
-  list                    Lists commands
+  drush                              Runs a Drush command for environment.
+  help                               Displays help for a command
+  init                               Setup Platform and Docker Compose files
+  link                               Displays link to local environment, with port.
+  list                               Lists commands
  docker
-  docker:logs             Tails the logs of a specific service container
-  docker:proxy (proxy)    Starts the nginx proxy container
-  docker:rebuild          Rebuild configurations and containers
-  docker:ssh              Allows for quick SSH into a service container.
-  docker:stop (stop)      Stops the docker containers
-  docker:up (start)       Starts the docker containers
+  docker:logs                        Tails the logs of a specific service container
+  docker:proxy (proxy)               Starts the nginx proxy container
+  docker:rebuild                     Rebuild configurations and containers
+  docker:restart (reboot)            Restarts the docker containers
+  docker:ssh                         Allows for quick SSH into a service container.
+  docker:stop (stop)                 Stops the docker containers
+  docker:up (start)                  Starts the docker containers
  flamegraph
-  flamegraph:create       Creates a flamegraph from xhprof folder contents.
-  flamegraph:setup        Sets the project up for generating flamegrapghs.
-  flamegraph:unpatch      Unpatches index.php to stop xhprof logging.
+  flamegraph:create                  Creates a flamegraph from xhprof folder contents.
+  flamegraph:setup                   Sets the project up for generating flamegrapghs.
+  flamegraph:unpatch                 Unpatches index.php to stop xhprof logging.
  project
-  project:behat (behat)   Runs behat test suite for project. Checks ./tests, ./www, ./shared and ./repository by default.
-  project:db-sync         Syncs database from environment to local
-
+  project:behat (behat)              Runs behat test suite for project. Checks ./tests, ./www, ./shared and ./repository by default.
+  project:db-sync                    Syncs database from environment to local
+ provider
+  provider:platformsh (platformsh)   Sets up a Platform.sh project
 ````
