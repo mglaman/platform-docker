@@ -3,6 +3,7 @@
 namespace mglaman\PlatformDocker\Docker;
 
 
+use mglaman\PlatformDocker\Config;
 use mglaman\PlatformDocker\Platform;
 use Symfony\Component\Yaml\Yaml;
 
@@ -155,5 +156,21 @@ class ComposeContainers
           'image' => 'memcached',
         ];
         $this->config['phpfpm']['links'][] = 'memcached';
+    }
+
+    public function addBlackfire() {
+        $this->config['blackfire'] = [
+            'image' => 'blackfire/blackfire',
+            'ports' => [
+                '8707',
+            ],
+            'environment' => [
+                'BLACKFIRE_SERVER_ID' => Config::get('blackfire_server_id'),
+                'BLACKFIRE_SERVER_TOKEN' => Config::get('blackfire_server_token'),
+                'BLACKFIRE_CLIENT_ID' => Config::get('blackfire_client_id'),
+                'BLACKFIRE_CLIENT_TOKEN' => Config::get('blackfire_client_token'),
+            ],
+        ];
+        $this->config['phpfpm']['links'][] = 'blackfire';
     }
 }

@@ -65,6 +65,9 @@ class RebuildCommand extends DockerCommand
                     case 'memcached':
                         $composeContainers->addMemcached();
                         break;
+                    case 'blackfire':
+                        $composeContainers->addBlackfire();
+                        break;
                 }
             }
         }
