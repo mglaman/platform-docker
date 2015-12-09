@@ -167,8 +167,7 @@ class ComposeContainers
             'environment' => [
                 'BLACKFIRE_SERVER_ID' => Config::get('blackfire_server_id'),
                 'BLACKFIRE_SERVER_TOKEN' => Config::get('blackfire_server_token'),
-                'BLACKFIRE_CLIENT_ID' => Config::get('blackfire_client_id'),
-                'BLACKFIRE_CLIENT_TOKEN' => Config::get('blackfire_client_token'),
+                'BLACKFIRE_LOG_LEVEL' => 4
             ],
         ];
         $this->config['phpfpm']['links'][] = 'blackfire';

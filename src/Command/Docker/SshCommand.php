@@ -26,6 +26,7 @@ class SshCommand extends DockerCommand
     {
         $this
           ->setName('docker:ssh')
+            ->setAliases(['ssh'])
           ->setDescription('Allows for quick SSH into a service container.')
           ->addArgument(
             'service',
@@ -48,6 +49,7 @@ class SshCommand extends DockerCommand
             'redis' => 'redis',
             'solr' => 'solr',
             'memcache' => 'memcached',
+            'blackfire' => 'blackfire',
         ];
 
         if (!isset($containerNameMap[$type])) {
