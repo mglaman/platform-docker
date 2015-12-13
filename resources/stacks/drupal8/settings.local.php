@@ -8,6 +8,9 @@
  */
 $settings['hash_salt'] = '{{ salt }}';
 
+$settings['file_chmod_directory'] = 0775;
+$settings['file_chmod_file'] = 0664;
+
 /**
  * Use local services definition file.
  */

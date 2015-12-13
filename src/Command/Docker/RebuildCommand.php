@@ -29,6 +29,7 @@ class RebuildCommand extends DockerCommand
     {
         $this
           ->setName('docker:rebuild')
+          ->setAliases(['rebuild'])
           ->setDescription('Rebuild configurations and containers');
     }
 
