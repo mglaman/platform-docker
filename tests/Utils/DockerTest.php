@@ -9,20 +9,21 @@
 namespace mglaman\PlatformDocker\Tests\Utils;
 
 
-use mglaman\PlatformDocker\Utils\Docker\Docker;
+use mglaman\Docker\Docker;
+use mglaman\Docker\Compose;
 
 class DockerTest extends \PHPUnit_Framework_TestCase
 {
     function testDockerExists()
     {
-        $this->assertTrue(Docker::dockerExists());
+        $this->assertTrue(Docker::exists());
     }
     function testDockerAvailable()
     {
-        $this->assertTrue(Docker::dockerAvailable());
+        $this->assertTrue(Docker::available());
     }
     function testDockerComposeExists()
     {
-        $this->assertTrue(Docker::dockerComposeExists());
+        $this->assertTrue(Compose::exists());
     }
 }
