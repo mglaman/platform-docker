@@ -56,6 +56,7 @@ class Application extends ParentApplication
         $commands[] = new Command\Project\DbSyncCommand();
         $commands[] = new Command\Project\BehatCommand();
         $commands[] = new Command\Providers\PlatformshProviderCommand();
+        $commands[] = new Command\Providers\Commerce2xProviderCommand();
         return $commands;
     }
 
