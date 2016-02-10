@@ -104,12 +104,22 @@ class BehatCommand extends Command
 
         $output->writeln("<info>Running Behat, saving output to $outPath");
         $this->startSeleniumContainer();
+        $output->writeln("<info>Behat is running...");
         $process->run();
-        $this->stopSeleniumContainer();
+        if ($process->getExitCode() > 0) {
+            $this->stdOut->writeln("<error>Behat tests had failure.");
+            /** @var \Symfony\Component\Console\Helper\ProcessHelper $process */
+            $process = $this->getHelper('process');
+            $potential = array('xdg-open', 'open', 'start');
+            foreach ($potential as $app) {
+                // Check if command exists by executing help flag.
 
-        if (!$process->isSuccessful()) {
-            $output->writeln($process->getErrorOutput());
+                if ($process->run($this->stdOut, "command -v $app")->isSuccessful()) {
+                    $process->run($this->stdOut, array($app, $outPath));
+                }
+            }
         }
+        $this->stopSeleniumContainer();
     }
 
     protected function discoverBehatYml()
