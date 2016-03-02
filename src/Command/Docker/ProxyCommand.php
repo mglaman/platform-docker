@@ -29,7 +29,7 @@ class ProxyCommand extends DockerCommand
           ->addArgument(
             'operation',
             InputArgument::OPTIONAL,
-            'Allows you to start or stop the nginx container proxy',
+            'Allows you to start, stop, create container, or update image for the nginx container proxy',
             'start'
           )
           ->setDescription('Starts the nginx proxy container');
@@ -45,6 +45,8 @@ class ProxyCommand extends DockerCommand
                 return $this->stopProxy();
             case 'start':
                 return $this->startProxy();
+            case 'create':
+                return $this->createProxy();
             default:
                 throw new \InvalidArgumentException('You must specify start or stop.');
         }
@@ -59,10 +61,13 @@ class ProxyCommand extends DockerCommand
     protected function startProxy()
     {
         $this->stdOut->writeln("<comment>Starting the nginx proxy container");
-        if (!Docker::start([$this->containerName])->isSuccessful()) {
-            // Container wasn't created yet.
+        try {
+            // Throws an exception if not successful.
+            Docker::start([$this->containerName]);
+        } catch (\Exception $e) {
             return $this->createProxy();
         }
+
         return 1;
     }
 
