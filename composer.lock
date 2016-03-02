@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cb3023d5235083f7483e4516c2aa9bc7",
-    "content-hash": "caf5bef905c1747a6efe9fd916a103d6",
+    "hash": "9692bbe5263d8dd3ec46403910d7e2da",
+    "content-hash": "8407bcf9d6254a5494cd533e20f9f0dd",
     "packages": [
         {
             "name": "mglaman/docker-helper",
-            "version": "v0.0.2",
+            "version": "v0.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mglaman/docker-helper.git",
-                "reference": "30b8cf3935cc6a7d6bac46708ff3d8d5628f02df"
+                "reference": "80b716d289e212b27ec828c225bdbd2fb22b8f98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/docker-helper/zipball/30b8cf3935cc6a7d6bac46708ff3d8d5628f02df",
-                "reference": "30b8cf3935cc6a7d6bac46708ff3d8d5628f02df",
+                "url": "https://api.github.com/repos/mglaman/docker-helper/zipball/80b716d289e212b27ec828c225bdbd2fb22b8f98",
+                "reference": "80b716d289e212b27ec828c225bdbd2fb22b8f98",
                 "shasum": ""
             },
             "require": {
@@ -44,7 +44,7 @@
                 }
             ],
             "description": "Helper class for interacting with Docker, Docker Compose, and Docker Machine.",
-            "time": "2015-11-28 20:41:05"
+            "time": "2016-03-02 14:02:15"
         },
         {
             "name": "mglaman/toolstack-helper",

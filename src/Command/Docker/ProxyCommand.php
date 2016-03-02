@@ -47,6 +47,8 @@ class ProxyCommand extends DockerCommand
                 return $this->startProxy();
             case 'create':
                 return $this->createProxy();
+            case 'update':
+                return $this->updateImage();
             default:
                 throw new \InvalidArgumentException('You must specify start or stop.');
         }
@@ -84,5 +86,17 @@ class ProxyCommand extends DockerCommand
           $this->containerName,
           'jwilder/nginx-proxy',
         ]);
+    }
+
+    protected function updateImage()
+    {
+        try {
+            $this->stopProxy();
+            $this->stdOut->writeln("<comment>Removing nginx proxy container");
+            Docker::rm(['nginx-proxy']);
+        } catch (\Exception $e) { }
+
+        Docker::pull(['jwilder/nginx-proxy']);
+        $this->createProxy();
     }
 }
