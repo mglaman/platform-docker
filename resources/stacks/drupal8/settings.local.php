@@ -32,10 +32,13 @@ $databases['default']['default'] = array(
 if (empty($_SERVER['PLATFORM_DOCKER'])) {
     $cmd = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"3306/tcp\") 0).HostPort}}' {{ container_name }}";
     $port = trim(shell_exec($cmd));
+    $host_cmd = "docker inspect --format='{{ .NetworkSettings.Gateway }}' {{ container_name }}";
+    $host = trim(shell_exec($host_cmd));
+
     // Default config within Docker container.
     $databases['default']['default'] = array(
       'driver' => 'mysql',
-      'host' => '{{ project_domain }}',
+      'host' => $host,
       'port' => $port,
       'username' => 'mysql',
       'password' => 'mysql',

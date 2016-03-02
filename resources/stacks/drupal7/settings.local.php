@@ -29,8 +29,6 @@ if (empty($_SERVER['PLATFORM_DOCKER'])) {
     // Default config within Docker container.
     $databases['default']['default'] = array(
       'driver' => 'mysql',
-      // The MySQL gateway seems a better choice than the project domain.
-      //'host' => '{{ project_domain }}',
       'host' => $host,
       'port' => $port,
       'username' => 'mysql',

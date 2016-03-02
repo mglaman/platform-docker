@@ -10,7 +10,9 @@ if (!empty($_SERVER['PLATFORM_DOCKER'])) {
 elseif (empty($_SERVER['PLATFORM_DOCKER'])) {
     $cmd = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"3306/tcp\") 0).HostPort}}' {{ container_name }}";
     $port = trim(shell_exec($cmd));
-    define('DB_HOST', "{{ project_domain }}:$port");
+    $host_cmd = "docker inspect --format='{{ .NetworkSettings.Gateway }}' {{ container_name }}";
+    $host = trim(shell_exec($host_cmd));
+    define('DB_HOST', "$host:$port");
 }
 
 {{ salts }}
