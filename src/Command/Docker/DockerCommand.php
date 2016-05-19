@@ -55,30 +55,32 @@ abstract class DockerCommand extends Command
 
     protected function validateNonNative()
     {
-        // Check to see if Docker has been exported.
-        if (!$this->envExported()) {
-            $this->stdOut->writeln("<comment>Docker environment information not exported. Attempting from PLATFORM_DOCKER_MACHINE_NAME");
-            if (getenv('PLATFORM_DOCKER_MACHINE_NAME')) {
-                // Attempt to boot the Docker VM
-                if (!Machine::start(getenv('PLATFORM_DOCKER_MACHINE_NAME'))) {
-                    $this->stdOut->writeln("<error>Failed to start Docker machine</error>");
+        if (!Docker::available()) {
+            // Check to see if Docker has been exported.
+            if (!$this->envExported()) {
+                $this->stdOut->writeln("<comment>Docker environment information not exported. Attempting from PLATFORM_DOCKER_MACHINE_NAME");
+                if (getenv('PLATFORM_DOCKER_MACHINE_NAME')) {
+                    // Attempt to boot the Docker VM
+                    if (!Machine::start(getenv('PLATFORM_DOCKER_MACHINE_NAME'))) {
+                        $this->stdOut->writeln("<error>Failed to start Docker machine</error>");
+                        exit(1);
+                    }
+                } else {
+                    $this->stdOut->writeln("<error>You need to start your Docker machine and export the environment information");
                     exit(1);
                 }
-            } else {
-                $this->stdOut->writeln("<error>You need to start your Docker machine and export the environment information");
+
+                // Export the Docker VM info on behalf of the user
+                $this->dockerParams = Machine::getEnv(getenv('PLATFORM_DOCKER_MACHINE_NAME'));
+                foreach ($this->dockerParams as $key => $value) {
+                    putenv("$key=$value");
+                }
+            }
+            // Give a Docker command a try.
+            if (!Docker::available()) {
+                $this->stdOut->writeln("<error>Unable to reach Docker service - try manually exporting environment variables.</error>");
                 exit(1);
             }
-
-            // Export the Docker VM info on behalf of the user
-            $this->dockerParams = Machine::getEnv(getenv('PLATFORM_DOCKER_MACHINE_NAME'));
-            foreach ($this->dockerParams as $key => $value) {
-                putenv("$key=$value");
-            }
-        }
-        // Give a Docker command a try.
-        if (!Docker::available()) {
-            $this->stdOut->writeln("<error>Unable to reach Docker service - try manually exporting environment variables.</error>");
-            exit(1);
         }
     }
 
