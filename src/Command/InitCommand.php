@@ -3,10 +3,12 @@
 namespace mglaman\PlatformDocker\Command;
 
 use mglaman\PlatformDocker\Config;
+use mglaman\PlatformDocker\Platform;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * Class InitCommand
@@ -42,6 +44,14 @@ class InitCommand extends Command
                 Config::set('alias-group', basename($this->cwd));
                 Config::set('name', basename($this->cwd));
                 Config::set('path', $this->cwd);
+
+                if (is_dir($this->cwd . '/' . Platform::DEFAULT_WEB_ROOT)) {
+                  Config::set('docroot', Platform::DEFAULT_WEB_ROOT);
+                } else {
+                  $question = new Question("<info>What is the document root for the project?");
+                  $answer = $helper->ask($input, $output, $question);
+                  Config::set('docroot', $answer);
+                }
 
                 if (!Config::write($this->cwd)) {
                     throw new \Exception('There was an error writing the platform configuration.');

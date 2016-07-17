@@ -44,10 +44,15 @@ class PlatformTest extends BaseUtilsTest
         $this->assertTrue(is_dir(self::$tmpName . '/repository'));
     }
 
-    public function testWebRoot()
+    public function testDefaultWebRoot()
     {
+        Config::set('docroot', 'www');
         mkdir(Platform::webDir());
         $this->assertTrue(is_dir(self::$tmpName . '/www'));
+
+      Config::set('docroot', 'web');
+      mkdir(Platform::webDir());
+      $this->assertTrue(is_dir(self::$tmpName . '/web'));
     }
 
 }

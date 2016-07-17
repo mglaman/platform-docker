@@ -56,7 +56,7 @@ class Config
     public function getConfig($key = null)
     {
         if ($key) {
-            return $this->config[$key];
+            return isset($this->config[$key]) ? $this->config[$key] : null;
         }
         return $this->config;
     }

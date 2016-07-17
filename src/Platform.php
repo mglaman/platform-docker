@@ -11,7 +11,7 @@ class Platform
 {
     const REPOSITORY_DIR = 'repository';
     const SHARED_DIR = 'shared';
-    const WEB_ROOT = 'www';
+    const DEFAULT_WEB_ROOT = 'www';
     const TEST_ROOT = 'tests';
 
     /**
@@ -79,7 +79,7 @@ class Platform
 
     public static function webDir()
     {
-        return self::rootDir() . '/' . self::WEB_ROOT;
+        return self::rootDir() . '/' . Config::get('docroot');
     }
 
     public static function testsDir()
