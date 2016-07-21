@@ -10,6 +10,7 @@ namespace mglaman\PlatformDocker\Docker;
 
 
 use mglaman\Docker\Docker;
+use mglaman\PlatformDocker\Config;
 use mglaman\PlatformDocker\Platform;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -85,6 +86,7 @@ class ComposeConfig
         $nginxConfFile= $this->projectPath . '/docker/conf/nginx.conf';
         $nginxConf = file_get_contents($nginxConfFile);
         $nginxConf = str_replace('{{ platform }}', Platform::projectName() . '.' . Platform::projectTld(), $nginxConf);
+        $nginxConf = str_replace('{{ docroot }}', Config::get('docroot'), $nginxConf);
         file_put_contents($nginxConfFile, $nginxConf);
 
         // stub in for Solr configs
