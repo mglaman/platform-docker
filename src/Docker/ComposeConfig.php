@@ -74,12 +74,20 @@ class ComposeConfig
               $this->projectPath . '/docker/conf/' . $fileName);
         }
 
-        // Change the default xdebug remote host on Mac, which uses a VM
+        // Change the default xdebug remote host when using Docker Machine
         if (!Docker::native()) {
             $phpConfFile = $this->projectPath . '/docker/conf/php.ini';
             $phpConf = file_get_contents($phpConfFile);
             $phpConf = str_replace('172.17.42.1', '192.168.99.1', $phpConf);
             file_put_contents($phpConfFile, $phpConf);
+        }
+        // Change xdebug remote host for Windows and Mac beta
+        // @todo No idea if this IP matches on Windows.
+        elseif (PHP_OS != 'Linux') {
+          $phpConfFile = $this->projectPath . '/docker/conf/php.ini';
+          $phpConf = file_get_contents($phpConfFile);
+          $phpConf = str_replace('172.17.42.1', '192.168.65.1', $phpConf);
+          file_put_contents($phpConfFile, $phpConf);
         }
 
         // Quick fix to make nginx PHP_IDE_CONFIG dynamic for now.
