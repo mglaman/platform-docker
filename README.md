@@ -14,6 +14,8 @@ Currently support is focused at Drupal 7 and Drupal 8. However there is rudiment
 ## Installation
 
 First, if you do not have Docker then head over to their [documentation](https://docs.docker.com/) and see how to install for your machine.
+For OSX and Windows users, make sure you have [Virtual Box](https://www.virtualbox.org/wiki/Downloads) installed and docker-machine configured, follow [these instructions](https://docs.docker.com/machine/get-started/#/create-a-machine) for the later and ensure you have
+ran `docker-machine create --driver virtualbox default`.
 
 ````
 composer global require mglaman/platform-docker
