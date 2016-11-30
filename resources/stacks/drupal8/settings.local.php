@@ -50,7 +50,7 @@ if (empty($_SERVER['PLATFORM_DOCKER'])) {
 
 // Configuration directories.
 $config_directories = array(
-  CONFIG_ACTIVE_DIRECTORY => '../../../shared/config/active',
-  CONFIG_STAGING_DIRECTORY => '../../../shared/config/staging',
-  CONFIG_SYNC_DIRECTORY => '../../../shared/config/staging',
+  CONFIG_ACTIVE_DIRECTORY => '../shared/config/active',
+  CONFIG_STAGING_DIRECTORY => '../shared/config/staging',
+  CONFIG_SYNC_DIRECTORY => '../shared/config/staging',
 );
