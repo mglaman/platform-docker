@@ -32,7 +32,6 @@ class Config
             $path = Platform::rootDir() . '/' . self::PLATFORM_CONFIG;
             $this->config = Yaml::parse(file_get_contents($path));
         }
-        return $this->config;
     }
 
     public static function get($key = null)
