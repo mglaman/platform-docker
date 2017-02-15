@@ -9,13 +9,9 @@
 namespace mglaman\PlatformDocker\Tests\Utils;
 
 use mglaman\PlatformDocker\Config;
-use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\vfsStreamDirectory;
 
 abstract class BaseUtilsTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var vfsStreamDirectory */
-    protected static $root;
     protected static $tmpName;
 
     /**
@@ -25,7 +21,6 @@ abstract class BaseUtilsTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        self::$root = vfsStream::setup(__CLASS__);
         $this->createTestProject();
     }
 
@@ -40,7 +35,7 @@ abstract class BaseUtilsTest extends \PHPUnit_Framework_TestCase
 
     protected function createTestProject()
     {
-        $testDir = self::$tmpName = tempnam(self::$root->url(), '');
+        $testDir = self::$tmpName = tempnam(sys_get_temp_dir(), '');
         unlink($testDir);
         mkdir($testDir);
 
