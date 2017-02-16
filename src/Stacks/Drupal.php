@@ -40,12 +40,12 @@ class Drupal extends StacksBase
      */
     protected function ensureSettings() {
         if (!$this->fs->exists(Platform::webDir() . '/sites/default')) {
-          $this->fs->mkdir(Platform::webDir() . '/sites/default', 0775);
+            $this->fs->mkdir(Platform::webDir() . '/sites/default', 0775);
         }
         else {
-          // If building from an existing project, Drupal may have fiddled with
-          // the permissions preventing us from writing.
-          $this->fs->chmod(Platform::webDir() . '/sites/default', 0775);
+            // If building from an existing project, Drupal may have fiddled with
+            // the permissions preventing us from writing.
+            $this->fs->chmod(Platform::webDir() . '/sites/default', 0775);
         }
         if ($this->fs->exists(Platform::webDir() . '/sites/default/settings.php')) {
             $this->fs->chmod(Platform::webDir() . '/sites/default/settings.php', 0664);
