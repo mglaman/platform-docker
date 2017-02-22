@@ -11,7 +11,7 @@ class Platform
 {
     const REPOSITORY_DIR = 'repository';
     const SHARED_DIR = 'shared';
-    const DEFAULT_WEB_ROOT = 'www';
+    const DEFAULT_WEB_ROOT = '_www';
     const TEST_ROOT = 'tests';
 
     /**
