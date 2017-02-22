@@ -6,9 +6,9 @@
   "require": {
     "symfony/config": "^2.7|^3.0",
     "symfony/console": "^2.7",
-    "symfony/filesystem": "^2.7",
+    "symfony/filesystem": "^2.7|^3.0",
     "symfony/yaml": "^2.7|^3.0",
-    "symfony/process": "^2.7",
+    "symfony/process": "^2.7|^3.0",
     "mglaman/toolstack-helper": "^0",
     "mglaman/docker-helper": "^0"
   },
