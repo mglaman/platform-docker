@@ -74,7 +74,7 @@ class ComposeConfig
     {
         // Copy Dockerfile for php-fpm
         $this->fs->copy($this->resourcesDir . "/images/php/{$this->phpVersion}/Dockerfile",
-          $this->projectPath . '/docker/images/php/Dockerfile');
+          $this->projectPath . '/docker/images/php/Dockerfile', TRUE);
     }
 
     public function copyConfigs()
@@ -82,7 +82,7 @@ class ComposeConfig
         // Copy configs
         foreach ($this->configsToCopy() as $source => $fileName) {
             $this->fs->copy($this->resourcesDir . '/conf/' . $source,
-              $this->projectPath . '/docker/conf/' . $fileName);
+              $this->projectPath . '/docker/conf/' . $fileName, TRUE);
         }
 
         // Change the default xdebug remote host when using Docker Machine
@@ -116,12 +116,12 @@ class ComposeConfig
                ->name('*');
         /** @var \SplFileInfo $file */
         foreach ($finder as $file) {
-            $this->fs->copy($file->getPathname(), $this->projectPath . '/docker/conf/solr/' . $file->getFilename());
+            $this->fs->copy($file->getPathname(), $this->projectPath . '/docker/conf/solr/' . $file->getFilename(), TRUE);
         }
 
         // copy ssl
-        $this->fs->copy($this->resourcesDir . '/ssl/nginx.crt', $this->projectPath . '/docker/ssl/nginx.crt');
-        $this->fs->copy($this->resourcesDir . '/ssl/nginx.key', $this->projectPath . '/docker/ssl/nginx.key');
+        $this->fs->copy($this->resourcesDir . '/ssl/nginx.crt', $this->projectPath . '/docker/ssl/nginx.crt', TRUE);
+        $this->fs->copy($this->resourcesDir . '/ssl/nginx.key', $this->projectPath . '/docker/ssl/nginx.key', TRUE);
     }
 
     /**

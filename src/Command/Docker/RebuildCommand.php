@@ -83,6 +83,10 @@ class RebuildCommand extends DockerCommand
             StacksFactory::configure($stack->type());
         }
 
+        // Stop and remove any existing containers.
+        Compose::stop();
+        Compose::rm(TRUE);
+
         $this->stdOut->writeln('<info>Building the containers</info>');
         Compose::build();
 
