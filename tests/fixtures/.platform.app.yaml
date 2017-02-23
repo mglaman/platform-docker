@@ -1,0 +1,135 @@
+# This file describes an application. You can have multiple applications
+# in the same project.
+
+# The name of this app. Must be unique within a project.
+name: php
+
+# The toolstack used to build the application.
+type: php:7.0
+build:
+    flavor: drupal
+
+# The relationships of the application with services or other applications.
+# The left-hand side is the name of the relationship as it will be exposed
+# to the application in the PLATFORM_RELATIONSHIPS variable. The right-hand
+# side is in the form `<service name>:<endpoint name>`.
+relationships:
+    database: "mysql:mysql"
+    postgres: "pgmigrationsource:postgresql"
+    solr: "solr:solr"
+    redis: "redis:redis"
+
+# The configuration of app when it is exposed to the web.
+web:
+    # The public directory of the app, relative to its root.
+    document_root: "/"
+    # The front-controller script to send non-static requests to.
+    passthru: "/index.php"
+    whitelist:
+      # CSS and Javascript.
+      - \.css$
+      - \.js$
+      - \.hbs$
+
+      # image/* types.
+      - \.gif$
+      - \.jpe?g$
+      - \.png$
+      - \.tiff?$
+      - \.wbmp$
+      - \.ico$
+      - \.jng$
+      - \.bmp$
+      - \.svgz?$
+
+      # audio/* types.
+      - \.midi?$
+      - \.mpe?ga$
+      - \.mp2$
+      - \.mp3$
+      - \.m4a$
+      - \.ra$
+      - \.weba$
+
+      # video/* types.
+      - \.3gpp?$
+      - \.mp4$
+      - \.mpe?g$
+      - \.mpe$
+      - \.ogv$
+      - \.mov$
+      - \.webm$
+      - \.flv$
+      - \.mng$
+      - \.asx$
+      - \.asf$
+      - \.wmv$
+      - \.avi$
+
+      # application/ogg.
+      - \.ogx$
+
+      # application/x-shockwave-flash.
+      - \.swf$
+
+      # application/java-archive.
+      - \.jar$
+
+      # fonts types.
+      - \.ttf$
+      - \.eot$
+      - \.woff$
+      - \.otf$
+
+      # robots.txt.
+      - /robots\.txt$
+
+      # html files.
+      - \.htm?l$
+      - \.xml$
+
+      # application/json.
+      - \.json$
+
+# The size of the persistent disk of the application (in MB).
+disk: 3000
+
+# The mounts that will be performed when the package is deployed.
+mounts:
+    "/public/sites/default/files": "shared:files/files"
+    "/tmp": "shared:files/tmp"
+    "/private": "shared:files/private"
+
+# The build-time dependencies of the app.
+dependencies:
+    php:
+        "drush/drush": "^8.0"
+
+runtime:
+    extensions:
+        - redis
+        - pdo_pgsql
+# The hooks executed at various points in the lifecycle of the application.
+hooks:
+    # We run deploy hook after your application has been deployed and started.
+    build: |
+      mv public/sites/default/google2b5ec40c8ce33883.html public/google2b5ec40c8ce33883.html
+      cd public
+      rm README.txt CHANGELOG.txt COPYRIGHT.txt INSTALL.mysql.txt INSTALL.pgsql.txt INSTALL.sqlite.txt INSTALL.txt LICENSE.txt MAINTAINERS.txt PATCHES.txt UPGRADE.txt
+    deploy: |
+      composer install --working-dir=public/sites/default/files/composer
+      cd public
+      drush -y updatedb
+      drush revert
+      drush fr-all -y
+      drush cc all
+      mkdir -p /tmp/tools
+      cp sites/default/tests/composer.json /tmp/tools/
+      cd /tmp/tools/
+      composer install
+
+# The configuration of scheduled execution.
+crons:
+    drupal:
+        spec: "*/15 * * * *"
+        cmd: "cd public ; drush cron-run"

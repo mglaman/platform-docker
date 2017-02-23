@@ -47,7 +47,7 @@ class ComposeConfig
         $this->resourcesDir = CLI_ROOT . '/resources';
         $this->projectPath = Platform::rootDir();
         $this->fs = new Filesystem();
-        $this->phpVersion = $phpVersion;
+        $this->phpVersion = $phpVersion ?: '5.6';
     }
 
     public function writeDockerCompose(ComposeContainers $composeContainers)

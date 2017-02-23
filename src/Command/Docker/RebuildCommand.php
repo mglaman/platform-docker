@@ -11,6 +11,7 @@ namespace mglaman\PlatformDocker\Command\Docker;
 use mglaman\Docker\Compose;
 use mglaman\PlatformDocker\Config;
 use mglaman\PlatformDocker\Platform;
+use mglaman\PlatformDocker\PlatformAppConfig;
 use mglaman\PlatformDocker\Stacks\StacksFactory;
 use mglaman\Toolstack\Toolstack;
 use mglaman\Toolstack\Stacks;
@@ -38,7 +39,8 @@ class RebuildCommand extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $composeConfig = new ComposeConfig();
+        $platform_config = new PlatformAppConfig();
+        $composeConfig = new ComposeConfig($platform_config->getPhpVersion());
 
         // Create docker folder in project.
         try {
