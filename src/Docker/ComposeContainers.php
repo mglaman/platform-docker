@@ -80,7 +80,7 @@ class ComposeContainers
     {
         $this->config['mariadb'] = [
             // @todo if comman run with verbose, tag verbose.
-          'command' => 'mysqld --user=root --verbose',
+          'command' => 'mysqld --verbose',
           'image' => 'mariadb',
           'ports' => [
             '3306',
