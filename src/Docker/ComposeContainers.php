@@ -83,7 +83,7 @@ class ComposeContainers
           'command' => 'mysqld --user=root --verbose',
           'image' => 'mariadb',
           'ports' => [
-            '3306',
+            '3306:3306',
           ],
           'volumes' => [
             './docker/data:/var/lib/mysql',
@@ -113,8 +113,8 @@ class ComposeContainers
             './docker/ssl/nginx.key:/etc/nginx/ssl/nginx.key',
           ],
           'ports' => [
-            '80',
-            '443',
+            '80:80',
+            '443:443',
           ],
           'links' => [
             'phpfpm',
@@ -141,7 +141,7 @@ class ComposeContainers
         $this->config['solr'] = [
           'image'   => 'makuk66/docker-solr:4.10.4',
           'ports' => [
-              '8893',
+              '8893:8893',
           ],
           'volumes' => [
             './docker/conf/solr:/opt/solr/example/solr/collection1/conf',
