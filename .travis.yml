@@ -10,6 +10,8 @@ matrix:
         - php: 7.0
     fast_finish: true
 sudo: false
+services:
+  - docker
 cache:
   directories:
     - $HOME/.composer/cache
