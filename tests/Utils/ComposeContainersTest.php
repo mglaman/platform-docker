@@ -1,19 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mglaman
- * Date: 8/30/15
- * Time: 7:31 AM
- */
 
 namespace mglaman\PlatformDocker\Tests\Utils;
 
 
 use mglaman\PlatformDocker\Docker\ComposeContainers;
 use mglaman\PlatformDocker\Platform;
+use mglaman\PlatformDocker\Tests\BaseTest;
 use Symfony\Component\Yaml\Yaml;
 
-class ComposeContainersTest extends BaseUtilsTest
+class ComposeContainersTest extends BaseTest
 {
     public function testDefaultConfig()
     {

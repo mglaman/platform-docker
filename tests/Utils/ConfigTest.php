@@ -10,8 +10,9 @@ namespace mglaman\PlatformDocker\Tests\Utils;
 
 
 use mglaman\PlatformDocker\Config;
+use mglaman\PlatformDocker\Tests\BaseTest;
 
-class ConfigTest extends BaseUtilsTest
+class ConfigTest extends BaseTest
 {
 
     public function testGet()
