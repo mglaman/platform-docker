@@ -20,7 +20,7 @@ $databases['default']['default'] = array(
 
 // Redis configuration.
 $conf['redis_client_host'] = '{{ redis_container_name }}'; // Your Redis instance hostname.
-if ($conf['redis_client_host'] && empty($_SERVER['PLATFORM_DOCKER'])) {
+if (empty($_SERVER['PLATFORM_DOCKER'])) {
     $conf['redis_client_host'] = '{{ project_domain }}';
     $conf['redis_client_port'] = trim(shell_exec("docker inspect --format='{{(index (index .NetworkSettings.Ports \"6379/tcp\") 0).HostPort}}' {{ redis_container_name }}"));
 }
