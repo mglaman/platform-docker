@@ -10,7 +10,7 @@ namespace mglaman\PlatformDocker;
 class Platform
 {
     const REPOSITORY_DIR = 'repository';
-    const SHARED_DIR = 'shared';
+    const SHARED_DIR = '.platform/local/shared';
     const DEFAULT_WEB_ROOT = '_www';
     const TEST_ROOT = 'tests';
 
