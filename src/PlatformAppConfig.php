@@ -2,41 +2,19 @@
 
 namespace mglaman\PlatformDocker;
 
-use Symfony\Component\Yaml\Yaml;
-
 /**
  * Reads the .platform.app.yaml configuration file.
  */
 class PlatformAppConfig
 {
-    const PLATFORM_CONFIG = '.platform.app.yaml';
+    use YamlConfigReader;
 
-    protected static $instance;
-    protected $config = array();
-
-    protected static function instance($refresh = false)
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConfigFilePath()
     {
-        if (self::$instance === null || $refresh === true) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-
-    public function __construct()
-    {
-        if ((empty($this->config)) && file_exists(Platform::rootDir() . '/' . self::PLATFORM_CONFIG)) {
-            $path = Platform::rootDir() . '/' . self::PLATFORM_CONFIG;
-            $this->config = Yaml::parse(file_get_contents($path));
-        }
-    }
-
-    public function get($key = null)
-    {
-        if ($key) {
-            return isset($this->config[$key]) ? $this->config[$key] : null;
-        }
-        return $this->config;
+        return '.platform.app.yaml';
     }
 
     /**
@@ -51,8 +29,4 @@ class PlatformAppConfig
         return NULL;
     }
 
-    public static function reset()
-    {
-        return self::instance(true);
-    }
 }
