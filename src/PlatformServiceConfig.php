@@ -22,8 +22,8 @@ class PlatformServiceConfig
      *
      * @return bool
      */
-    public function hasRedis() {
-        return (bool) $this->get('redis');
+    public static function hasRedis() {
+        return (bool) self::get('redis');
     }
 
 }

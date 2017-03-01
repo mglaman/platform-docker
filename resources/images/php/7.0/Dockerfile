@@ -28,6 +28,10 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
 
+# Setup redis
+RUN pecl install redis
+RUN docker-php-ext-enable redis
+
 # XHPROF is not available in PHP 7.
 
 RUN export VERSION=`php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;"` \

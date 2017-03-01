@@ -4,6 +4,7 @@ namespace mglaman\PlatformDocker\Stacks;
 
 use mglaman\Docker\Compose;
 use mglaman\PlatformDocker\Platform;
+use mglaman\PlatformDocker\PlatformServiceConfig;
 use Symfony\Component\Filesystem\Filesystem;
 
 abstract class StacksBase  implements StackTypeInterface {
@@ -13,10 +14,16 @@ abstract class StacksBase  implements StackTypeInterface {
     protected $projectName;
 
     protected $projectTld;
+
     /**
      * @var string
      */
     protected $containerName;
+
+    /**
+     * @var string
+     */
+    protected $redisContainerName;
 
     protected $version;
 
@@ -31,5 +38,6 @@ abstract class StacksBase  implements StackTypeInterface {
         $this->projectName   = Platform::projectName();
         $this->projectTld    = Platform::projectTld();
         $this->containerName = Compose::getContainerName(Platform::projectName(), 'mariadb');
+        $this->redisContainerName = PlatformServiceConfig::hasRedis() ? Compose::getContainerName(Platform::projectName(), 'redis') : '';
     }
 }
