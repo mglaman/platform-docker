@@ -1,0 +1,25 @@
+{
+  "chmod": "0755",
+  "directories": [
+    "resources",
+    "src"
+  ],
+  "files": [
+    "vendor/autoload.php",
+    "vendor/symfony/console/Resources/bin/hiddeninput.exe"
+  ],
+  "finder": [
+    {
+      "in": "vendor",
+      "name": "*.php",
+      "exclude": [
+        "phpunit",
+        "Tests",
+        "tests"
+      ]
+    }
+  ],
+  "main": "platform-docker",
+  "output": "platform-docker.phar",
+  "stub": "stub.php"
+}
