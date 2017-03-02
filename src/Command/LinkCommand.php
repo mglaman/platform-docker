@@ -46,7 +46,7 @@ class LinkCommand extends DockerCommand
         try {
             // See if the nginx-proxy is running and use that if it is.
             $process = Docker::inspect(['--format="{{ .State.Running }}"', 'nginx-proxy'], true);
-            if (trim($process->getOutput()) === 'true') {
+            if (strpos($process->getOutput(), 'true') !== FALSE) {
                 $url = 'http://' . Platform::projectName() . '.' . Platform::projectTld();
             }
         }
