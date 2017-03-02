@@ -30,11 +30,6 @@ Use within any directory. Until the app itself can scaffold a folder, it's expec
 * /repository (not required, but opinionated this is the source of what was built.)
 * /tests (default directory it will look for Behat tests, however checks shared and www)
 
-Sites are provisioned at *project-name*.platform. Currently the tld is not configurable (#24). It's best to set up dnsmasq set up wildcard DNS entries to point \*.platform to your localhost or Docker VM (Mac, Windows.) Here's some tutorials
-
-* http://passingcuriosity.com/2013/dnsmasq-dev-osx/
-* http://www.dickson.me.uk/2012/03/26/setting-up-dnsmasq-with-ubuntu-10-04-for-home-networking/
-
 If you are on Mac OS X, export ````PLATFORM_DOCKER_MACHINE_NAME```` with your Docker machine name. The tool will automatically boot the machine or export its environment information as needed. For example, put ````12 export PLATFORM_DOCKER_MACHINE_NAME="vmname"```` in your .bash_profile.
 
 ### Features

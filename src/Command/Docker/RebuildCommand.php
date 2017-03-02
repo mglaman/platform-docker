@@ -9,6 +9,7 @@
 namespace mglaman\PlatformDocker\Command\Docker;
 
 use mglaman\Docker\Compose;
+use mglaman\Docker\Docker;
 use mglaman\PlatformDocker\Config;
 use mglaman\PlatformDocker\Platform;
 use mglaman\PlatformDocker\PlatformAppConfig;
@@ -99,5 +100,8 @@ class RebuildCommand extends DockerCommand
 
         $this->stdOut->writeln('<info>Bringing up the containers</info>');
         Compose::up(['-d']);
+        $nginx_port = Docker::getContainerPort(Compose::getContainerName(Platform::projectName(), 'nginx'), 80);
+        $name = Platform::projectName();
+        $this->stdOut->writeln("<info>$name available at http://localhost/$nginx_port</info>");
     }
 }

@@ -20,23 +20,20 @@ $databases['default']['default'] = array(
 
 // Redis configuration.
 $conf['redis_client_host'] = '{{ redis_container_name }}'; // Your Redis instance hostname.
-if (empty($_SERVER['PLATFORM_DOCKER'])) {
-    $conf['redis_client_host'] = '{{ project_domain }}';
-    $conf['redis_client_port'] = trim(shell_exec("docker inspect --format='{{(index (index .NetworkSettings.Ports \"6379/tcp\") 0).HostPort}}' {{ redis_container_name }}"));
-}
 
-// Database configuration.
+// Configuration when running drush commands locally.
 if (empty($_SERVER['PLATFORM_DOCKER'])) {
+
+    $conf['redis_client_host'] = '127.0.0.1';
+    $conf['redis_client_port'] = trim(shell_exec("docker inspect --format='{{(index (index .NetworkSettings.Ports \"6379/tcp\") 0).HostPort}}' {{ redis_container_name }}"));
 
     $port_cmd = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"3306/tcp\") 0).HostPort}}' {{ container_name }}";
     $port = trim(shell_exec($port_cmd));
-    
-    $host = '{{ project_domain }}';
 
     // Default config within Docker container.
     $databases['default']['default'] = array(
       'driver' => 'mysql',
-      'host' => $host,
+      'host' => '127.0.0.1',
       'port' => $port,
       'username' => 'mysql',
       'password' => 'mysql',
