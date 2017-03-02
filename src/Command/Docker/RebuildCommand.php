@@ -101,6 +101,7 @@ class RebuildCommand extends DockerCommand
         $this->stdOut->writeln('<info>Bringing up the containers</info>');
         Compose::up(['-d']);
         $uri = Platform::getUri();
+        $name = Platform::projectName();
         $this->stdOut->writeln("<info>$name available at $uri</info>");
     }
 }
