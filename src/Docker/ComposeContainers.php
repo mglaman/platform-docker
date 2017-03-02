@@ -131,7 +131,10 @@ class ComposeContainers
      */
     public function addRedis() {
         $this->config['redis'] = [
-          'image' => 'redis',
+            'image' => 'redis',
+            'ports' => [
+                '6379',
+            ],
         ];
         $this->config['phpfpm']['links'][] = 'redis';
     }

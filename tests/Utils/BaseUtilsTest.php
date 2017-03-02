@@ -40,6 +40,7 @@ abstract class BaseUtilsTest extends \PHPUnit_Framework_TestCase
         mkdir($testDir);
 
         file_put_contents($testDir . '/' . Config::PLATFORM_CONFIG, 'name: phpunit');
+        copy(__DIR__ .'/../fixtures/.platform.app.yaml', $testDir . '/.platform.app.yaml');
         chdir($testDir);
     }
 }

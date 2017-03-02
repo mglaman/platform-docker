@@ -47,16 +47,21 @@ class Drupal extends StacksBase
             // the permissions preventing us from writing.
             $this->fs->chmod(Platform::webDir() . '/sites/default', 0775);
         }
-        if ($this->fs->exists(Platform::webDir() . '/sites/default/settings.php')) {
+        $has_settings = $this->fs->exists(Platform::webDir() . '/sites/default/settings.php');
+        if ($has_settings) {
             $this->fs->chmod(Platform::webDir() . '/sites/default/settings.php', 0664);
         }
 
         switch ($this->version) {
             case DrupalStackHelper::DRUPAL7:
-                $this->fs->copy(CLI_ROOT . '/resources/stacks/drupal7/settings.php', Platform::webDir() . '/sites/default/settings.php', true);
+                if (!$has_settings) {
+                    $this->fs->copy(CLI_ROOT . '/resources/stacks/drupal7/settings.php', Platform::webDir() . '/sites/default/settings.php', true);
+                }
                 break;
             case DrupalStackHelper::DRUPAL8:
-                $this->fs->copy(CLI_ROOT . '/resources/stacks/drupal8/settings.php', Platform::webDir() . '/sites/default/settings.php', true);
+                if ($has_settings) {
+                    $this->fs->copy(CLI_ROOT . '/resources/stacks/drupal8/settings.php', Platform::webDir() . '/sites/default/settings.php', true);
+                }
                 $this->fs->mkdir([
                   Platform::sharedDir() . '/config',
                   Platform::sharedDir() . '/config/active',
@@ -85,6 +90,8 @@ class Drupal extends StacksBase
         $localSettings = file_get_contents(Platform::sharedDir() . '/settings.local.php');
         $localSettings = str_replace('{{ salt }}', hash('sha256', serialize($_SERVER)), $localSettings);
         $localSettings = str_replace('{{ container_name }}', $this->containerName, $localSettings);
+        $localSettings = str_replace('{{ redis_container_name }}', $this->redisContainerName, $localSettings);
+        $localSettings = str_replace('{{ project_domain }}', $this->projectName . '.' . $this->projectTld, $localSettings);
         $localSettings = str_replace('{{ project_domain }}', $this->projectName . '.' . $this->projectTld, $localSettings);
         file_put_contents(Platform::sharedDir() . '/settings.local.php', $localSettings);
 

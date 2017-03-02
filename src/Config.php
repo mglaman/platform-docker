@@ -12,31 +12,13 @@ use Symfony\Component\Yaml\Yaml;
 
 class Config
 {
+    use YamlConfigReader;
+
     const PLATFORM_CONFIG = '.platform-project';
 
-    protected static $instance;
-    protected $config = array();
-
-    protected static function instance($refresh = false)
+    protected function getConfigFilePath()
     {
-        if (self::$instance === null || $refresh === true) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-
-    public function __construct()
-    {
-        if ((empty($this->config)) && file_exists(Platform::rootDir() . '/' . self::PLATFORM_CONFIG)) {
-            $path = Platform::rootDir() . '/' . self::PLATFORM_CONFIG;
-            $this->config = Yaml::parse(file_get_contents($path));
-        }
-    }
-
-    public static function get($key = null)
-    {
-        return self::instance()->getConfig($key);
+        return self::PLATFORM_CONFIG;
     }
 
     public static function set($key, $value)
@@ -52,23 +34,10 @@ class Config
         return self::instance()->writeConfig($destinationDir);
     }
 
-    public function getConfig($key = null)
-    {
-        if ($key) {
-            return isset($this->config[$key]) ? $this->config[$key] : null;
-        }
-        return $this->config;
-    }
-
     public function setConfig($key, $value)
     {
         $this->config[$key] = $value;
         return $this;
-    }
-
-    public static function reset()
-    {
-        return self::instance(true);
     }
 
     public function writeConfig($destinationDir = null)

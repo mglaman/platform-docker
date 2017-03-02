@@ -34,8 +34,8 @@ class PlatformTest extends BaseUtilsTest
 
     public function testSharedDir()
     {
-        mkdir(Platform::sharedDir());
-        $this->assertTrue(is_dir(self::$tmpName . '/shared'));
+        mkdir(Platform::sharedDir(), 0777, TRUE);
+        $this->assertTrue(is_dir(self::$tmpName . '/.platform/local/shared'));
     }
 
     public function testRepoDir()

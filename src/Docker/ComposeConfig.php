@@ -30,13 +30,24 @@ class ComposeConfig
     protected $projectPath;
 
     /**
+     * The PHP Version in the format MAJOR.MINOR.
      *
+     * @var string
      */
-    public function __construct()
+    protected $phpVersion;
+
+    /**
+     * ComposeConfig constructor.
+     *
+     * @param string $php_version
+     *   The PHP Version in the format MAJOR.MINOR, for example '7.0'.
+     */
+    public function __construct($phpVersion = '5.6')
     {
         $this->resourcesDir = CLI_ROOT . '/resources';
         $this->projectPath = Platform::rootDir();
         $this->fs = new Filesystem();
+        $this->phpVersion = $phpVersion ?: '5.6';
     }
 
     public function writeDockerCompose(ComposeContainers $composeContainers)
@@ -62,16 +73,16 @@ class ComposeConfig
     public function copyImages()
     {
         // Copy Dockerfile for php-fpm
-        $this->fs->copy($this->resourcesDir . '/images/php/Dockerfile',
-          $this->projectPath . '/docker/images/php/Dockerfile');
+        $this->fs->copy($this->resourcesDir . "/images/php/{$this->phpVersion}/Dockerfile",
+          $this->projectPath . '/docker/images/php/Dockerfile', TRUE);
     }
 
     public function copyConfigs()
     {
         // Copy configs
-        foreach ($this->configsToCopy() as $fileName) {
-            $this->fs->copy($this->resourcesDir . '/conf/' . $fileName,
-              $this->projectPath . '/docker/conf/' . $fileName);
+        foreach ($this->configsToCopy() as $source => $fileName) {
+            $this->fs->copy($this->resourcesDir . '/conf/' . $source,
+              $this->projectPath . '/docker/conf/' . $fileName, TRUE);
         }
 
         // Change the default xdebug remote host when using Docker Machine
@@ -105,12 +116,12 @@ class ComposeConfig
                ->name('*');
         /** @var \SplFileInfo $file */
         foreach ($finder as $file) {
-            $this->fs->copy($file->getPathname(), $this->projectPath . '/docker/conf/solr/' . $file->getFilename());
+            $this->fs->copy($file->getPathname(), $this->projectPath . '/docker/conf/solr/' . $file->getFilename(), TRUE);
         }
 
         // copy ssl
-        $this->fs->copy($this->resourcesDir . '/ssl/nginx.crt', $this->projectPath . '/docker/ssl/nginx.crt');
-        $this->fs->copy($this->resourcesDir . '/ssl/nginx.key', $this->projectPath . '/docker/ssl/nginx.key');
+        $this->fs->copy($this->resourcesDir . '/ssl/nginx.crt', $this->projectPath . '/docker/ssl/nginx.crt', TRUE);
+        $this->fs->copy($this->resourcesDir . '/ssl/nginx.key', $this->projectPath . '/docker/ssl/nginx.key', TRUE);
     }
 
     /**
@@ -118,6 +129,11 @@ class ComposeConfig
      */
     protected function configsToCopy()
     {
-        return ['fpm.conf', 'mysql.cnf', 'nginx.conf', 'php.ini',];
+        return [
+            "php/{$this->phpVersion}/fpm.conf" => 'fpm.conf',
+            'mysql.cnf' => 'mysql.cnf',
+            'nginx.conf' => 'nginx.conf',
+            "php/{$this->phpVersion}/php.ini" => 'php.ini',
+        ];
     }
 }
