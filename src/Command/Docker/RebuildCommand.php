@@ -100,8 +100,8 @@ class RebuildCommand extends DockerCommand
 
         $this->stdOut->writeln('<info>Bringing up the containers</info>');
         Compose::up(['-d']);
-        $nginx_port = Docker::getContainerPort(Compose::getContainerName(Platform::projectName(), 'nginx'), 80);
+        $uri = Platform::getUri();
         $name = Platform::projectName();
-        $this->stdOut->writeln("<info>$name available at http://localhost/$nginx_port</info>");
+        $this->stdOut->writeln("<info>$name available at $uri</info>");
     }
 }
