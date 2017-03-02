@@ -28,7 +28,7 @@ $databases['default']['default'] = array(
   'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
 );
 
-// Database configuration.
+// Configuration when running drush commands locally.
 if (empty($_SERVER['PLATFORM_DOCKER'])) {
     $cmd = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"3306/tcp\") 0).HostPort}}' {{ container_name }}";
     $port = trim(shell_exec($cmd));
@@ -37,7 +37,7 @@ if (empty($_SERVER['PLATFORM_DOCKER'])) {
     // Default config within Docker container.
     $databases['default']['default'] = array(
       'driver' => 'mysql',
-      'host' => $host,
+      'host' => '127.0.0.1',
       'port' => $port,
       'username' => 'mysql',
       'password' => 'mysql',
