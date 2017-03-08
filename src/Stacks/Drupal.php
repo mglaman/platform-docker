@@ -3,6 +3,7 @@
 namespace mglaman\PlatformDocker\Stacks;
 
 
+use mglaman\PlatformDocker\Docker\ComposeContainers;
 use mglaman\Toolstack\Toolstack;
 use mglaman\Toolstack\Stacks\Drupal as DrupalStackHelper;
 use mglaman\PlatformDocker\Platform;
@@ -92,7 +93,8 @@ class Drupal extends StacksBase
         $localSettings = str_replace('{{ container_name }}', $this->containerName, $localSettings);
         $localSettings = str_replace('{{ redis_container_name }}', $this->redisContainerName, $localSettings);
         $localSettings = str_replace('{{ project_domain }}', $this->projectName . '.' . $this->projectTld, $localSettings);
-        $localSettings = str_replace('{{ project_domain }}', $this->projectName . '.' . $this->projectTld, $localSettings);
+        $localSettings = str_replace('{{ mysql_user }}', ComposeContainers::getMysqlUser(), $localSettings);
+        $localSettings = str_replace('{{ mysql_password }}', ComposeContainers::getMysqlPassword(), $localSettings);
         file_put_contents(Platform::sharedDir() . '/settings.local.php', $localSettings);
 
         // Relink if missing.
