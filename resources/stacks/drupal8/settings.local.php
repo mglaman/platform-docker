@@ -48,6 +48,9 @@ if (empty($_SERVER['PLATFORM_DOCKER'])) {
     );
 }
 
+// Set the private file path to where a "platform build" command creates one.
+$settings['file_private_path'] = '../private';
+
 // Configuration directories.
 $config_directories = array(
   CONFIG_ACTIVE_DIRECTORY => '../shared/config/active',
