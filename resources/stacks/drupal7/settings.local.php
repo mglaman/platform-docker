@@ -41,3 +41,6 @@ if (empty($_SERVER['PLATFORM_DOCKER'])) {
       'prefix' => '',
     );
 }
+
+// Set the private file path to where a "platform build" command creates one.
+$conf['file_private_path'] = '../private';
