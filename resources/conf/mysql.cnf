@@ -39,6 +39,14 @@ query_cache_size = 4M
 query_cache_limit = 256K
 thread_cache_size = 128
 
+# If you do not need full ACID compliance, this can be set 0. It means that you will loose data for
+# the last 1-2 seconds but makes the system much faster.
+innodb_flush_log_at_trx_commit=0
+# Various performance settings. See documentation for more information.
+innodb_log_buffer_size=4M
+innodb_thread_concurrency=8
+innodb_flush_method=O_DIRECT
+
 # * IMPORTANT: Additional settings that can override those from this file!
 #   The files must end with '.cnf', otherwise they'll be ignored.
 #
