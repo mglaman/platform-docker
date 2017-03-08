@@ -4,6 +4,7 @@ namespace mglaman\PlatformDocker\Docker;
 
 
 use mglaman\PlatformDocker\Config;
+use mglaman\PlatformDocker\Mysql\Mysql;
 use mglaman\PlatformDocker\Platform;
 use Symfony\Component\Yaml\Yaml;
 
@@ -91,49 +92,12 @@ class ComposeContainers
           ],
           'environment' => [
             'MYSQL_DATABASE' => 'data',
-            'MYSQL_USER' => static::getMysqlUser(),
-            'MYSQL_PASSWORD' => static::getMysqlPassword(),
+            'MYSQL_USER' => Mysql::getMysqlUser(),
+            'MYSQL_PASSWORD' => Mysql::getMysqlPassword(),
             'MYSQL_ALLOW_EMPTY_PASSWORD' => 'yes',
-            'MYSQL_ROOT_PASSWORD' => 'root,'
+            'MYSQL_ROOT_PASSWORD' => Mysql::getMysqlRootPassword(),
           ],
         ];
-    }
-
-    public static function getMysqlUser() {
-        $my_cnf = [];
-        $my_cnf_file = static::getUserDirectory() . '/.my.cnf';
-        if (file_exists($my_cnf_file)) {
-            $my_cnf = parse_ini_file($my_cnf_file);
-        }
-        return isset($my_cnf['user']) ? $my_cnf['user'] : 'mysql';
-    }
-
-    public static function getMysqlPassword() {
-        $my_cnf = [];
-        $my_cnf_file = static::getUserDirectory() . '/.my.cnf';
-        if (file_exists($my_cnf_file)) {
-            $my_cnf = parse_ini_file($my_cnf_file);
-        }
-        return isset($my_cnf['password']) ? $my_cnf['password'] : 'mysql';
-    }
-
-    /**
-     * @return string The formal user home as detected from environment parameters
-     * @throws \RuntimeException If the user home could not reliably be determined
-     */
-    public static function getUserDirectory()
-    {
-        if (false !== ($home = getenv('HOME'))) {
-            return $home;
-        }
-        if (defined('PHP_WINDOWS_VERSION_BUILD') && false !== ($home = getenv('USERPROFILE'))) {
-            return $home;
-        }
-        if (function_exists('posix_getuid') && function_exists('posix_getpwuid')) {
-            $info = posix_getpwuid(posix_getuid());
-            return $info['dir'];
-        }
-        throw new \RuntimeException('Could not determine user directory');
     }
 
     /**
