@@ -92,12 +92,16 @@ class ComposeContainers
           ],
           'environment' => [
             'MYSQL_DATABASE' => 'data',
-            'MYSQL_USER' => Mysql::getMysqlUser(),
-            'MYSQL_PASSWORD' => Mysql::getMysqlPassword(),
             'MYSQL_ALLOW_EMPTY_PASSWORD' => 'yes',
             'MYSQL_ROOT_PASSWORD' => Mysql::getMysqlRootPassword(),
           ],
         ];
+
+        $user = Mysql::getMysqlUser();
+        if (strcasecmp($user, 'root') !== 0) {
+            $this->config['mariadb']['environment']['MYSQL_USER'] = $user;
+            $this->config['mariadb']['environment']['MYSQL_PASSWORD'] = Mysql::getMysqlPassword();
+        }
     }
 
     /**

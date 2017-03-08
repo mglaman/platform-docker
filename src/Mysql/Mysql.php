@@ -4,6 +4,11 @@ namespace mglaman\PlatformDocker\Mysql;
 
 /**
  * Static methods to get info about the local mysql environment.
+ *
+ * We need to read .my.cnf files if they exist and use the user information from it. This is because of a bug in the
+ * most recent versions of Drush that is unlikely to be ported to Drush 8 or 7.
+ *
+ * @see https://github.com/drush-ops/drush/pull/2387
  */
 class Mysql
 {
