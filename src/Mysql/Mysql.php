@@ -24,7 +24,7 @@ class Mysql
         if (file_exists($my_cnf_file)) {
             $my_cnf = parse_ini_file($my_cnf_file);
         }
-        return isset($my_cnf['user']) ? $my_cnf['user'] : 'mysql';
+        return isset($my_cnf['user']) && $my_cnf['user'] !== 'root' ? $my_cnf['user'] : 'mysql';
     }
 
     /**
@@ -38,7 +38,7 @@ class Mysql
         if (file_exists($my_cnf_file)) {
             $my_cnf = parse_ini_file($my_cnf_file);
         }
-        return isset($my_cnf['password']) ? $my_cnf['password'] : 'mysql';
+        return isset($my_cnf['password'], $my_cnf['user']) && $my_cnf['user'] !== 'root' ? $my_cnf['password'] : 'mysql';
     }
 
     /**
