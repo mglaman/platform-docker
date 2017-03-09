@@ -88,9 +88,15 @@ class Drupal extends StacksBase
 
         // Replace template variables.
         $localSettings = file_get_contents(Platform::sharedDir() . '/settings.local.php');
+        if (file_exists(Platform::rootDir() . '/.platform-project.local.settings.php')) {
+            $additional_settings = file_get_contents(Platform::rootDir() . '/.platform-project.local.settings.php');
+            $additional_settings = str_replace("<?php\n", '', $additional_settings);
+            $localSettings .= $additional_settings;
+        }
         $localSettings = str_replace('{{ salt }}', hash('sha256', serialize($_SERVER)), $localSettings);
         $localSettings = str_replace('{{ container_name }}', $this->containerName, $localSettings);
         $localSettings = str_replace('{{ redis_container_name }}', $this->redisContainerName, $localSettings);
+        $localSettings = str_replace('{{ solr_container_name }}', $this->solrContainerName, $localSettings);
         $localSettings = str_replace('{{ project_domain }}', $this->projectName . '.' . $this->projectTld, $localSettings);
         $localSettings = str_replace('{{ project_domain }}', $this->projectName . '.' . $this->projectTld, $localSettings);
         file_put_contents(Platform::sharedDir() . '/settings.local.php', $localSettings);
