@@ -97,7 +97,7 @@ class Drupal extends StacksBase
 
         // Relink if missing.
         if (!$this->fs->exists(Platform::webDir() . '/sites/default/settings.local.php')) {
-            $this->fs->symlink('../../../shared/settings.local.php', Platform::webDir() . '/sites/default/settings.local.php');
+            $this->fs->symlink($this->getRelativeLinkToShared() . '/settings.local.php', Platform::webDir() . '/sites/default/settings.local.php');
         }
     }
 
@@ -124,6 +124,15 @@ class Drupal extends StacksBase
         $localSettings = str_replace('{{ project_domain }}', $this->projectName . '.' . $this->projectTld, $localSettings);
         file_put_contents(Platform::sharedDir() . '/drushrc.php', $localSettings);
 
-        $this->fs->symlink('../../../shared/drushrc.php', Platform::webDir() . '/sites/default/drushrc.php');
+        $this->fs->symlink($this->getRelativeLinkToShared() . 'drushrc.php', Platform::webDir() . '/sites/default/drushrc.php');
+    }
+
+    /**
+     * Gets the relative path from the sites/default directory to the shared directory.
+     *
+     * @return string
+     */
+    protected function getRelativeLinkToShared() {
+        return $this->fs->makePathRelative(realpath(Platform::sharedDir()), realpath(Platform::webDir() . '/sites/default/'));
     }
 }
