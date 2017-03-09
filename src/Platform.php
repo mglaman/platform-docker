@@ -2,6 +2,8 @@
 
 namespace mglaman\PlatformDocker;
 
+use mglaman\Docker\Compose;
+use mglaman\Docker\Docker;
 
 /**
  * Class Platform
@@ -86,4 +88,21 @@ class Platform
     {
         return self::rootDir() . '/' . self::TEST_ROOT;
     }
+
+    /**
+     * Gets the uri to access the site.
+     *
+     * @return string
+     *
+     * @throws \RuntimeException
+     *   Thrown when the nginx container is not available.
+     */
+    public static function getUri() {
+        $nginx_port = Docker::getContainerPort(Compose::getContainerName(self::projectName(), 'nginx'), 80);
+        if (!$nginx_port) {
+            throw new \RuntimeException("nginx container is not running");
+        }
+        return "http://localhost:$nginx_port";
+    }
+
 }

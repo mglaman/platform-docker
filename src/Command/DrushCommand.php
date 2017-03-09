@@ -40,7 +40,7 @@ class DrushCommand extends DockerCommand
             'drush',
             $input->getArgument('cmd'),
             '--root=' . Platform::webDir(),
-            '--uri=' . Platform::projectName() . '.' . Platform::projectTld()
+            '--uri=' . Platform::getUri()
         ]);
         passthru($processBuilder->getProcess()->getCommandLine());
     }

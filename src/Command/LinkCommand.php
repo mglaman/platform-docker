@@ -37,18 +37,23 @@ class LinkCommand extends DockerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $url = 'http://' . Platform::projectName() . '.' . Platform::projectTld();
-
-        // See if the nginx-proxy is running.
         try {
+            $url = Platform::getUri();
+        } catch (\Exception $e) {
+            $output->writeln('<error>The nginx container is not running.</error>');
+        }
+
+        try {
+            // See if the nginx-proxy is running and use that if it is.
             $process = Docker::inspect(['--format="{{ .State.Running }}"', 'nginx-proxy'], true);
-
-            if (trim($process->getOutput()) != 'true') {
-                $port = Docker::getContainerPort(Compose::getContainerName(Platform::projectName(), 'nginx'), 80);
-                $url .= ':' . $port;
+            if (strpos($process->getOutput(), 'true') !== FALSE) {
+                $url = 'http://' . Platform::projectName() . '.' . Platform::projectTld();
             }
-        } catch (\Exception $e) { }
+        }
+        catch (\Exception $e) {}
 
-        $this->openUrl($url, $this->stdErr, $this->stdOut);
+        if ($url) {
+            $this->openUrl($url, $this->stdErr, $this->stdOut);
+        }
     }
 }
