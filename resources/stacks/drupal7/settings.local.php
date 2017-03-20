@@ -35,8 +35,8 @@ if (empty($_SERVER['PLATFORM_DOCKER'])) {
       'driver' => 'mysql',
       'host' => '127.0.0.1',
       'port' => $port,
-      'username' => 'mysql',
-      'password' => 'mysql',
+      'username' => '{{ mysql_user }}',
+      'password' => '{{ mysql_password }}',
       'database' => 'data',
       'prefix' => '',
     );

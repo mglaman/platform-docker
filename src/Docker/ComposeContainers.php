@@ -4,6 +4,7 @@ namespace mglaman\PlatformDocker\Docker;
 
 
 use mglaman\PlatformDocker\Config;
+use mglaman\PlatformDocker\Mysql\Mysql;
 use mglaman\PlatformDocker\Platform;
 use Symfony\Component\Yaml\Yaml;
 
@@ -91,12 +92,16 @@ class ComposeContainers
           ],
           'environment' => [
             'MYSQL_DATABASE' => 'data',
-            'MYSQL_USER' => 'mysql',
-            'MYSQL_PASSWORD' => 'mysql',
             'MYSQL_ALLOW_EMPTY_PASSWORD' => 'yes',
-            'MYSQL_ROOT_PASSWORD' => 'root,'
+            'MYSQL_ROOT_PASSWORD' => Mysql::getMysqlRootPassword(),
           ],
         ];
+
+        $user = Mysql::getMysqlUser();
+        if (strcasecmp($user, 'root') !== 0) {
+            $this->config['mariadb']['environment']['MYSQL_USER'] = $user;
+            $this->config['mariadb']['environment']['MYSQL_PASSWORD'] = Mysql::getMysqlPassword();
+        }
     }
 
     /**
