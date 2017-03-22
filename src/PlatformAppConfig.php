@@ -29,4 +29,24 @@ class PlatformAppConfig
         return NULL;
     }
 
+    /**
+     * Determines if the site is using redis.
+     *
+     * @return bool
+     */
+    public static function hasRedis() {
+        $relationships = self::get('relationships');
+        return isset($relationships['redis']);
+    }
+
+    /**
+     * Determines if the site is using solr.
+     *
+     * @return bool
+     */
+    public static function hasSolr() {
+        $relationships = self::get('relationships');
+        return isset($relationships['solr']);
+    }
+
 }

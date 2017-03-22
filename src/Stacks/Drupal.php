@@ -59,7 +59,7 @@ class Drupal extends StacksBase
                 }
                 break;
             case DrupalStackHelper::DRUPAL8:
-                if ($has_settings) {
+                if (!$has_settings) {
                     $this->fs->copy(CLI_ROOT . '/resources/stacks/drupal8/settings.php', Platform::webDir() . '/sites/default/settings.php', true);
                 }
                 $this->fs->mkdir([
