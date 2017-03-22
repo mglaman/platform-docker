@@ -78,7 +78,7 @@ class Drupal extends StacksBase
         $target_local_settings = Platform::sharedDir() . '/settings.local.php';
         if ($this->fs->exists($target_local_settings)) {
             // Try and make it deletable.
-            $this->fs->chmod($target_local_settings, 0644);
+            $this->fs->chmod($target_local_settings, 0664);
         }
         switch ($this->version) {
             case DrupalStackHelper::DRUPAL7:
