@@ -75,25 +75,30 @@ class Drupal extends StacksBase
 
     protected function ensureLocalSettings() {
         // @todo: Check if settings.local.php exists, load in any $conf changes.
+        $target_local_settings = Platform::sharedDir() . '/settings.local.php';
+        if ($this->fs->exists($target_local_settings)) {
+            // Try and make it deletable.
+            $this->fs->chmod($target_local_settings, 0664);
+        }
         switch ($this->version) {
             case DrupalStackHelper::DRUPAL7:
-                $this->fs->copy(CLI_ROOT . '/resources/stacks/drupal7/settings.local.php', Platform::sharedDir() . '/settings.local.php', true);
+                $this->fs->copy(CLI_ROOT . '/resources/stacks/drupal7/settings.local.php', $target_local_settings, true);
                 break;
             case DrupalStackHelper::DRUPAL8:
-                $this->fs->copy(CLI_ROOT . '/resources/stacks/drupal8/settings.local.php', Platform::sharedDir() . '/settings.local.php', true);
+                $this->fs->copy(CLI_ROOT . '/resources/stacks/drupal8/settings.local.php', $target_local_settings, true);
                 break;
             default:
                 throw new \Exception('Unsupported version of Drupal. Write a pull reuqest!');
         }
 
         // Replace template variables.
-        $localSettings = file_get_contents(Platform::sharedDir() . '/settings.local.php');
+        $localSettings = file_get_contents($target_local_settings);
         $localSettings = str_replace('{{ salt }}', hash('sha256', serialize($_SERVER)), $localSettings);
         $localSettings = str_replace('{{ container_name }}', $this->containerName, $localSettings);
         $localSettings = str_replace('{{ redis_container_name }}', $this->redisContainerName, $localSettings);
         $localSettings = str_replace('{{ project_domain }}', $this->projectName . '.' . $this->projectTld, $localSettings);
         $localSettings = str_replace('{{ project_domain }}', $this->projectName . '.' . $this->projectTld, $localSettings);
-        file_put_contents(Platform::sharedDir() . '/settings.local.php', $localSettings);
+        file_put_contents($target_local_settings, $localSettings);
 
         // Relink if missing.
         if (!$this->fs->exists(Platform::webDir() . '/sites/default/settings.local.php')) {
