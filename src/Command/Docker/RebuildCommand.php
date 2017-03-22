@@ -80,6 +80,9 @@ class RebuildCommand extends DockerCommand
             if (PlatformAppConfig::hasRedis()) {
                 $composeContainers->addRedis();
             }
+            if (PlatformAppConfig::hasSolr()) {
+                $composeContainers->addSolr();
+            }
         }
 
         $composeConfig->writeDockerCompose($composeContainers);
