@@ -96,7 +96,6 @@ class Drupal extends StacksBase
         $localSettings = str_replace('{{ salt }}', hash('sha256', serialize($_SERVER)), $localSettings);
         $localSettings = str_replace('{{ container_name }}', $this->containerName, $localSettings);
         $localSettings = str_replace('{{ redis_container_name }}', $this->redisContainerName, $localSettings);
-        $localSettings = str_replace('{{ solr_container_name }}', $this->solrContainerName, $localSettings);
         $localSettings = str_replace('{{ project_domain }}', $this->projectName . '.' . $this->projectTld, $localSettings);
         $localSettings = str_replace('{{ project_domain }}', $this->projectName . '.' . $this->projectTld, $localSettings);
         file_put_contents(Platform::sharedDir() . '/settings.local.php', $localSettings);
