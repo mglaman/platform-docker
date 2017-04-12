@@ -37,6 +37,7 @@ class ComposeContainers
         $this->path = $path;
         $this->name = $name;
         // Add required containers.
+        $this->addUnison();
         $this->addPhpFpm();
         $this->addDatabase();
         $this->addWebserver();
@@ -47,7 +48,11 @@ class ComposeContainers
      * @return string
      */
     public function yaml() {
-        return Yaml::dump($this->config);
+        return Yaml::dump([
+            'version' => '2',
+            'services' => $this->config,
+            'volumes' => ['code' => NULL],
+        ], 10);
     }
 
     /**
@@ -60,8 +65,8 @@ class ComposeContainers
           'build'   => 'docker/images/php',
           'volumes' => [
             './docker/conf/fpm.conf:/usr/local/etc/php-fpm.conf',
-            './:/var/platform',
             './docker/conf/php.ini:/usr/local/etc/php/conf.d/local.ini',
+            'code:/var/www/html',
           ],
           'links' => [
             'mariadb',
@@ -99,6 +104,22 @@ class ComposeContainers
         ];
     }
 
+
+    /**
+     *
+     */
+    public function addUnison()
+    {
+        $this->config['unison'] = [
+            'command' => '/usr/local/bin/unison /var/platform /var/www/html -confirmbigdel=false -prefer=/var/platform -fastcheck=true -times=true -watch=true -auto -batch -repeat=watch -retry=5 -ignore="Name {.git,*.swp,.idea,volumes,docker/*}"',
+            'build'   => 'docker/images/unison',
+            'volumes' => [
+                './:/var/platform',
+                'code:/var/www/html',
+            ],
+        ];
+    }
+
     /**
      *
      */
@@ -108,7 +129,7 @@ class ComposeContainers
           'image' => 'nginx:1.9.0',
           'volumes' => [
             './docker/conf/nginx.conf:/etc/nginx/conf.d/default.conf',
-            './:/var/platform',
+            'code:/var/www/html',
             './docker/ssl/nginx.crt:/etc/nginx/ssl/nginx.crt',
             './docker/ssl/nginx.key:/etc/nginx/ssl/nginx.key',
           ],

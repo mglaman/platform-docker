@@ -92,7 +92,7 @@ class RebuildCommand extends DockerCommand
 
         // Stop and remove any existing containers.
         Compose::stop();
-        Compose::rm(TRUE);
+        Compose::rm(TRUE, TRUE);
 
         $this->stdOut->writeln('<info>Building the containers</info>');
         Compose::build();
