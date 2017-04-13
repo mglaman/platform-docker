@@ -18,12 +18,13 @@ class ComposeContainersTest extends BaseUtilsTest
     public function testDefaultConfig()
     {
         $config = new ComposeContainers(Platform::rootDir(), Platform::projectName());
-        $config_converted = Yaml::parse($config->yaml());
+        $config_converted = Yaml::parse($config->yaml())['services'];
 
         $this->assertArrayHasKey('phpfpm', $config_converted);
         $this->assertArrayHasKey('nginx', $config_converted);
         $this->assertArrayHasKey('mariadb', $config_converted);
-        $this->assertCount(3, $config_converted);
+        $this->assertArrayHasKey('unison', $config_converted);
+        $this->assertCount(4, $config_converted);
     }
 
     public function testAddExtras()
@@ -31,10 +32,10 @@ class ComposeContainersTest extends BaseUtilsTest
         $config = new ComposeContainers(Platform::rootDir(), Platform::projectName());
         $config->addRedis();
         $config_converted = Yaml::parse($config->yaml());
-        $this->assertCount(4, $config_converted);
+        $this->assertCount(5, $config_converted['services']);
         $config->addSolr();
         $config_converted = Yaml::parse($config->yaml());
-        $this->assertCount(5, $config_converted);
+        $this->assertCount(6, $config_converted['services']);
     }
 
 }
