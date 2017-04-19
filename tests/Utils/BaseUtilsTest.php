@@ -34,14 +34,16 @@ abstract class BaseUtilsTest extends \PHPUnit_Framework_TestCase
         exec('rm -Rf ' . escapeshellarg(self::$tmpName));
     }
 
-    protected function createTestProject($fixture = '.platform.app.yaml')
+    protected function createTestProject($fixture = '.platform.app.yaml', $services = 'services.yaml')
     {
         $testDir = self::$tmpName = tempnam(sys_get_temp_dir(), '');
         unlink($testDir);
         mkdir($testDir);
+        mkdir($testDir . '/.platform');
 
         file_put_contents($testDir . '/' . Config::PLATFORM_CONFIG, 'name: phpunit');
         copy(__DIR__ .'/../fixtures/' . $fixture, $testDir . '/.platform.app.yaml');
+        copy(__DIR__ .'/../fixtures/' . $services, $testDir . '/.platform/services.yaml');
         chdir($testDir);
         PlatformAppConfig::reset();
     }

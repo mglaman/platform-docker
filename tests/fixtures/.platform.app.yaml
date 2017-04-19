@@ -16,7 +16,7 @@ build:
 relationships:
     database: "mysql:mysql"
     postgres: "pgmigrationsource:postgresql"
-    solr: "solr:solr"
+    solr: "solrsearch:solr"
     redis: "redis:redis"
 
 # The configuration of app when it is exposed to the web.

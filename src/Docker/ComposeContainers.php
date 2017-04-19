@@ -5,6 +5,7 @@ namespace mglaman\PlatformDocker\Docker;
 
 use mglaman\PlatformDocker\Config;
 use mglaman\PlatformDocker\Platform;
+use mglaman\PlatformDocker\PlatformServiceConfig;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -141,8 +142,16 @@ class ComposeContainers
 
     public function addSolr()
     {
+        $solr_type = PlatformServiceConfig::getSolrType()
+        switch ($solr_type) {
+            case 'solr:6.3':
+                $image = $solr_type;
+                break;
+            default:
+                $image = 'makuk66/docker-solr:4.10.4';
+        }
         $this->config['solr'] = [
-          'image'   => 'makuk66/docker-solr:4.10.4',
+          'image'   => $image,
           'ports' => [
               '8893',
           ],
