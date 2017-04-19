@@ -7,7 +7,7 @@ use mglaman\PlatformDocker\PlatformServiceConfig;
 /**
  * @coversDefaultClass \mglaman\PlatformDocker\PlatformServiceConfig
  */
-class PlatformAppConfigTest extends BaseUtilsTest
+class PlatformServiceConfigTest extends BaseUtilsTest
 {
 
     /**
