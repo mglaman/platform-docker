@@ -19,4 +19,13 @@ class PlatformAppConfigTest extends BaseUtilsTest
         $this->assertEquals('solr:6.3', PlatformServiceConfig::getSolrType());
     }
 
+    /**
+     * @covers ::getSolrMajorVersion
+     */
+    public function testGetSolrMajorVersion()
+    {
+        $this->createTestProject();
+        $this->assertEquals('6', PlatformServiceConfig::getSolrMajorVersion());
+    }
+
 }

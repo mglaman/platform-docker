@@ -12,6 +12,7 @@ namespace mglaman\PlatformDocker\Docker;
 use mglaman\Docker\Docker;
 use mglaman\PlatformDocker\Config;
 use mglaman\PlatformDocker\Platform;
+use mglaman\PlatformDocker\PlatformServiceConfig;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
@@ -109,8 +110,9 @@ class ComposeConfig
         file_put_contents($nginxConfFile, $nginxConf);
 
         // stub in for Solr configs
+        $solr_major_version = PlatformServiceConfig::getSolrMajorVersion();
         $finder = new Finder();
-        $finder->in($this->resourcesDir . '/conf/solr')
+        $finder->in($this->resourcesDir . "/conf/solr/$solr_major_version.x/")
                ->files()
                ->depth('< 1')
                ->name('*');

@@ -36,4 +36,20 @@ class PlatformServiceConfig
         return $solr_config['type'];
     }
 
+    /**
+     * Gets the solr major version
+     *
+     * @return string
+     */
+    public static function getSolrMajorVersion() {
+        $type = static::getSolrType();
+        if ($type) {
+            list(, $version) = explode(":", $type);
+            if (preg_match('/^(\d)\./', $version, $matches)) {
+                return $matches[1];
+            }
+            return '4';
+        }
+    }
+
 }

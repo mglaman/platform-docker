@@ -142,7 +142,7 @@ class ComposeContainers
 
     public function addSolr()
     {
-        $solr_type = PlatformServiceConfig::getSolrType()
+        $solr_type = PlatformServiceConfig::getSolrType();
         switch ($solr_type) {
             case 'solr:6.3':
                 $image = $solr_type;
