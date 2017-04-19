@@ -39,17 +39,25 @@ class PlatformServiceConfig
     /**
      * Gets the solr major version
      *
-     * @return string
+     * @return string|FALSE
      */
     public static function getSolrMajorVersion() {
         $type = static::getSolrType();
+        $version = FALSE;
         if ($type) {
             list(, $version) = explode(":", $type);
             if (preg_match('/^(\d)\./', $version, $matches)) {
-                return $matches[1];
+                $version = $matches[1];
             }
-            return '4';
+            else {
+                $version = '4';
+            }
+            // Platform support 3,4 and 6 atm. We only support 4 and 6.
+            if ($version === '3') {
+                $version = '4';
+            }
         }
+        return $version;
     }
 
 }

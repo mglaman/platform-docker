@@ -26,6 +26,9 @@ class PlatformAppConfigTest extends BaseUtilsTest
     {
         $this->createTestProject();
         $this->assertEquals('6', PlatformServiceConfig::getSolrMajorVersion());
+
+        $this->createTestProject('.platform.app.yaml', 'solr-3-services.yaml');
+        $this->assertEquals('4', PlatformServiceConfig::getSolrMajorVersion());
     }
 
 }

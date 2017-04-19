@@ -10,6 +10,7 @@ namespace mglaman\PlatformDocker\Tests\Utils;
 
 use mglaman\PlatformDocker\Config;
 use mglaman\PlatformDocker\PlatformAppConfig;
+use mglaman\PlatformDocker\PlatformServiceConfig;
 
 abstract class BaseUtilsTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,5 +47,6 @@ abstract class BaseUtilsTest extends \PHPUnit_Framework_TestCase
         copy(__DIR__ .'/../fixtures/' . $services, $testDir . '/.platform/services.yaml');
         chdir($testDir);
         PlatformAppConfig::reset();
+        PlatformServiceConfig::reset();
     }
 }
