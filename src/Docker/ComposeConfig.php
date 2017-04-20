@@ -12,6 +12,7 @@ namespace mglaman\PlatformDocker\Docker;
 use mglaman\Docker\Docker;
 use mglaman\PlatformDocker\Config;
 use mglaman\PlatformDocker\Platform;
+use mglaman\PlatformDocker\PlatformAppConfig;
 use mglaman\PlatformDocker\PlatformServiceConfig;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -109,16 +110,18 @@ class ComposeConfig
         $nginxConf = str_replace('{{ docroot }}', Config::get('docroot'), $nginxConf);
         file_put_contents($nginxConfFile, $nginxConf);
 
-        // stub in for Solr configs
-        $solr_major_version = PlatformServiceConfig::getSolrMajorVersion();
-        $finder = new Finder();
-        $finder->in($this->resourcesDir . "/conf/solr/$solr_major_version.x/")
-               ->files()
-               ->depth('< 1')
-               ->name('*');
-        /** @var \SplFileInfo $file */
-        foreach ($finder as $file) {
-            $this->fs->copy($file->getPathname(), $this->projectPath . '/docker/conf/solr/' . $file->getFilename(), TRUE);
+        if (PlatformAppConfig::hasSolr()) {
+            // stub in for Solr configs
+            $solr_major_version = PlatformServiceConfig::getSolrMajorVersion();
+            $finder = new Finder();
+            $finder->in($this->resourcesDir . "/conf/solr/$solr_major_version.x/")
+                ->files()
+                ->depth('< 1')
+                ->name('*');
+            /** @var \SplFileInfo $file */
+            foreach ($finder as $file) {
+                $this->fs->copy($file->getPathname(), $this->projectPath . '/docker/conf/solr/' . $file->getFilename(), TRUE);
+            }
         }
 
         // copy ssl
