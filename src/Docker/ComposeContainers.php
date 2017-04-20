@@ -150,13 +150,20 @@ class ComposeContainers
             default:
                 $image = 'makuk66/docker-solr:4.10.4';
         }
+        switch (PlatformServiceConfig::getSolrMajorVersion()) {
+            case '6':
+                $solr_volume = './docker/conf/solr:/opt/solr/server/solr/mycores/conf';
+                break;
+            default:
+                $solr_volume = './docker/conf/solr:/opt/solr/example/solr/collection1/conf';
+        }
         $this->config['solr'] = [
           'image'   => $image,
           'ports' => [
               '8893',
           ],
           'volumes' => [
-            './docker/conf/solr:/opt/solr/example/solr/collection1/conf',
+              $solr_volume,
           ],
         ];
         $this->config['phpfpm']['links'][] = 'solr';
