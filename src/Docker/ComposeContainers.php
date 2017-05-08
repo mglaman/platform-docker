@@ -144,7 +144,7 @@ class ComposeContainers
         $this->config['solr'] = [
           'image'   => 'makuk66/docker-solr:4.10.4',
           'ports' => [
-              '8893',
+              '8983',
           ],
           'volumes' => [
             './docker/conf/solr:/opt/solr/example/solr/collection1/conf',
