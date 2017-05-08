@@ -45,9 +45,19 @@ class InitCommand extends Command
                 Config::set('name', basename($this->cwd));
                 Config::set('path', $this->cwd);
 
+                // Platform.sh scaffold docroot.
                 if (is_dir($this->cwd . '/' . Platform::DEFAULT_WEB_ROOT)) {
                   Config::set('docroot', Platform::DEFAULT_WEB_ROOT);
-                } else {
+                }
+                // Typical app location.
+                elseif (is_dir($this->cwd . '/web')) {
+                    Config::set('docroot', 'web');
+                }
+                // Acquia.
+                elseif (is_dir($this->cwd . '/docroot')) {
+                    Config::set('docroot', 'docroot');
+                }
+                else {
                   $question = new Question("<info>What is the document root for the project?");
                   $answer = $helper->ask($input, $output, $question);
                   Config::set('docroot', $answer);
