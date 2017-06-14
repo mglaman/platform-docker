@@ -130,7 +130,9 @@ class Drupal extends StacksBase
         $localSettings = str_replace('{{ project_domain }}', $this->projectName . '.' . $this->projectTld, $localSettings);
         file_put_contents(Platform::sharedDir() . '/drushrc.php', $localSettings);
 
-        $this->fs->symlink($this->getRelativeLinkToShared() . 'drushrc.php', Platform::webDir() . '/sites/default/drushrc.php');
+        if (!file_exists(Platform::webDir() . '/sites/default/drushrc.php')) {
+            $this->fs->symlink($this->getRelativeLinkToShared() . 'drushrc.php', Platform::webDir() . '/sites/default/drushrc.php');
+        }
     }
 
     /**
