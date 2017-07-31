@@ -25,12 +25,16 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
 #	rm -fr /root/memcache.tgz
 
 # Setup xdebug
-RUN pecl install xdebug
-RUN docker-php-ext-enable xdebug
+RUN pecl install xdebug && docker-php-ext-enable xdebug
 
 # Setup redis
-RUN pecl install redis
-RUN docker-php-ext-enable redis
+RUN pecl install redis && docker-php-ext-enable redis
+
+# Install APCu and APC backward compatibility
+RUN pecl install apcu \
+    && pecl install apcu_bc-1.0.3 \
+    && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini \
+    && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini
 
 # XHPROF is not available in PHP 7.
 
