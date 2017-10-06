@@ -61,7 +61,7 @@ class ComposeContainers
           'build'   => 'docker/images/php',
           'volumes' => [
             './docker/conf/fpm.conf:/usr/local/etc/php-fpm.conf',
-            './:/var/platform',
+            './:/var/platform:cached',
             './docker/conf/php.ini:/usr/local/etc/php/conf.d/local.ini',
           ],
           'links' => [
@@ -109,7 +109,7 @@ class ComposeContainers
           'image' => 'nginx:1.9.0',
           'volumes' => [
             './docker/conf/nginx.conf:/etc/nginx/conf.d/default.conf',
-            './:/var/platform',
+            './:/var/platform:cached',
             './docker/ssl/nginx.crt:/etc/nginx/ssl/nginx.crt',
             './docker/ssl/nginx.key:/etc/nginx/ssl/nginx.key',
           ],
